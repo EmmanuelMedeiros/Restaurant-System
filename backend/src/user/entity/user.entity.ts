@@ -14,7 +14,7 @@ export class User implements IUser {
     @Column({name: "role", enum: Role})
     role: Role;
 
-    @Column({type: 'varchar', nullable: false, length: "30"})
+    @Column({type: 'text', nullable: false})
     password: string;
 
 

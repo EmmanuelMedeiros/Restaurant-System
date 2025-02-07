@@ -5,6 +5,9 @@ import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 
+import * as crypto from 'crypto'
+import { PwdHash } from 'src/common/entity/PwdHash.entity';
+
 @Injectable()
 export class UserService {
     constructor(
@@ -20,8 +23,9 @@ export class UserService {
     async create(createUserDTO: CreateUserDTO): Promise<EndMessage> {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK}
         try {
+            const hashPassword: string = await PwdHash.generatePasswordHash(createUserDTO.password);
             const newUser: User = new User(
-                createUserDTO.password,
+                hashPassword,
                 createUserDTO.uuid,
                 createUserDTO.email,
                 createUserDTO.role
