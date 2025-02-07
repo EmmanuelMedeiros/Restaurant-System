@@ -1,0 +1,16 @@
+@baseUrl = http://localhost:3000
+
+###
+
+POST {{baseUrl}}/item-category
+Content-Type: application/json
+
+{
+    "title": "Almoço"
+}
+
+###
+
+GET {{baseUrl}}/item-category/2
+
+###
