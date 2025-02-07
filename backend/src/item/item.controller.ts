@@ -1,9 +1,11 @@
-import { Body, Controller, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { EndMessage } from 'src/interface/EndMessage';
 import { CreateItemDTO } from './dto/create.item.dto';
 import { ItemCategoryService } from 'src/item-category/item-category.service';
 import { ItemCategory } from 'src/item-category/entity/item-category.entity';
+import { UpdateItemDTO } from './dto/update.item.dto';
+import { Item } from './entity/item.entity';
 
 @Controller('item')
 export class ItemController {
@@ -32,4 +34,41 @@ export class ItemController {
         }
         return serviceResponse;
     }  
+
+    @HttpCode(HttpStatus.OK)
+    @Get('/:id')
+    async findOne(@Param('id') id: number) {
+        const item: Item|null = await this.itemService.findOne(id);
+        if(!item) {
+            throw new HttpException("No item found for this ID", HttpStatus.NOT_FOUND);
+        }
+        return item;
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Put('/:id')
+    async update(@Body() updateItemDTO: UpdateItemDTO, @Param('id') id: number) {
+        const fetchedItem: Item|null = await this.itemService.findOne(id);
+        if(!fetchedItem) {
+            throw new HttpException("This item does not exist in database", HttpStatus.NOT_FOUND);
+        };
+        let fetchedItemCategory: ItemCategory|null = null;
+        if(updateItemDTO.category) {
+            fetchedItemCategory = await this.itemCategoryService.findOne(updateItemDTO.category?.id);
+            if(!fetchedItemCategory) {
+                throw new HttpException("This item category does not exist in database", HttpStatus.NOT_FOUND);
+            };
+        }
+        const updateItem: UpdateItemDTO = new UpdateItemDTO(
+            updateItemDTO.category,
+            updateItemDTO.description,
+            updateItemDTO.name,
+            updateItemDTO.price
+        )
+        const serviceResponse: EndMessage = await this.itemService.update(updateItem, fetchedItem.id);
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, serviceResponse.status);
+        }
+        return serviceResponse;
+    }
 }

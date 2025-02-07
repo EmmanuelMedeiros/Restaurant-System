@@ -4,6 +4,7 @@ import { Item } from './entity/item.entity';
 import { InsertResult, Repository } from 'typeorm';
 import { CreateItemDTO } from './dto/create.item.dto';
 import { EndMessage } from 'src/interface/EndMessage';
+import { UpdateItemDTO } from './dto/update.item.dto';
 
 @Injectable()
 export class ItemService {
@@ -33,5 +34,28 @@ export class ItemService {
             }catch(err){
                 return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
             }
+    }
+
+    async findOne(id: number) {
+    const item: Item|null = await this.itemRepository.findOne({
+        where: {
+          id: Number(id)
+        },
+        relations: {
+            category: true
         }
+      })
+      return item;
+    }
+
+    async update(updateItemDTO: UpdateItemDTO, itemID: number): Promise<EndMessage> {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        try {
+            await this.itemRepository.update(itemID, updateItemDTO);
+            const returnItem: Item|null = await this.itemRepository.findOne({where: {id: itemID}})
+            return endMessage = {data: returnItem, status: HttpStatus.OK};
+        }catch(err){
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
+    }
 }

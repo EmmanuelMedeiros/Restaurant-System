@@ -15,3 +15,16 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{baseUrl}}/item/14
+
+###
+
+PUT {{baseUrl}}/item/14
+Content-Type: application/json
+
+{
+    "description": "Mudou tudo de novo"
+}
+
+###

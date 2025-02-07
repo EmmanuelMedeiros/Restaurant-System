@@ -11,6 +11,6 @@ Content-Type: application/json
 
 ###
 
-GET {{baseUrl}}/item-category/2
+GET {{baseUrl}}/item-category/1
 
 ###
