@@ -20,11 +20,20 @@ GET {{baseUrl}}/item/14
 
 ###
 
-PUT {{baseUrl}}/item/14
+PUT {{baseUrl}}/item/16
 Content-Type: application/json
 
-{
-    "description": "Mudou tudo de novo"
+{   
+    "name": "Carne de porco",
+    "description": "É carne e é de porco e agora é tira-gosto",
+    "category": {
+        "id": 4
+    }
 }
+
+###
+
+DELETE {{baseUrl}}/item/17
+
 
 ###

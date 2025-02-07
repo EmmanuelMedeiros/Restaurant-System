@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { EndMessage } from 'src/interface/EndMessage';
 import { CreateItemDTO } from './dto/create.item.dto';
@@ -66,6 +66,16 @@ export class ItemController {
             updateItemDTO.price
         )
         const serviceResponse: EndMessage = await this.itemService.update(updateItem, fetchedItem.id);
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, serviceResponse.status);
+        }
+        return serviceResponse;
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Delete('/:id')
+    async deleteOne(@Param('id') id: number) {
+        const serviceResponse: EndMessage = await this.itemService.deleteOne(id);
         if(serviceResponse.status !== HttpStatus.OK) {
             throw new HttpException(serviceResponse.data, serviceResponse.status);
         }

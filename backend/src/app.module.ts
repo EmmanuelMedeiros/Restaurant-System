@@ -5,6 +5,7 @@ import { TableModule } from './table/table.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ItemCategoryModule } from './item-category/item-category.module';
 import { ItemModule } from './item/item.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(
@@ -18,7 +19,7 @@ import { ItemModule } from './item/item.module';
       synchronize: true,
       autoLoadEntities: true
     }
-  ) ,TableModule, ItemCategoryModule, ItemModule],
+  ) ,TableModule, ItemCategoryModule, ItemModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })

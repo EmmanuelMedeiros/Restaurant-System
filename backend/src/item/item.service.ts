@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Item } from './entity/item.entity';
-import { InsertResult, Repository } from 'typeorm';
+import { DeleteResult, InsertResult, Repository } from 'typeorm';
 import { CreateItemDTO } from './dto/create.item.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 import { UpdateItemDTO } from './dto/update.item.dto';
@@ -46,6 +46,16 @@ export class ItemService {
         }
       })
       return item;
+    }
+
+    async deleteOne(id: number) {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        try {
+            await this.itemRepository.delete(id);
+            return endMessage = {data: `Item ${id} deleted`, status: HttpStatus.OK};
+        }catch(err) {
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
     }
 
     async update(updateItemDTO: UpdateItemDTO, itemID: number): Promise<EndMessage> {
