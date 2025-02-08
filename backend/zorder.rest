@@ -21,3 +21,7 @@ Content-Type: application/json
 }
 
 ###
+GET {{baseUrl}}/order/7533a0c2-5e4e-4a21-bec4-87a98bd4c550
+
+
+###

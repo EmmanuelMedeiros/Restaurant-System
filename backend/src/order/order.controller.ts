@@ -10,6 +10,7 @@ import { UserService } from 'src/user/user.service';
 import { OrderItem } from './entity/orderItem.entity';
 import { ItemService } from 'src/item/item.service';
 import { Item } from 'src/item/entity/item.entity';
+import { Order } from './entity/order.entity';
 
 @Controller('order')
 export class OrderController {
@@ -53,5 +54,14 @@ export class OrderController {
             throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
         }
         return serviceResponse;
+    }
+
+    @Get("/:uuid")
+    async findOne(@Param("uuid") uuid:string) {
+        const order: Order|null = await this.orderService.findOne(uuid)
+        if(!order) {
+            throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
+        }
+        return order;
     }
 }

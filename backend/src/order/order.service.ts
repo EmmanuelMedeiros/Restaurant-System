@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entity/order.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { CreateOrderDTO } from './dto/create-order.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 
@@ -14,7 +14,9 @@ export class OrderService {
         @InjectRepository(Order)
         private readonly orderRepository: Repository<Order>,
         @InjectRepository(OrderItem)
-        private readonly orderItemRepository: Repository<OrderItem>
+        private readonly orderItemRepository: Repository<OrderItem>,
+        @InjectEntityManager()
+        private readonly entityManager: EntityManager
     ) {};
 
     async create(createOrderDTO: CreateOrderDTO): Promise<EndMessage> {
@@ -28,19 +30,34 @@ export class OrderService {
                 undefined,
                 undefined
             )
-            await this.orderRepository.insert(order);
             const orderItem: OrderItem = new OrderItem(
                 crypto.randomUUID(),
                 createOrderDTO.orderItem.item,
                 order,
                 createOrderDTO.orderItem.quantity
             )
-            await this.orderItemRepository.insert(orderItem)
+            await this.entityManager.transaction(async () => {
+                await this.orderRepository.insert(order);
+                await this.orderItemRepository.insert(orderItem)
+            })
             endMessage = {data: order, status: HttpStatus.CREATED};
         }catch(err) {
             endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
         return endMessage;
+    }
+
+    async findOne(uuid: string): Promise<Order|null> {
+        const user: Order|null = await this.orderRepository.findOne({
+            where: {
+                uuid: uuid
+            },
+            relations: {
+                table: true,
+                waiter: true
+            }
+        })
+        return user;
     }
 
 }
