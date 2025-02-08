@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:3000
+
+POST {{baseUrl}}/order
+Content-Type: application/json
+
+{
+
+    "table": {
+        "id": 1
+    },
+    "waiter": {
+        "uuid": "c58d3b3e-3ba0-495b-bb69-ae9b6a2db867"
+    },
+    "orderItem": {
+        "item": {
+            "id": 14
+        },
+        "quantity": 2
+    }
+
+}
+
+###

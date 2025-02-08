@@ -9,6 +9,7 @@ import { ItemCategoryModule } from 'src/item-category/item-category.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Item]), ItemCategoryModule],
   controllers: [ItemController],
-  providers: [ItemService]
+  providers: [ItemService],
+  exports: [ItemService]
 })
 export class ItemModule {}

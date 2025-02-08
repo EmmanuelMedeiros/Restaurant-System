@@ -10,3 +10,7 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{baseUrl}}/table/3
+
+###

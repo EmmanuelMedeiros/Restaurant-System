@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ItemCategoryModule } from './item-category/item-category.module';
 import { ItemModule } from './item/item.module';
 import { UserModule } from './user/user.module';
+import { OrderItemModule } from './order-item/order-item.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(
@@ -19,7 +21,7 @@ import { UserModule } from './user/user.module';
       synchronize: true,
       autoLoadEntities: true
     }
-  ) ,TableModule, ItemCategoryModule, ItemModule, UserModule],
+  ) ,TableModule, ItemCategoryModule, ItemModule, UserModule, OrderItemModule, OrderModule],
   controllers: [AppController],
   providers: [AppService],
 })

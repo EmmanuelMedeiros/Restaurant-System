@@ -14,9 +14,9 @@ POST {{baseUrl}}/user
 Content-Type: application/json
 
 {
-    "email": "email@hotmail.com",
-    "password": "senha123",
-    "role": "admin"
+    "email": "employee@email.com",
+    "password": "employee",
+    "role": "waiter"
 }
 
 ###

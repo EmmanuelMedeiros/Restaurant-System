@@ -30,4 +30,13 @@ export class TableService {
             return endMessage = {data: err.toString(), status: HttpStatus.INTERNAL_SERVER_ERROR};
         }
     }
+
+    async findOne(id: number): Promise<Table|null> {
+        const table: Table|null = await this.tableRepository.findOne({
+            where: {
+                id: id
+            }
+        })
+        return table;
+    }
 }
