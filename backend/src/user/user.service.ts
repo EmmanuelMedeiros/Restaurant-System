@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 
-import * as crypto from 'crypto'
 import { PwdHash } from 'src/common/entity/PwdHash.entity';
 
 @Injectable()
@@ -18,6 +17,20 @@ export class UserService {
     async findAll(): Promise<User[]|null> {
         const userList: User[] = await this.userRepository.find();
         return userList;
+    }
+
+    async findOne(uuid: string): Promise<User|null> {
+        const user: User|null = await this.userRepository.findOne({
+            where: {
+                uuid: uuid
+            },
+            select: {
+                uuid: true,
+                email: true,
+                role: true
+            }
+        })
+        return user;
     }
 
     async create(createUserDTO: CreateUserDTO): Promise<EndMessage> {

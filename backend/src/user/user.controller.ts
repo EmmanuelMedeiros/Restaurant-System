@@ -37,4 +37,14 @@ export class UserController {
         return serviceResponse;
     }
 
+    @HttpCode(HttpStatus.OK)
+    @Get('/:uuid')
+    async findOne(@Param('uuid') uuid: string) {
+        const user: User|null = await this.userService.findOne(uuid)
+        if(!user) {
+            throw new HttpException("No user found for this UUID", HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
+
 }

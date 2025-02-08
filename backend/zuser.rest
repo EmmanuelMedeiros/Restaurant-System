@@ -6,7 +6,11 @@ GET {{baseUrl}}/user
 
 ###
 
-POST {{baseUrl}}/user 
+GET {{baseUrl}}/user/e7dbb9e8-0d8a-47dc-8efc-3366993f7bb9
+
+###
+
+POST {{baseUrl}}/user
 Content-Type: application/json
 
 {
