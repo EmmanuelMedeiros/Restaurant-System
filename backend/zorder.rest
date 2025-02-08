@@ -6,7 +6,7 @@ Content-Type: application/json
 {
 
     "table": {
-        "id": 1
+        "id": 4
     },
     "waiter": {
         "uuid": "c58d3b3e-3ba0-495b-bb69-ae9b6a2db867"
@@ -21,6 +21,7 @@ Content-Type: application/json
 }
 
 ###
+
 GET {{baseUrl}}/order/7533a0c2-5e4e-4a21-bec4-87a98bd4c550
 
 

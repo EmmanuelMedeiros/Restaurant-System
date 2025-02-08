@@ -1,7 +1,7 @@
 import { IOrderItem } from "src/interface/IOrderItem";
 import { Item } from "src/item/entity/item.entity";
 import { Order } from "./order.entity";
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class OrderItem implements IOrderItem {
@@ -9,7 +9,7 @@ export class OrderItem implements IOrderItem {
     @PrimaryColumn()
     public readonly id: string;
 
-    @OneToOne(() => Item)
+    @ManyToOne(() => Item)
     @JoinColumn({
         name: 'itemID'
     })

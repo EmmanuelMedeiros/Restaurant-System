@@ -1,4 +1,5 @@
 import { IsEmpty, IsString, Length } from "class-validator";
+import { TableStatus } from "src/enum/TableStatus";
 import { ITable } from "src/interface/ITable";
 import { IsNull } from "typeorm";
 
@@ -19,5 +20,6 @@ export class CreateTableDTO implements Pick<ITable, "name"> {
 	public set name(value: string) {
 		this._name = value;
 	}
+
 
 }

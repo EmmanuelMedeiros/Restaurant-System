@@ -1,12 +1,14 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entity/order.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { CreateOrderDTO } from './dto/create-order.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 
 import * as crypto from 'crypto';
 import { OrderItem } from './entity/orderItem.entity';
+import { TableStatus } from 'src/enum/TableStatus';
+import { Table } from 'src/table/entity/table.entity';
 
 @Injectable()
 export class OrderService {
@@ -15,16 +17,24 @@ export class OrderService {
         private readonly orderRepository: Repository<Order>,
         @InjectRepository(OrderItem)
         private readonly orderItemRepository: Repository<OrderItem>,
-        @InjectEntityManager()
-        private readonly entityManager: EntityManager
+        private dataSource: DataSource
     ) {};
 
     async create(createOrderDTO: CreateOrderDTO): Promise<EndMessage> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK}
         try {
+
+            const updatedTable: Table = new Table(
+                createOrderDTO.table.id,
+                createOrderDTO.table.name,
+                TableStatus.BUSY,
+            )
             const order: Order = new Order(
                 createOrderDTO.createdAt,
-                createOrderDTO.table,
+                updatedTable,
                 crypto.randomUUID(),
                 createOrderDTO.waiter,
                 undefined,
@@ -36,13 +46,14 @@ export class OrderService {
                 order,
                 createOrderDTO.orderItem.quantity
             )
-            await this.entityManager.transaction(async () => {
-                await this.orderRepository.insert(order);
-                await this.orderItemRepository.insert(orderItem)
-            })
-            endMessage = {data: order, status: HttpStatus.CREATED};
+            await queryRunner.manager.insert(Order, order);
+            await queryRunner.manager.insert(OrderItem, orderItem);
+            await queryRunner.manager.update(Table, order.table.id, updatedTable)
+            await queryRunner.commitTransaction();
+            return endMessage = {data: order, status: HttpStatus.CREATED};
         }catch(err) {
-            endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+            await queryRunner.rollbackTransaction();
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
         return endMessage;
     }

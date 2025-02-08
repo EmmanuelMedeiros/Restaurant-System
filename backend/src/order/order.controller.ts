@@ -11,6 +11,7 @@ import { OrderItem } from './entity/orderItem.entity';
 import { ItemService } from 'src/item/item.service';
 import { Item } from 'src/item/entity/item.entity';
 import { Order } from './entity/order.entity';
+import { TableStatus } from 'src/enum/TableStatus';
 
 @Controller('order')
 export class OrderController {
@@ -27,6 +28,9 @@ export class OrderController {
         const fetchedTable: Table|null = await this.tableService.findOne(createUserDTO.table.id);
         if(!fetchedTable) {
             throw new HttpException(`No table found for this ID`, HttpStatus.NOT_FOUND);
+        };
+        if(fetchedTable.status === TableStatus.BUSY) {
+            throw new HttpException(`This table already has an order in running`, HttpStatus.BAD_REQUEST)
         };
         const fetchedUser: User|null = await this.userService.findOne(createUserDTO.waiter.uuid);
         if(!fetchedUser) {

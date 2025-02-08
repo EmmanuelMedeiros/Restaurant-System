@@ -4,6 +4,7 @@ import { InsertResult, Repository } from 'typeorm';
 import { Table } from './entity/table.entity';
 import { CreateTableDTO } from './dto/create-table.dto';
 import { EndMessage } from 'src/interface/EndMessage';
+import { TableStatus } from 'src/enum/TableStatus';
 
 @Injectable()
 export class TableService {
@@ -18,12 +19,14 @@ export class TableService {
         try {
             const tableToInsert: Table = new Table(
                 0,
-                createTableDTO.name
+                createTableDTO.name,
+                TableStatus.SLEEPING
             )
             const table: InsertResult = await this.tableRepository.insert(tableToInsert);
             const insertedTable: Table = new Table(
                 table.raw[0].id,
-                createTableDTO.name
+                createTableDTO.name,
+                TableStatus.SLEEPING
             )
             return endMessage = {data: insertedTable, status: HttpStatus.CREATED};
         }catch(err){
