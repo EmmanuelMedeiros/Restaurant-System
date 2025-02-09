@@ -38,4 +38,14 @@ export class ItemCategoryService {
         })
         return book;
       }
+
+    async deleteOne(itemCategory: ItemCategory): Promise<EndMessage> {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.CREATED};
+        try {
+            await this.itemCategoryRepository.delete(itemCategory);
+            return endMessage = {data: itemCategory, status: HttpStatus.OK};
+        }catch(err) {
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
+    } 
 }

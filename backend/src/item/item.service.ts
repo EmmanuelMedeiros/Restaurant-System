@@ -48,11 +48,11 @@ export class ItemService {
       return item;
     }
 
-    async deleteOne(id: number) {
+    async deleteOne(itemToDelete: Item) {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
         try {
-            await this.itemRepository.delete(id);
-            return endMessage = {data: `Item ${id} deleted`, status: HttpStatus.OK};
+            await this.itemRepository.delete(itemToDelete.id);
+            return endMessage = {data: itemToDelete, status: HttpStatus.OK};
         }catch(err) {
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }

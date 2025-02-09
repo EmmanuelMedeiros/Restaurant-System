@@ -25,27 +25,27 @@ export class OrderController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    async create(@Body() createUserDTO: CreateOrderDTO ) {
-        const fetchedTable: Table|null = await this.tableService.findOne(createUserDTO.table.id);
+    async create(@Body() createOrderDTO: CreateOrderDTO ) {
+        const fetchedTable: Table|null = await this.tableService.findOne(createOrderDTO.table.id);
         if(!fetchedTable) {
             throw new HttpException(`No table found for this ID`, HttpStatus.NOT_FOUND);
         };
         if(fetchedTable.status === TableStatus.BUSY) {
             throw new HttpException(`This table already has an order in running`, HttpStatus.BAD_REQUEST)
         };
-        const fetchedUser: User|null = await this.userService.findOne(createUserDTO.waiter.uuid);
+        const fetchedUser: User|null = await this.userService.findOne(createOrderDTO.waiter.uuid);
         if(!fetchedUser) {
             throw new HttpException(`No user found for this UUID`, HttpStatus.NOT_FOUND);
         };
-        const fetchedItem: Item|null = await this.itemService.findOne(Number(createUserDTO.orderItem.item.id))
+        const fetchedItem: Item|null = await this.itemService.findOne(Number(createOrderDTO.orderItem.item.id))
         if(!fetchedItem) {
             throw new HttpException(`No user found for this UUID`, HttpStatus.NOT_FOUND);
         };
         const orderItem: OrderItem = {
             id: "",
             item: fetchedItem,
-            order: createUserDTO.orderItem.order,
-            quantity: createUserDTO.orderItem.quantity
+            order: createOrderDTO.orderItem.order,
+            quantity: createOrderDTO.orderItem.quantity
         }
         const createOrder: CreateOrderDTO = new CreateOrderDTO(
             fetchedTable,
@@ -69,4 +69,6 @@ export class OrderController {
         }
         return order;
     }
+
+    
 }

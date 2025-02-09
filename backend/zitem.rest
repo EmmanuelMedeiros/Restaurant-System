@@ -6,9 +6,9 @@ POST {{baseUrl}}/item
 Content-Type: application/json
 
 {
-    "name": "Carne de sol de boi",
-    "description": "Carne de sol de boi daquele jeitão",
-    "price": 45.50,
+    "name": "Charque de picanha",
+    "description": "Charquin e lavagirl",
+    "price": 78.00,
     "category": {
         "id": 1
     }
@@ -33,7 +33,7 @@ Content-Type: application/json
 
 ###
 
-DELETE {{baseUrl}}/item/17
+DELETE {{baseUrl}}/item/19
 
 
 ###

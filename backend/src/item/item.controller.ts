@@ -75,7 +75,11 @@ export class ItemController {
     @HttpCode(HttpStatus.OK)
     @Delete('/:id')
     async deleteOne(@Param('id') id: number) {
-        const serviceResponse: EndMessage = await this.itemService.deleteOne(id);
+        const itemToDelete: Item|null = await this.itemService.findOne(id);
+        if(!itemToDelete) {
+            throw new HttpException("No item found for this ID", HttpStatus.NOT_FOUND);
+        };
+        const serviceResponse: EndMessage = await this.itemService.deleteOne(itemToDelete);
         if(serviceResponse.status !== HttpStatus.OK) {
             throw new HttpException(serviceResponse.data, serviceResponse.status);
         }

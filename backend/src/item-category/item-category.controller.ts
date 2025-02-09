@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { ItemCategoryService } from './item-category.service';
 import { CreateItemCategoryDTO } from './dto/create.itemCategory.dto';
 import { EndMessage } from 'src/interface/EndMessage';
@@ -26,5 +26,19 @@ export class ItemCategoryController {
             throw new HttpException("No item category found for this ID", HttpStatus.NOT_FOUND);
         };
         return item
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Delete('/:id')
+    async deleteOne(@Param('id') id:number) {
+        const itemCategory: ItemCategory|null = await this.itemCategoryService.findOne(id);
+        if(!itemCategory) {
+            throw new HttpException("No item category found for this ID", HttpStatus.NOT_FOUND);
+        };
+        const serviceResponse: EndMessage = await this.itemCategoryService.deleteOne(itemCategory);
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, serviceResponse.status);
+        }
+        return serviceResponse;
     }
 }
