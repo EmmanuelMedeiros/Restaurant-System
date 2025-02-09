@@ -12,6 +12,7 @@ import { ItemService } from 'src/item/item.service';
 import { Item } from 'src/item/entity/item.entity';
 import { Order } from './entity/order.entity';
 import { TableStatus } from 'src/enum/TableStatus';
+import { Role } from 'src/enum/Role';
 
 @Controller('order')
 export class OrderController {
