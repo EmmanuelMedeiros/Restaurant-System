@@ -33,16 +33,16 @@ GET {{baseUrl}}/order/order-items/d157d137-5477-4788-af2e-fc90928d6c3f
 
 ### FINISH ORDER 
 
-PUT {{baseUrl}}/order/finish/5a3b68b3-c35d-40b1-80b3-a92b5ecebe35;
+PUT {{baseUrl}}/order/finish/87302fe0-6ee1-4fc8-b031-705f77de9804
 
 ### MANIPULATE ORDER ITEM
 
-POST {{baseUrl}}/order/manipulate_order_item/87302fe0-6ee1-4fc8-b031-705f77de9804
+POST {{baseUrl}}/order/manipulate_order_item/31589a74-dcef-466d-b84b-b4fe7385a7b0
 Content-Type: application/json
 
 {
     "item": {
         "id": 2
     },
-    "quantity": 10
+    "quantity": 0
 }

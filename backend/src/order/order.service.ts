@@ -122,7 +122,7 @@ export class OrderService {
         try {
             const thisOrderItems: OrderItem[]|null = await this.findOrderItems(order);
             const specificOrderItem: OrderItem|undefined = thisOrderItems.find(x => x.item.id === orderItem.item.id);
-            if(specificOrderItem) {
+            if(specificOrderItem && orderItem.quantity > 0) {
                 await this.orderItemRepository.query(`update
                                                     	order_item
                                                     set
@@ -131,8 +131,11 @@ export class OrderService {
                                                     	"orderUuid" = $2
                                                     AND
                                                         "itemID" = $3`, [orderItem.quantity, order.uuid, orderItem.item.id]);
-                return endMessage = {data: 'SUCCESS', status: HttpStatus.OK};
-            } else {
+                return endMessage = {data: orderItem, status: HttpStatus.OK};
+            } else if(specificOrderItem && orderItem.quantity === 0) {
+                await this.orderItemRepository.delete(specificOrderItem.uuid)
+                return endMessage = {data: orderItem, status: HttpStatus.OK};
+            } else if(orderItem.quantity > 1){
                 const itemToInsert: OrderItem = new OrderItem(
                     crypto.randomUUID(),
                     orderItem.item,
@@ -140,8 +143,10 @@ export class OrderService {
                     orderItem.quantity
                 )
                 await this.orderItemRepository.insert(itemToInsert);
-                return endMessage = {data: 'SUCCESS', status: HttpStatus.OK};
-            };
+                return endMessage = {data: itemToInsert, status: HttpStatus.OK};
+            } else {
+                return endMessage = {data: `To insert a new item, it's quantity must be above 0`, status: HttpStatus.BAD_REQUEST};
+            }
 
         }catch(err) {
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};

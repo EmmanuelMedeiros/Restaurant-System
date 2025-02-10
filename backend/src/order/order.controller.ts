@@ -111,8 +111,10 @@ export class OrderController {
     @HttpCode(HttpStatus.OK)
     @Post('/manipulate_order_item/:uuid')
     async manipulateOrderItem(@Param("uuid") uuid: string, @Body() orderItem: CreateOrderItemDTO) {
+        if(orderItem.quantity < 0) {
+            throw new HttpException("Quantity must be 0 or above", HttpStatus.BAD_REQUEST)
+        }
         const fetchedOrder: Order|null = await this.orderService.findOne(uuid)
-        console.log(fetchedOrder)
         if(!fetchedOrder) {
             throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
         };
@@ -124,7 +126,10 @@ export class OrderController {
             throw new HttpException("No item found for this ID", HttpStatus.NOT_FOUND);
         };
         const serviceResponse: EndMessage = await this.orderService.manipulateOrderItem(fetchedOrder, orderItem);
-
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
+        }
+        return serviceResponse;
     }
     
 }
