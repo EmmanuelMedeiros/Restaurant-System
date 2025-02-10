@@ -14,9 +14,9 @@ POST {{baseUrl}}/user
 Content-Type: application/json
 
 {
-    "email": "employee@email.com",
-    "password": "employee",
-    "role": "waiter"
+    "email": "admin@email.com",
+    "password": "adminadmin",
+    "role": "admin"
 }
 
 ###

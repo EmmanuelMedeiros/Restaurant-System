@@ -4,14 +4,14 @@ import { User } from './entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { EndMessage } from 'src/interface/EndMessage';
-
-import { PwdHash } from 'src/common/entity/PwdHash.entity';
+import { HashContract } from 'src/common/hashing/abstract-hash.entity';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>,
+        private readonly hashService: HashContract
     ) {}
 
     async findAll(): Promise<User[]|null> {
@@ -36,7 +36,7 @@ export class UserService {
     async create(createUserDTO: CreateUserDTO): Promise<EndMessage> {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK}
         try {
-            const hashPassword: string = await PwdHash.generatePasswordHash(createUserDTO.password);
+            const hashPassword: string = await this.hashService.hash(createUserDTO.password);
             const newUser: User = new User(
                 hashPassword,
                 createUserDTO.uuid,
