@@ -26,7 +26,7 @@ export class Order implements IOrder {
     @Column({type: "timestamp", nullable: true})
     public readonly finishedAt?: string | undefined;
 
-    @OneToMany(() => OrderItem, (orderItem) => orderItem.id)
+    @OneToMany(() => OrderItem, (orderItem) => orderItem.uuid)
     public readonly orderItems: OrderItem[];
     
 

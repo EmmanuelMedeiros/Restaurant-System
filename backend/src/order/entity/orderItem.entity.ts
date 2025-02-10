@@ -7,7 +7,7 @@ import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne,
 export class OrderItem implements IOrderItem {
 
     @PrimaryColumn()
-    public readonly id: string;
+    public readonly uuid: string;
 
     @ManyToOne(() => Item)
     @JoinColumn({
@@ -21,8 +21,8 @@ export class OrderItem implements IOrderItem {
     @Column({type: 'integer'})
     public readonly quantity: number;
 
-	constructor(id: string, item: Item, order: Order, quantity: number) {
-		this.id = id;
+	constructor(uuid: string, item: Item, order: Order, quantity: number) {
+		this.uuid = uuid;
 		this.item = item;
 		this.order = order;
 		this.quantity = quantity;
