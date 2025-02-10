@@ -24,12 +24,12 @@ Content-Type: application/json
 
 ### GET SPECIFIC ORDER
 
-GET {{baseUrl}}/order/7533a0c2-5e4e-4a21-bec4-87a98bd4c550
+GET {{baseUrl}}/order/31589a74-dcef-466d-b84b-b4fe7385a7b0
 
 
 ### GET SPECIFIC ORDER'S ITEM
 
-GET {{baseUrl}}/order/order-items/d157d137-5477-4788-af2e-fc90928d6c3f
+GET {{baseUrl}}/order/order-items/31589a74-dcef-466d-b84b-b4fe7385a7b0
 
 ### FINISH ORDER 
 
@@ -44,5 +44,5 @@ Content-Type: application/json
     "item": {
         "id": 2
     },
-    "quantity": 0
+    "quantity": 7
 }

@@ -131,9 +131,15 @@ export class OrderService {
                                                     	"orderUuid" = $2
                                                     AND
                                                         "itemID" = $3`, [orderItem.quantity, order.uuid, orderItem.item.id]);
+                await this.orderRepository.update(order.uuid, {
+                    modifiedAt: moment().format('YYYY/MM/DD HH:mm:ss')
+                })
                 return endMessage = {data: orderItem, status: HttpStatus.OK};
             } else if(specificOrderItem && orderItem.quantity === 0) {
                 await this.orderItemRepository.delete(specificOrderItem.uuid)
+                await this.orderRepository.update(order.uuid, {
+                    modifiedAt: moment().format('YYYY/MM/DD HH:mm:ss')
+                })
                 return endMessage = {data: orderItem, status: HttpStatus.OK};
             } else if(orderItem.quantity > 1){
                 const itemToInsert: OrderItem = new OrderItem(
@@ -143,6 +149,9 @@ export class OrderService {
                     orderItem.quantity
                 )
                 await this.orderItemRepository.insert(itemToInsert);
+                await this.orderRepository.update(order.uuid, {
+                    modifiedAt: moment().format('YYYY/MM/DD HH:mm:ss')
+                })
                 return endMessage = {data: itemToInsert, status: HttpStatus.OK};
             } else {
                 return endMessage = {data: `To insert a new item, it's quantity must be above 0`, status: HttpStatus.BAD_REQUEST};
