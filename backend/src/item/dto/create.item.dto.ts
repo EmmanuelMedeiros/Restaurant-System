@@ -17,7 +17,7 @@ export class CreateItemDTO implements Pick<IItem, "category"|"createdAt"|"descri
 
 	constructor(category: ItemCategory, name: string, price: number, description?: string) {
 		this.category = category;
-		this._createdAt = moment().format('YYYY/MM/DD hh:mm:ss');
+		this._createdAt = moment().format('YYYY/MM/DD HH:mm:ss');
 		this.description = description;
 		this.name = name;
 		this.price = price;

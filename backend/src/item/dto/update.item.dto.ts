@@ -20,7 +20,7 @@ export class UpdateItemDTO {
 		this.description = description;
 		this.name = name;
 		this.price = price;
-        this.updatedAt = moment().format('YYYY/MM/DD hh:mm:ss');
+        this.updatedAt = moment().format('YYYY/MM/DD HH:mm:ss');
 	}
     
 }

@@ -18,7 +18,7 @@ export class CreateOrderDTO implements Pick<Order, "table"|"waiter"|"createdAt"|
         this.table = table;
         this.waiter = waiter;
         this.orderItem = orderItem,
-		this.createdAt = moment().format('YYYY/MM/DD hh:mm:ss');
+		this.createdAt = moment().format('YYYY/MM/DD HH:mm:ss');
 		this.finishedAt = finishedAt;
 		this.modifiedAt = modifiedAt;
         this.finishedAt = finishedAt,
