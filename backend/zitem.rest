@@ -6,9 +6,9 @@ POST {{baseUrl}}/item
 Content-Type: application/json
 
 {
-    "name": "Charque de picanha",
-    "description": "Charquin e lavagirl",
-    "price": 78.00,
+    "name": "Carne de porco",
+    "description": "porkin",
+    "price": 48.00,
     "category": {
         "id": 1
     }

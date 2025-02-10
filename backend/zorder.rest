@@ -1,28 +1,48 @@
 @baseUrl = http://localhost:3000
 
+### POST ORDER
+
 POST {{baseUrl}}/order
 Content-Type: application/json
 
 {
 
     "table": {
-        "id": 4
+        "id": 1
     },
     "waiter": {
-        "uuid": "c58d3b3e-3ba0-495b-bb69-ae9b6a2db867"
+        "uuid": "f116cfba-be75-4d4c-a447-000eaf4506e2"
     },
     "orderItem": {
         "item": {
-            "id": 14
+            "id": 1
         },
         "quantity": 2
     }
 
 }
 
-###
+### GET SPECIFIC ORDER
 
 GET {{baseUrl}}/order/7533a0c2-5e4e-4a21-bec4-87a98bd4c550
 
 
-###
+### GET SPECIFIC ORDER'S ITEM
+
+GET {{baseUrl}}/order/order-items/d157d137-5477-4788-af2e-fc90928d6c3f
+
+### FINISH ORDER 
+
+PUT {{baseUrl}}/order/finish/5a3b68b3-c35d-40b1-80b3-a92b5ecebe35;
+
+### MANIPULATE ORDER ITEM
+
+POST {{baseUrl}}/order/manipulate_order_item/87302fe0-6ee1-4fc8-b031-705f77de9804
+Content-Type: application/json
+
+{
+    "item": {
+        "id": 2
+    },
+    "quantity": 10
+}

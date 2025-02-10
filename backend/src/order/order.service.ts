@@ -6,9 +6,12 @@ import { CreateOrderDTO } from './dto/create-order.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 
 import * as crypto from 'crypto';
+import * as moment from 'moment';
+
 import { OrderItem } from './entity/orderItem.entity';
 import { TableStatus } from 'src/enum/TableStatus';
 import { Table } from 'src/table/entity/table.entity';
+import { CreateOrderItemDTO } from './dto/create-orderItem.dto';
 
 @Injectable()
 export class OrderService {
@@ -17,6 +20,8 @@ export class OrderService {
         private readonly orderRepository: Repository<Order>,
         @InjectRepository(OrderItem)
         private readonly orderItemRepository: Repository<OrderItem>,
+        @InjectRepository(Table)
+        private readonly tableRepository: Repository<Table>,
         private dataSource: DataSource
     ) {};
 
@@ -55,7 +60,6 @@ export class OrderService {
             await queryRunner.rollbackTransaction();
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
-        return endMessage;
     }
 
     async findOne(uuid: string): Promise<Order|null> {
@@ -69,6 +73,79 @@ export class OrderService {
             }
         })
         return user;
+    }
+
+    async findOrderItems(order: Order) {
+        const orderItems: OrderItem[]|null = await this.orderItemRepository.find({
+            where: {
+                order: order
+            },
+            relations: {
+                item: true            
+            }
+        })
+        return orderItems;
+    }
+
+    async finishOrder(order: Order, orderItems: OrderItem[]): Promise<EndMessage> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        const finishedAtMoment: string = moment().format("YYYY/MM/DD hh:mm:ss")
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        try {
+            await queryRunner.manager.update(Order, order.uuid, {
+                finishedAt: finishedAtMoment
+            });
+            await queryRunner.manager.update(Table, order.table, {
+                status: TableStatus.SLEEPING
+            });
+            await queryRunner.commitTransaction();
+            const sendBackOrder: Order = {
+                createdAt: order.createdAt,
+                orderItems: order.orderItems,
+                table: order.table,
+                uuid: order.uuid,
+                waiter: order.waiter,
+                finishedAt: finishedAtMoment,
+                modifiedAt: order.modifiedAt
+            }
+            return endMessage = {data: [{order: sendBackOrder, orderItems: orderItems}], status: HttpStatus.OK};
+        }catch(err) {
+            await queryRunner.rollbackTransaction();
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
+    }
+
+    async manipulateOrderItem(order: Order, orderItem: CreateOrderItemDTO) {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        try {
+            const thisOrderItems: OrderItem[]|null = await this.findOrderItems(order);
+            const specificOrderItem: OrderItem|undefined = thisOrderItems.find(x => x.item.id === orderItem.item.id);
+            if(specificOrderItem) {
+                await this.orderItemRepository.query(`update
+                                                    	order_item
+                                                    set
+                                                    	quantity = $1
+                                                    where
+                                                    	"orderUuid" = $2
+                                                    AND
+                                                        "itemID" = $3`, [orderItem.quantity, order.uuid, orderItem.item.id]);
+                return endMessage = {data: 'SUCCESS', status: HttpStatus.OK};
+            } else {
+                const itemToInsert: OrderItem = new OrderItem(
+                    crypto.randomUUID(),
+                    orderItem.item,
+                    order,
+                    orderItem.quantity
+                )
+                await this.orderItemRepository.insert(itemToInsert);
+                return endMessage = {data: 'SUCCESS', status: HttpStatus.OK};
+            };
+
+        }catch(err) {
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
     }
 
 }
