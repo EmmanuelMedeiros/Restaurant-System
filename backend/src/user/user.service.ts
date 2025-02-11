@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 import { HashContract } from 'src/common/hashing/abstract-hash.entity';
+import { AuthUserDTO } from './dto/auth.user.dto';
 
 @Injectable()
 export class UserService {
@@ -49,5 +50,21 @@ export class UserService {
             endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
         return endMessage;
+    }
+
+    async authenticate(authUserDTO: AuthUserDTO): Promise<EndMessage> {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        try {
+            const fetchedUserByEmail: User[] = await this.userRepository.findBy({email: authUserDTO.email});
+            if(fetchedUserByEmail.length === 0) {
+                return endMessage = {data: 'Credentials not found in system', status: HttpStatus.BAD_REQUEST};
+            }
+            if( !(await this.hashService.compare(fetchedUserByEmail[0].password, authUserDTO.password)) ) {
+                return endMessage = {data: 'Credentials not match', status: HttpStatus.BAD_REQUEST};
+            };
+            return endMessage = {data: fetchedUserByEmail, status: HttpStatus.OK};
+        }catch(err) {
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
     }
 }

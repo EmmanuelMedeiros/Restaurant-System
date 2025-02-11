@@ -20,3 +20,12 @@ Content-Type: application/json
 }
 
 ###
+POST {{baseUrl}}/user/authenticate
+Content-Type: application/json
+
+{
+    "email": "admin@email.com",
+    "password": "adminadmin"
+}
+
+###

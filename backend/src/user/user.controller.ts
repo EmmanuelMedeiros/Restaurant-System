@@ -5,6 +5,7 @@ import { User } from './entity/user.entity';
 import * as crypto from 'crypto';
 import { EndMessage } from 'src/interface/EndMessage';
 import { CreateUserDTO } from './dto/create.user.dto';
+import { AuthUserDTO } from './dto/auth.user.dto';
 
 @Controller('user')
 export class UserController {
@@ -45,6 +46,15 @@ export class UserController {
             throw new HttpException("No user found for this UUID", HttpStatus.NOT_FOUND);
         }
         return user;
+    }
+
+    @Post('/authenticate')
+    async authenticate(@Body() authUser: AuthUserDTO) {
+        const serviceResponse: EndMessage = await this.userService.authenticate(authUser);
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
+        }
+        return serviceResponse;
     }
 
 }
