@@ -1,6 +1,6 @@
 import { Global, Module } from "@nestjs/common";
-import { HashContract } from "./abstract-hash.entity";
-import { HashService } from "./hash.service.entity";
+import { HashContract } from "../hashing/abstract-hash.entity";
+import { HashService } from "../hashing/hash.service.entity";
 
 @Global()
 @Module({
@@ -10,6 +10,4 @@ import { HashService } from "./hash.service.entity";
     }],
     exports: [HashContract]
 })
-export class HashModule {
-
-}
+export class AuthModule{}
