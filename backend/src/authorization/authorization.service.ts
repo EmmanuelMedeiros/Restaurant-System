@@ -33,7 +33,8 @@ export class AuthorizationService {
                 const jwtToken = await this.jwtService.signAsync(
                     {
                         uuid: fetchedUserByEmail[0].uuid,
-                        email: fetchedUserByEmail[0].email
+                        email: fetchedUserByEmail[0].email,
+                        role: fetchedUserByEmail[0].role
                     },
                     {
                         secret: this.jwtConfiguration.secret,

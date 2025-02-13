@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TableModule } from './table/table.module';
@@ -10,6 +10,7 @@ import { OrderItemModule } from './order-item/order-item.module';
 import { OrderModule } from './order/order.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthorizationModule } from './authorization/authorization.module';
+import { JWTVerify } from './common/middleware/jwtVerify.middleware';
 
 @Module({
   imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(
@@ -27,4 +28,8 @@ import { AuthorizationModule } from './authorization/authorization.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(JWTVerify).forRoutes('*');
+  }
+}

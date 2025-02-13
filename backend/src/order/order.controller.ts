@@ -16,6 +16,7 @@ import { Role } from 'src/enum/Role';
 import { UpdateItemDTO } from 'src/item/dto/update.item.dto';
 import { CreateOrderItemDTO } from './dto/create-orderItem.dto';
 import { JWTGuard } from 'src/common/guard/jwt.guard';
+import { UserRoleGuard } from 'src/common/guard/userRole.guard';
 
 @Controller('order')
 export class OrderController {
@@ -64,6 +65,7 @@ export class OrderController {
         return serviceResponse;
     }
 
+    @UseGuards(new UserRoleGuard(Role.WAITER))
     @Get("/:uuid")
     async findOne(@Param("uuid") uuid:string) {
         const order: Order|null = await this.orderService.findOne(uuid)
