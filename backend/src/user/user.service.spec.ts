@@ -6,6 +6,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { Role } from "src/enum/Role";
 import { CreateUserDTO } from "./dto/create.user.dto";
+import { EndMessage } from "src/interface/EndMessage";
+import { HttpStatus } from "@nestjs/common";
 
 describe('userService', () => {
 
@@ -39,7 +41,7 @@ describe('userService', () => {
     });
 
     describe('create', () => {
-        it("Must create a new person", async () => {
+        it("Must create a new user", async () => {
 
             const createUserDTO = new CreateUserDTO(
                 "email@email",
@@ -48,7 +50,7 @@ describe('userService', () => {
             )
 
             jest.spyOn(hashService, 'hash').mockResolvedValue('pwdHash')
-            await userService.create(createUserDTO)
+            const endMessage: EndMessage = await userService.create(createUserDTO)
 
             const newUser: User = new User(
                 "pwdHash",
@@ -59,6 +61,9 @@ describe('userService', () => {
 
             expect(hashService.hash).toHaveBeenCalledWith(createUserDTO.password);
             expect(userRepository.insert).toHaveBeenCalledWith(newUser)
+            expect(endMessage).toStrictEqual(
+                {data: newUser, status: HttpStatus.CREATED}
+            )
 
         })
     })
