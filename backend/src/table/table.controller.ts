@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { TableService } from './table.service';
 import { CreateTableDTO } from './dto/create-table.dto';
 import { EndMessage } from 'src/interface/EndMessage';
@@ -19,12 +19,36 @@ export class TableController {
     }  
 
     @HttpCode(HttpStatus.OK)
+    @Get()
+    async findAll() {
+        const tableList: Table[]|null = await this.tableService.findAll();
+        if(!tableList || tableList.length < 1) {
+            throw new HttpException("No user found", HttpStatus.NOT_FOUND);
+        }
+        return tableList;
+    }
+
+    @HttpCode(HttpStatus.OK)
     @Get('/:id')
-    async findOne(@Param('id') uuid: number) {
-        const table: Table|null = await this.tableService.findOne(uuid)
+    async findOne(@Param('id') id: number) {
+        const table: Table|null = await this.tableService.findOne(id)
         if(!table) {
-            throw new HttpException("No table found for this UUID", HttpStatus.NOT_FOUND);
+            throw new HttpException("No table found for this ID", HttpStatus.NOT_FOUND);
         }
         return table;
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Delete('/:id')
+    async delete(@Param('id') id: number) {
+        const table: Table|null = await this.tableService.findOne(id)
+        if(!table) {
+            throw new HttpException("No table found for this ID", HttpStatus.NOT_FOUND);
+        };
+        const serviceResponse: EndMessage = await this.tableService.delete(table);
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, serviceResponse.status);
+        }
+        return serviceResponse;
     }
 }

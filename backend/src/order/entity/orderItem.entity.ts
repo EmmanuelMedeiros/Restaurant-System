@@ -5,7 +5,6 @@ import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne,
 
 @Entity()
 export class OrderItem implements IOrderItem {
-
     @PrimaryColumn()
     public readonly uuid: string;
 
@@ -15,7 +14,7 @@ export class OrderItem implements IOrderItem {
     })
     public readonly item: Item;
 
-    @ManyToOne(() => Order)
+    @ManyToOne(() => Order, (order) => order.uuid, {onDelete: "CASCADE"})
     public readonly order: Order;
 
     @Column({type: 'integer'})

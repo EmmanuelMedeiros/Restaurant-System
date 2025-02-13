@@ -11,13 +11,13 @@ Content-Type: application/json
         "id": 1
     },
     "waiter": {
-        "uuid": "f116cfba-be75-4d4c-a447-000eaf4506e2"
+        "uuid": "12a4cd40-d103-4577-826d-3289f5615513"
     },
     "orderItem": {
         "item": {
             "id": 1
         },
-        "quantity": 2
+        "quantity": 3
     }
 
 }
@@ -25,24 +25,32 @@ Content-Type: application/json
 ### GET SPECIFIC ORDER
 
 GET {{baseUrl}}/order/31589a74-dcef-466d-b84b-b4fe7385a7b0
+Authorization: "Bearer 1234"
 
-
-### GET SPECIFIC ORDER'S ITEM
+### GET SPECIFIC ORDER'S ITEMS
 
 GET {{baseUrl}}/order/order-items/31589a74-dcef-466d-b84b-b4fe7385a7b0
 
 ### FINISH ORDER 
 
-PUT {{baseUrl}}/order/finish/87302fe0-6ee1-4fc8-b031-705f77de9804
+PUT {{baseUrl}}/order/finish/2c622264-0dd9-4a09-8b4e-6c14b06c5b5d
 
 ### MANIPULATE ORDER ITEM
 
-POST {{baseUrl}}/order/manipulate_order_item/31589a74-dcef-466d-b84b-b4fe7385a7b0
+POST {{baseUrl}}/order/manipulate_order_item/2c622264-0dd9-4a09-8b4e-6c14b06c5b5d
 Content-Type: application/json
 
 {
     "item": {
         "id": 2
     },
-    "quantity": 7
+    "quantity": 2
 }
+### DELETE ORDER
+
+POST {{baseUrl}}/order/2c622264-0dd9-4a09-8b4e-6c14b06c5b5d
+Content-Type: application/json
+
+### DELETE ORDER
+
+DELETE {{baseUrl}}/order/14182d19-1593-4107-888a-4b4038ef0891

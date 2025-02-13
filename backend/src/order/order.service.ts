@@ -75,6 +75,17 @@ export class OrderService {
         return user;
     }
 
+    async deleteOne(order: Order): Promise<EndMessage> {
+        let endMessage: EndMessage = {status: HttpStatus.OK, data: ''};
+        try {
+            await this.orderRepository.delete(order.uuid);
+            await this.tableRepository.update(order.table, {status: TableStatus.SLEEPING})
+            return endMessage = {status: HttpStatus.OK, data: order}
+        }catch(err) {
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
+    }
+
     async findOrderItems(order: Order) {
         const orderItems: OrderItem[]|null = await this.orderItemRepository.find({
             where: {

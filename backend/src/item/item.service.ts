@@ -36,6 +36,11 @@ export class ItemService {
             }
     }
 
+    async findAll() {
+        const itemList: Item[]|null = await this.itemRepository.find();
+        return itemList;
+    }
+
     async findOne(id: number) {
     const item: Item|null = await this.itemRepository.findOne({
         where: {

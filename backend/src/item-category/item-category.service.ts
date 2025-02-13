@@ -4,6 +4,7 @@ import { ItemCategory } from './entity/item-category.entity';
 import { InsertResult, Repository } from 'typeorm';
 import { CreateItemCategoryDTO } from './dto/create.itemCategory.dto';
 import { EndMessage } from 'src/interface/EndMessage';
+import { UpdateItemCategoryDTO } from './dto/update.itemCategory.dto';
 
 @Injectable()
 export class ItemCategoryService {
@@ -37,7 +38,27 @@ export class ItemCategoryService {
           }
         })
         return book;
-      }
+    }
+
+    async update(updateItemCategoryDTO: UpdateItemCategoryDTO, itemCategoryID: number): Promise<EndMessage> {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        try {
+            await this.itemCategoryRepository.update(itemCategoryID, updateItemCategoryDTO);
+            const itemCategory: ItemCategory = {
+                id: itemCategoryID,
+                title: updateItemCategoryDTO.title
+            }
+            return endMessage = {data: itemCategory, status: HttpStatus.OK};
+        }catch(err) {
+            return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
+    }
+    
+
+    async findAll(): Promise<ItemCategory[]|null> {
+        const itemCategoriesList: ItemCategory[] = await this.itemCategoryRepository.find();
+        return itemCategoriesList;
+    }
 
     async deleteOne(itemCategory: ItemCategory): Promise<EndMessage> {
         let endMessage: EndMessage = {data: '', status: HttpStatus.CREATED};

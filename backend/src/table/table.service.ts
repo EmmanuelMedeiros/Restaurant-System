@@ -12,6 +12,7 @@ export class TableService {
         @InjectRepository(Table)
         private readonly tableRepository: Repository<Table>
     ) {};
+    
 
     async create(createTableDTO: CreateTableDTO): Promise<EndMessage>{
         let endMessage: EndMessage = {data: '', status: HttpStatus.CREATED};
@@ -34,6 +35,11 @@ export class TableService {
         }
     }
 
+    async findAll(): Promise<Table[]|null> {
+        const tableList: Table[] = await this.tableRepository.find();
+        return tableList;
+    }
+
     async findOne(id: number): Promise<Table|null> {
         const table: Table|null = await this.tableRepository.findOne({
             where: {
@@ -41,5 +47,16 @@ export class TableService {
             }
         })
         return table;
+    }
+
+    async delete(table: Table) {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK}
+        try {
+            await this.tableRepository.delete(table.id);
+            endMessage = {data: table, status: HttpStatus.OK};
+        }catch(err) {
+            endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
+        return endMessage;
     }
 }

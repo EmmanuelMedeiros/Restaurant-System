@@ -8,20 +8,22 @@ import { ItemModule } from './item/item.module';
 import { UserModule } from './user/user.module';
 import { OrderItemModule } from './order-item/order-item.module';
 import { OrderModule } from './order/order.module';
+import { ConfigModule } from '@nestjs/config';
+import { AuthorizationModule } from './authorization/authorization.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(
+  imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(
     {
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'admin',
-      database: 'restaurant_system_db',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       synchronize: true,
       autoLoadEntities: true
     }
-  ) ,TableModule, ItemCategoryModule, ItemModule, UserModule, OrderItemModule, OrderModule],
+  ) ,TableModule, ItemCategoryModule, ItemModule, UserModule, OrderItemModule, OrderModule, AuthorizationModule],
   controllers: [AppController],
   providers: [AppService],
 })

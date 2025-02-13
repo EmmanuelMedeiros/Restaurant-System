@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3000
 
-###
+### CREATE ITEM
 
 POST {{baseUrl}}/item
 Content-Type: application/json
@@ -14,11 +14,15 @@ Content-Type: application/json
     }
 }
 
-###
+### GET ALL ITEMS
+
+GET {{baseUrl}}/item
+
+### GET SPECIFIC ITEM
 
 GET {{baseUrl}}/item/14
 
-###
+### EDIT SPECIFIC ITEM
 
 PUT {{baseUrl}}/item/16
 Content-Type: application/json
@@ -31,9 +35,6 @@ Content-Type: application/json
     }
 }
 
-###
+### DELETE ITEM
 
 DELETE {{baseUrl}}/item/19
-
-
-###

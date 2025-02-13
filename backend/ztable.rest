@@ -1,16 +1,25 @@
 @baseUrl = http://localhost:3000
 
-###
+### CREATE NEW TABLE
 
 POST {{baseUrl}}/table
 Content-Type: application/json
 
 {
-    "name": "01"
+    "name": "03"
 }
 
-###
+### GET ALL TABLES
 
-GET {{baseUrl}}/table/3
+GET {{baseUrl}}/table/2
 
-###
+### GET ONE TABLE
+
+GET {{baseUrl}}/table
+
+### DELETE ONE TABLE
+
+GET {{baseUrl}}/table/
+
+### MISSING: DELETE TABLE/ UPDATE TABLE
+

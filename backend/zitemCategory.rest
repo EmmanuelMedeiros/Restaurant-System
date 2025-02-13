@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3000
 
-###
+### CREATE ITEM CATEGORY
 
 POST {{baseUrl}}/item-category
 Content-Type: application/json
@@ -9,10 +9,23 @@ Content-Type: application/json
     "title": "Almoço"
 }
 
-###
+### GET ALL ITEM CATEGORY 
+
+GET {{baseUrl}}/item-category
+
+### GET SPECIFIC ITEM CATEGORY 
 
 GET {{baseUrl}}/item-category/1
 
-###
+### UPDATE SPECIFIC ITEM CATEGORY
+
+PUT {{baseUrl}}/item-category/2
+Content-Type: application/json
+
+{
+    "title": "Tira-gostinho"
+}
+
+### DELETE SPECIFIC ITEM CATEGORY
 
 DELETE {{baseUrl}}/item-category/6

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 
 import { OrderService } from './order.service';
 import { CreateOrderDTO } from './dto/create-order.dto';
@@ -15,6 +15,7 @@ import { TableStatus } from 'src/enum/TableStatus';
 import { Role } from 'src/enum/Role';
 import { UpdateItemDTO } from 'src/item/dto/update.item.dto';
 import { CreateOrderItemDTO } from './dto/create-orderItem.dto';
+import { JWTGuard } from 'src/common/guard/jwt.guard';
 
 @Controller('order')
 export class OrderController {
@@ -41,7 +42,7 @@ export class OrderController {
         };
         const fetchedItem: Item|null = await this.itemService.findOne(Number(createOrderDTO.orderItem.item.id))
         if(!fetchedItem) {
-            throw new HttpException(`No user found for this UUID`, HttpStatus.NOT_FOUND);
+            throw new HttpException(`No item found for this ID`, HttpStatus.NOT_FOUND);
         };
         const orderItem: OrderItem = {
             uuid: "",
@@ -70,6 +71,19 @@ export class OrderController {
             throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
         }
         return order;
+    }
+
+    @Delete("/:uuid")
+    async deleteOne(@Param("uuid") uuid: string) {
+        const order: Order|null = await this.orderService.findOne(uuid)
+        if(!order) {
+            throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
+        };
+        const serviceResponse: EndMessage = await this.orderService.deleteOne(order);
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
+        }
+        return serviceResponse;
     }
 
     @Get("/order-items/:uuid")

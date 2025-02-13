@@ -14,7 +14,7 @@ export class Order implements IOrder {
     @ManyToOne(() => Table)
     public readonly table: Table;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, {onDelete: "CASCADE"})
     public readonly waiter: User;
 
     @Column({type: 'timestamp'})

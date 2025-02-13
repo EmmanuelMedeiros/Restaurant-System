@@ -6,6 +6,7 @@ import { ItemCategoryService } from 'src/item-category/item-category.service';
 import { ItemCategory } from 'src/item-category/entity/item-category.entity';
 import { UpdateItemDTO } from './dto/update.item.dto';
 import { Item } from './entity/item.entity';
+import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 
 @Controller('item')
 export class ItemController {
@@ -34,6 +35,16 @@ export class ItemController {
         }
         return serviceResponse;
     }  
+
+    @HttpCode(HttpStatus.OK)
+    @Get()
+    async findAll() {
+        const itemList: Item[]|null = await this.itemService.findAll();
+        if(!itemList || itemList.length < 1) {
+            throw new HttpException("No item found in database", HttpStatus.BAD_REQUEST);
+        }
+        return itemList
+    }
 
     @HttpCode(HttpStatus.OK)
     @Get('/:id')
