@@ -51,7 +51,6 @@ describe('userService', () => {
 
             jest.spyOn(hashService, 'hash').mockResolvedValue('pwdHash')
             const endMessage: EndMessage = await userService.create(createUserDTO)
-
             const newUser: User = new User(
                 "pwdHash",
                 createUserDTO.uuid,

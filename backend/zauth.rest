@@ -8,3 +8,12 @@ Content-Type: application/json
     "email": "admin@email.com",
     "password": "adminadmin"
 }
+
+###
+
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNGMyMmEzZC1jNDE1LTRiZmUtODA3ZC0wYTNmZDNkZjRmMTMiLCJpYXQiOjE3Mzk1MzQ3NDgsImV4cCI6MTczOTcwNzU0OCwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIn0.G_plPU9d2CVLJ0V98qEesP4973ZCG3MSfX4pbXjSa7Y"
+}
