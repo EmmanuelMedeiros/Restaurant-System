@@ -3,13 +3,17 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 interface ButtonToActionProps {
     buttonTitle: string,
     textStyle: {fontSize: number, color: string},
-    buttonStyle: {backgroundColor: string}
+    buttonStyle: {backgroundColor: string},
+    isDisabled: boolean
 }
 
-export default function ButtonToAction({buttonTitle, textStyle, buttonStyle}: ButtonToActionProps) {
+export default function ButtonToAction({buttonTitle, textStyle, buttonStyle, isDisabled}: ButtonToActionProps) {
     return(
-        <TouchableOpacity style={[{...buttonStyle}, buttonToActionStyle.button]}>
-            <Text style={{...textStyle, fontWeight: 'bold'}}>{buttonTitle}</Text>
+        <TouchableOpacity 
+            style={[{...buttonStyle}, buttonToActionStyle.button]}
+            disabled={isDisabled}
+        >
+            <Text style={{...textStyle, fontWeight: 'bold', textAlign: 'center', margin: 'auto'}}>{buttonTitle}</Text>
         </TouchableOpacity>
     )
 }
@@ -17,7 +21,11 @@ export default function ButtonToAction({buttonTitle, textStyle, buttonStyle}: Bu
 const buttonToActionStyle = StyleSheet.create({
 
     button: {
-        padding: 20,
+        width: 130,
+        height: 70,
+
+        textAlign: 'center',
+
         borderRadius: 10
     }
 

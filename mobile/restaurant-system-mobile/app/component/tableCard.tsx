@@ -3,13 +3,20 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Icons from '@expo/vector-icons/Feather'
 import ButtonToAction from "./buttonToAction";
+import { TableStatus } from "../enum/TableStatus";
 
 interface TableCardProps {
     setShow: React.Dispatch<React.SetStateAction<boolean>>,
-    tableName: string
+    table: {id: string, status: TableStatus} | undefined
 }
 
-export default function TableCard({setShow, tableName}: TableCardProps) {
+export default function TableCard({setShow, table}: TableCardProps) {
+
+    let statusColor: "grey"|"#A87F26" = "grey";
+    let closeOrderBGColor: "#255247"|"rgba(37, 82, 71, .3)" = "#255247"
+
+    table?.status === TableStatus.BUSY ? [statusColor = "#A87F26", closeOrderBGColor = "#255247"]: [statusColor = "grey", closeOrderBGColor = "rgba(37, 82, 71, .3)"];
+
 
     return(
         <View 
@@ -17,11 +24,16 @@ export default function TableCard({setShow, tableName}: TableCardProps) {
             >
 
             <View style={tableCardStyle.card}>
-                <Text style={tableCardStyle.tableName}>Mesa {tableName}</Text>
+                
+                <View style={tableCardStyle.statusView}>
+                    <View style={[tableCardStyle.statusBullet, {backgroundColor: statusColor}]}/>
+                    <Text style={{color: 'white'}}>{table?.status}</Text>
+                </View>
+                <Text style={tableCardStyle.tableName}>Mesa {table?.id}</Text>
 
                 <View style={tableCardStyle.cardButtons}>
                     <ButtonToAction
-                        buttonTitle="Abrir Pedido"
+                        buttonTitle={table?.status === TableStatus.BUSY ? 'Pedidos' : 'Abrir Pedido'}
                         textStyle={
                             {
                                 color: '#181818',
@@ -33,21 +45,23 @@ export default function TableCard({setShow, tableName}: TableCardProps) {
                                 backgroundColor: '#C1C1C1'
                             }
                         }
+                        isDisabled={false}
                     />
 
                     <ButtonToAction
                         buttonTitle="Fechar Conta"
                         textStyle={
                             {
-                                color: '#181818',
+                                color: closeOrderBGColor === "#255247" ? '#C1C1C1' : 'rgba(193, 193, 193, .4)',
                                 fontSize: 15
                             }
                         }
                         buttonStyle={
                             {
-                                backgroundColor: '#255247'
+                                backgroundColor: closeOrderBGColor
                             }
                         }
+                        isDisabled={table?.status == TableStatus.SLEEPING ? true : false}
                     />
                 </View>
 
@@ -86,6 +100,8 @@ const tableCardStyle = StyleSheet.create({
 
         flexDirection: 'row',
         alignItems: 'center',
+
+        position: 'relative'
         
     },
 
@@ -95,5 +111,25 @@ const tableCardStyle = StyleSheet.create({
         gap: 20,
 
         alignItems: 'center'
+    },
+
+    statusView: {
+        position: 'absolute',
+
+        top: 20,
+        left: 20,
+
+        flexDirection: 'row',
+        alignItems: 'center',
+
+        gap: 10
+    },
+
+    statusBullet: {
+        width: 15,
+        height: 15,
+
+        borderRadius: '100%'
     }
+    
 })

@@ -3,16 +3,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Table from "../component/table";
 import { useState } from "react";
 import TableCard from "../component/tableCard";
-
-
+import { TableStatus } from "../enum/TableStatus";
 
 export default function TablesScreen() {
 
     const [openTableCard, setOpenTableCard] = useState<boolean>(false);
+    const [selectedTable, setSelectedTable] = useState<{id: string, status: TableStatus}>()
 
-    const tableObject: {id: string}[] = [
-        {id: "01"}, {id: "02"}, {id: "03"},
-        {id: "04"},  {id: "05"},  {id: "06"}
+    const tableObject: {id: string, status: TableStatus }[] = [
+        {id: "01", status: TableStatus.BUSY}, {id: "02", status: TableStatus.SLEEPING}, {id: "03", status: TableStatus.SLEEPING},
+        {id: "04", status: TableStatus.SLEEPING},  {id: "05", status: TableStatus.BUSY},  {id: "06", status: TableStatus.BUSY}
     ];
 
     return(
@@ -39,7 +39,10 @@ export default function TablesScreen() {
                                 key={element.id}
                                 onTouchEnd={() => setOpenTableCard(true)}
                             >
-                                <TouchableOpacity key={element.id}>
+                                <TouchableOpacity 
+                                    key={element.id}
+                                    onPressIn={() => setSelectedTable(element)}
+                                >
                                     <Table
                                         tableName={element.id}
                                     />
@@ -52,8 +55,8 @@ export default function TablesScreen() {
 
             <View style={[tableScreenStyle.tableCard, !openTableCard ? tableScreenStyle.notShow : null]}>
                 <TableCard
+                    table={selectedTable}
                     setShow={setOpenTableCard}
-                    tableName={"01"}
                 />
             </View>
 
