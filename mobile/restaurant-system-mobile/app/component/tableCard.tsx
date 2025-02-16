@@ -6,6 +6,8 @@ import ButtonToAction from "./buttonToAction";
 import { TableStatus } from "../enum/TableStatus";
 import { ITable } from "../interface/ITable";
 
+import { Link, router } from "expo-router";
+
 interface TableCardProps {
     setShow: React.Dispatch<React.SetStateAction<boolean>>,
     table: ITable | undefined
@@ -13,11 +15,15 @@ interface TableCardProps {
 
 export default function TableCard({setShow, table}: TableCardProps) {
 
+
     let statusColor: "grey"|"#A87F26" = "grey";
     let closeOrderBGColor: "#255247"|"rgba(37, 82, 71, .3)" = "#255247"
 
     table?.status === TableStatus.BUSY ? [statusColor = "#A87F26", closeOrderBGColor = "#255247"]: [statusColor = "grey", closeOrderBGColor = "rgba(37, 82, 71, .3)"];
 
+    function goToCreateOrder() {
+        router.push("/table/createOrder")
+    }
 
     return(
         <View 
@@ -49,6 +55,7 @@ export default function TableCard({setShow, table}: TableCardProps) {
                                 }
                             }
                             isDisabled={false}
+                            onPress={() => {table?.status === TableStatus.BUSY ? null : goToCreateOrder()}}
                         />
                     </View>
                     

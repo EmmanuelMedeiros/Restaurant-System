@@ -12,7 +12,7 @@ export class TablesEndpoint {
 
     async getAll(): Promise<IApiResponse> {
 
-        let apiResponse: IApiResponse
+        let apiResponse: IApiResponse;
 
         const apiResult = await axios.get(`${this.apiUrl}/table`)
         .then((response) => {

@@ -44,7 +44,7 @@ export default function TablesScreen() {
         >   
         
             <Pressable 
-                style={{height: '80%',}}
+                style={{height: '80%', width: '90%'}}
                 onPressIn={() => setOpenTableCard(false)}                
             >
                 <ScrollView horizontal={true}>

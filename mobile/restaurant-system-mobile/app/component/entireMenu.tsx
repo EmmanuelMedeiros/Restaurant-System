@@ -6,6 +6,9 @@ import { IItemCategory } from "../interface/IItemCategory";
 import { useEffect, useState } from "react";
 import { OrderCreationStates } from "../enum/OrderCreationStates";
 
+import { BackHandler } from "react-native";
+
+import { Link, router } from "expo-router";
 
 const itemList: IItem[] = [
     {
@@ -98,11 +101,19 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
     }
 
+    useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", () => {
+            router.navigate('/table/tables');
+            return true;
+        });
+    }, [])
+
     return(
         <View style={entireMenuStyle.container}>
             
             <TouchableOpacity
                 style={{position: 'absolute', right: 10, top: 10, zIndex: 10}}
+                onPress={() => router.navigate('/table/tables')}
             >
                 <Icons name='x' 
                     size={30} 

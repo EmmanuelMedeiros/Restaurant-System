@@ -4,12 +4,15 @@ interface ButtonToActionProps {
     buttonTitle: string,
     textStyle: {fontSize: number, color: string},
     buttonStyle: {backgroundColor: string},
-    isDisabled: boolean
+    isDisabled: boolean,
+    onPress?: () => void;
 }
 
-export default function ButtonToAction({buttonTitle, textStyle, buttonStyle, isDisabled}: ButtonToActionProps) {
+export default function ButtonToAction({buttonTitle, textStyle, buttonStyle, isDisabled, onPress}: ButtonToActionProps) {
+
     return(
         <TouchableOpacity 
+            onPress={onPress}
             style={[{...buttonStyle}, buttonToActionStyle.button]}
             disabled={isDisabled}
         >
