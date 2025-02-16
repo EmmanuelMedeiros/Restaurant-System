@@ -25,7 +25,7 @@ export default function TablesScreen() {
     async function getAllTables() {
         const apiResult: IApiResponse = await tablesEndpoint.getAll();
         if(apiResult.statusCode != 200) {
-            return console.log("ERRO EM GETALLTABLES");
+            return console.log(apiResult.data);
         };
 
         const tableList: ITable[] = apiResult.data;

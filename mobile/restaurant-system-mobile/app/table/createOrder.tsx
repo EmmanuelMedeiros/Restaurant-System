@@ -5,12 +5,15 @@ import { OrderCreationStates } from "../enum/OrderCreationStates";
 import PreInsertOrderItem from "../component/preInsertOrderItem";
 import { IItem } from "../interface/IItem";
 import { IOrderItem } from "../interface/IOrderItem";
+import { useLocalSearchParams } from "expo-router";
 
 export default function CreateOrder() {
 
     const [currentState, setCurrentState]                   = useState<OrderCreationStates>(OrderCreationStates.CREATE);
     const [choosenItems, setChooseItems]                    = useState<IItem[]>([]);
     const [preInsertOrderItems, setPreInsertOrderItems]     = useState<IOrderItem[]>([]);
+
+    const {tableID} = useLocalSearchParams<{tableID: string}>();
 
     useEffect(() => {
 
