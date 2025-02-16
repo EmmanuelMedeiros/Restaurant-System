@@ -2,9 +2,9 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-nati
 import { IItem } from "../interface/IItem";
 
 import Icons from '@expo/vector-icons/Feather'
-import { IChooseableItem } from "../interface/IChooseableItem";
 import { IItemCategory } from "../interface/IItemCategory";
 import { useEffect, useState } from "react";
+import { OrderCreationStates } from "../enum/OrderCreationStates";
 
 
 const itemList: IItem[] = [
@@ -13,35 +13,56 @@ const itemList: IItem[] = [
         createdAt: '2024/02/23',
         id: 1,
         name: 'CARNE DE SOL DE BOI - PRATO COMPLETO',
-        price: 75.50
+        price: 75.50,
     },
     {
         category: {id: 1, title: 'Tira-gosto'},
         createdAt: '2024/02/23',
         id: 2,
         name: 'CARNE DE SOL DE PORCO - PRATO COMPLETO',
-        price: 45.10
+        price: 45.10,
     },
     {
         category: {id: 2, title: 'Tira-gosto'},
         createdAt: '2024/02/23',
         id: 3,
         name: 'CALDINHO DE SURURU',
-        price: 10.00
+        price: 10.00,
     },
     {
         category: {id: 2, title: 'Tira-gosto'},
         createdAt: '2024/02/23',
         id: 4,
         name: 'CALDINHO DE SIRI',
-        price: 10.00
+        price: 10.00,
     },
     {
         category: {id: 3, title: 'Bebida'},
         createdAt: '2024/02/23',
         id: 5,
         name: 'SUCO DE LARANJA',
-        price: 10.00
+        price: 10.00,
+    },
+    {
+        category: {id: 3, title: 'Bebida'},
+        createdAt: '2024/02/23',
+        id: 5,
+        name: 'SUCO DE LARANJA',
+        price: 10.00,
+    },
+    {
+        category: {id: 3, title: 'Bebida'},
+        createdAt: '2024/02/23',
+        id: 5,
+        name: 'SUCO DE LARANJA',
+        price: 10.00,
+    },
+    {
+        category: {id: 3, title: 'Bebida'},
+        createdAt: '2024/02/23',
+        id: 5,
+        name: 'SUCO DE LARANJA',
+        price: 10.00,
     }
 ];
 
@@ -49,12 +70,16 @@ const menuCategoryList: IItemCategory[] = [
     {id: 1, title: "ALMOÇO"}, {id: 2, title: "TIRA-GOSTO"}, {id: 3, title: "BEBIDAS"}, {id: 4, title: "GUARNIÇÕES"}
 ];
 
-export default function EntireMenuComponent() {
+interface EntireMenuComponentProps {
+    storedItems: IItem[],
+    setStoredItems: React.Dispatch<React.SetStateAction<IItem[]>>,
+    setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>
+}
+
+export default function EntireMenuComponent({storedItems, setStoredItems, setOrderState}: EntireMenuComponentProps) {
 
     const [itemsList, setItemsList]                     = useState<IItem[]>(itemList);
     const [itemCategoryToShow, setItemCategoryToShow]   = useState<number>(1);
-    const [storedItems, setStoredItems]                 = useState<IItem[]>([]);
-
 
     const toggleItemChooseOnHandle = (item: IItem) => {
 
@@ -141,7 +166,9 @@ export default function EntireMenuComponent() {
             
             <View style={storedItems.length < 1 ? entireMenuStyle.notShow : {position: 'absolute', bottom: 10, left: 10, width: 50} }>
 
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => setOrderState(OrderCreationStates.CONFIRM)}
+                >
                     <View style={{width: 25, height: 25, borderRadius: '100%', backgroundColor: '#171717', position: 'absolute', right: 0, top: 0, marginTop: -15, zIndex: 10}}>
                         <Text style={{margin: 'auto', color: '#C1C1C1'}}>{storedItems.length}</Text>
                     </View>

@@ -1,19 +1,42 @@
 import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Table from "../component/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TableCard from "../component/tableCard";
 import { TableStatus } from "../enum/TableStatus";
+import { TablesEndpoint } from "../fuctions/tables/table.endpoint";
+import { ITable } from "../interface/ITable";
+import { IApiResponse } from "../interface/IApiResponse";
 
 export default function TablesScreen() {
 
+    const tablesEndpoint: TablesEndpoint = new TablesEndpoint();
+
     const [openTableCard, setOpenTableCard] = useState<boolean>(false);
-    const [selectedTable, setSelectedTable] = useState<{id: string, status: TableStatus}>()
+    const [selectedTable, setSelectedTable] = useState<ITable>();
+
+    const [tablesList, setTablesList] = useState<ITable[]>([]);
 
     const tableObject: {id: string, status: TableStatus }[] = [
         {id: "01", status: TableStatus.BUSY}, {id: "02", status: TableStatus.SLEEPING}, {id: "03", status: TableStatus.SLEEPING},
         {id: "04", status: TableStatus.SLEEPING},  {id: "05", status: TableStatus.BUSY},  {id: "06", status: TableStatus.BUSY}
     ];
+
+    async function getAllTables() {
+        const apiResult: IApiResponse = await tablesEndpoint.getAll();
+        if(apiResult.statusCode != 200) {
+            return console.log("ERRO EM GETALLTABLES");
+        };
+
+        const tableList: ITable[] = apiResult.data;
+        tableList.sort((a, b) => a.id - b.id);
+        return setTablesList(tableList);
+
+    }
+
+    useEffect(() => {
+        getAllTables();
+    }, [])
 
     return(
         <SafeAreaView 
@@ -33,7 +56,7 @@ export default function TablesScreen() {
                         contentContainerStyle={{flexWrap: "wrap", width: '105%', flexDirection: 'column', justifyContent: "flex-end"}}
 
                     >
-                        {tableObject.reverse().map((element) => (
+                        {tablesList.reverse().map((element) => (
                             <View 
                                 style={tableScreenStyle.tableList}
                                 key={element.id}
@@ -44,7 +67,7 @@ export default function TablesScreen() {
                                     onPressIn={() => setSelectedTable(element)}
                                 >
                                     <Table
-                                        tableName={element.id}
+                                        tableName={element.name}
                                     />
                                 </TouchableOpacity>
                             </View>

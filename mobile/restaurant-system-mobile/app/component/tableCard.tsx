@@ -4,10 +4,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icons from '@expo/vector-icons/Feather'
 import ButtonToAction from "./buttonToAction";
 import { TableStatus } from "../enum/TableStatus";
+import { ITable } from "../interface/ITable";
 
 interface TableCardProps {
     setShow: React.Dispatch<React.SetStateAction<boolean>>,
-    table: {id: string, status: TableStatus} | undefined
+    table: ITable | undefined
 }
 
 export default function TableCard({setShow, table}: TableCardProps) {
@@ -32,37 +33,42 @@ export default function TableCard({setShow, table}: TableCardProps) {
                 <Text style={tableCardStyle.tableName}>Mesa {table?.id}</Text>
 
                 <View style={tableCardStyle.cardButtons}>
-                    <ButtonToAction
-                        buttonTitle={table?.status === TableStatus.BUSY ? 'Pedidos' : 'Abrir Pedido'}
-                        textStyle={
-                            {
-                                color: '#181818',
-                                fontSize: 15
-                            }
-                        }
-                        buttonStyle={
-                            {
-                                backgroundColor: '#C1C1C1'
-                            }
-                        }
-                        isDisabled={false}
-                    />
 
-                    <ButtonToAction
-                        buttonTitle="Fechar Conta"
-                        textStyle={
-                            {
-                                color: closeOrderBGColor === "#255247" ? '#C1C1C1' : 'rgba(193, 193, 193, .4)',
-                                fontSize: 15
+                    <View style={{height: '30%', width: '130%', marginRight: 20}}>
+                        <ButtonToAction
+                            buttonTitle={table?.status === TableStatus.BUSY ? 'Pedidos' : 'Abrir Pedido'}
+                            textStyle={
+                                {
+                                    color: '#181818',
+                                    fontSize: 15
+                                }
                             }
-                        }
-                        buttonStyle={
-                            {
-                                backgroundColor: closeOrderBGColor
+                            buttonStyle={
+                                {
+                                    backgroundColor: '#C1C1C1'
+                                }
                             }
-                        }
-                        isDisabled={table?.status == TableStatus.SLEEPING ? true : false}
-                    />
+                            isDisabled={false}
+                        />
+                    </View>
+                    
+                    <View style={{height: '30%', width: '130%', marginRight: 20}}>
+                        <ButtonToAction
+                            buttonTitle="Fechar Conta"
+                            textStyle={
+                                {
+                                    color: closeOrderBGColor === "#255247" ? '#C1C1C1' : 'rgba(193, 193, 193, .4)',
+                                    fontSize: 15
+                                }
+                            }
+                            buttonStyle={
+                                {
+                                    backgroundColor: closeOrderBGColor
+                                }
+                            }
+                            isDisabled={table?.status == TableStatus.SLEEPING ? true : false}
+                        />
+                    </View>
                 </View>
 
             </View>

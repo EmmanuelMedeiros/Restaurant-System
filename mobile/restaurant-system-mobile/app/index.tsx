@@ -5,7 +5,7 @@ import CreateOrder from "./screen/createOrder";
 export default function Index() {
   return (
     <>
-      <CreateOrder/>
+      <TablesScreen/>
     </>
   );
 }

@@ -21,8 +21,8 @@ export default function ButtonToAction({buttonTitle, textStyle, buttonStyle, isD
 const buttonToActionStyle = StyleSheet.create({
 
     button: {
-        width: 130,
-        height: 70,
+        width: '100%',
+        height: '100%',
 
         textAlign: 'center',
 
