@@ -10,13 +10,12 @@ import { IOrderItem } from "../interface/IOrderItem";
 import ButtonToAction from "./buttonToAction";
 
 interface PreInsertOrderItemProps {
-    itemList: IOrderItem[]
+    itemList: IOrderItem[],
+    setItemList: React.Dispatch<React.SetStateAction<IItem[]>>,
     setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>
 };
 
-export default function PreInsertOrderItem({itemList, setOrderState}: PreInsertOrderItemProps) {
-
-    const [orderItems, setOrderItems] = useState<IOrderItem[]>([])
+export default function PreInsertOrderItem({itemList, setItemList, setOrderState}: PreInsertOrderItemProps) {
 
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
@@ -25,14 +24,27 @@ export default function PreInsertOrderItem({itemList, setOrderState}: PreInsertO
         });
     }, [])
 
+    const deleteItemOnHandle = (itemIndex: number) => {
+
+        itemList.splice(itemIndex, 1);
+        const menuItemList: IItem[] = itemList.map((element) => {
+            return(
+                element.item
+            )
+        });
+        setItemList(menuItemList);
+        return;
+    }
+
     return(
         <SafeAreaView style={preInsertOrderItemStyle.container}>
             <TouchableOpacity
-                style={{position: 'absolute', right: 10, top: 10, zIndex: 10}}
+                onPressOut={() => setOrderState(OrderCreationStates.CREATE)}
+                style={{position: 'absolute', left: 10, top: 10, zIndex: 10}}
             >
-                <Icons name='x' 
+                <Icons name='chevron-left' 
                     size={30} 
-                    color={'#6C3232'}
+                    color={'#171717'}
                 />
 
             </TouchableOpacity>
@@ -46,7 +58,7 @@ export default function PreInsertOrderItem({itemList, setOrderState}: PreInsertO
                 contentContainerStyle={{paddingBottom: 20}}
                     showsVerticalScrollIndicator={true}
                 >  
-                {itemList.map((element) => (
+                {itemList.map((element, index) => (
                     <View>
                         <View 
                             style={preInsertOrderItemStyle.eachItem}
@@ -60,10 +72,10 @@ export default function PreInsertOrderItem({itemList, setOrderState}: PreInsertO
                             <Text style={preInsertOrderItemStyle.itemName}>{element.item.name}</Text>
 
                             <TouchableOpacity
-                                onPressIn={() => null}
+                                onPressIn={() => deleteItemOnHandle(index)}
                                 style={{zIndex: 10}}
                             >
-                                <Icons name="trash-2" size={20}/>
+                                <Icons name="trash-2" size={20} style={{padding: 8}}/>
                             </TouchableOpacity>
 
                         </View>

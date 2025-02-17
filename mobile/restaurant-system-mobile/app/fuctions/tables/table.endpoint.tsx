@@ -22,6 +22,19 @@ export class TablesEndpoint {
             return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
         });
         return apiResult;
+    };
+
+    async getOne(id: number): Promise<IApiResponse> {
+        let apiResponse: IApiResponse;
+
+        const apiResult = await axios.get(`${this.apiUrl}/table/${id}`)
+        .then((response) => {
+            return apiResponse = {data: response.data, statusCode: 200}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
+        return apiResult;
     }
 
 }

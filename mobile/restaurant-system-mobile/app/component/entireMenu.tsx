@@ -9,6 +9,7 @@ import { OrderCreationStates } from "../enum/OrderCreationStates";
 import { BackHandler } from "react-native";
 
 import { Link, router } from "expo-router";
+import { ITable } from "../interface/ITable";
 
 const itemList: IItem[] = [
     {
@@ -76,10 +77,11 @@ const menuCategoryList: IItemCategory[] = [
 interface EntireMenuComponentProps {
     storedItems: IItem[],
     setStoredItems: React.Dispatch<React.SetStateAction<IItem[]>>,
-    setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>
+    setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>,
+    currentTable: ITable | undefined
 }
 
-export default function EntireMenuComponent({storedItems, setStoredItems, setOrderState}: EntireMenuComponentProps) {
+export default function EntireMenuComponent({storedItems, setStoredItems, setOrderState, currentTable}: EntireMenuComponentProps) {
 
     const [itemsList, setItemsList]                     = useState<IItem[]>(itemList);
     const [itemCategoryToShow, setItemCategoryToShow]   = useState<number>(1);
@@ -122,7 +124,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
             </TouchableOpacity>
 
-            <Text style={entireMenuStyle.title}>Mesa X</Text>
+            <Text style={entireMenuStyle.title}>Table {currentTable?.name}</Text>
             <Text style={entireMenuStyle.subTitle}>Adicionar Item</Text>
 
             <View style={entireMenuStyle.lighHorizontalLine}/>
