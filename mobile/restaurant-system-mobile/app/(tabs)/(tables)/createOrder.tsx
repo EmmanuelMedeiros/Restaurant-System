@@ -67,7 +67,8 @@ export default function CreateOrder() {
                 :
                 <View style={createOrderStyle.menuComponent}>
                     <PreInsertOrderItem
-                        itemList={preInsertOrderItems}
+                        setOrderItemList={setPreInsertOrderItems}
+                        orderItemList={preInsertOrderItems}
                         setItemList={setChooseItems}
                         setOrderState={setCurrentState}
                     />

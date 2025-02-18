@@ -10,12 +10,13 @@ import { IOrderItem } from "../interface/IOrderItem";
 import ButtonToAction from "./buttonToAction";
 
 interface PreInsertOrderItemProps {
-    itemList: IOrderItem[],
+    orderItemList: IOrderItem[],
     setItemList: React.Dispatch<React.SetStateAction<IItem[]>>,
     setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>
+    setOrderItemList: React.Dispatch<React.SetStateAction<IOrderItem[]>>,
 };
 
-export default function PreInsertOrderItem({itemList, setItemList, setOrderState}: PreInsertOrderItemProps) {
+export default function PreInsertOrderItem({orderItemList, setOrderItemList, setItemList, setOrderState}: PreInsertOrderItemProps) {
 
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
@@ -26,13 +27,35 @@ export default function PreInsertOrderItem({itemList, setItemList, setOrderState
 
     const deleteItemOnHandle = (itemIndex: number) => {
 
-        itemList.splice(itemIndex, 1);
-        const menuItemList: IItem[] = itemList.map((element) => {
+        orderItemList.splice(itemIndex, 1);
+        const menuItemList: IItem[] = orderItemList.map((element) => {
             return(
                 element.item
             )
         });
         setItemList(menuItemList);
+        return;
+    }
+
+    const increaseItemQuantity = (index: number) => {
+        const newArray = orderItemList.map((element, pos) => {
+            if(index === pos) {
+                element.quantity++
+            };
+            return element
+        });
+        setOrderItemList(newArray);
+        return;
+    }
+
+    const decreaseQuantity = (index: number) => {
+        const newArray = orderItemList.map((element, pos) => {
+            if(index === pos && element.quantity > 1) {
+                element.quantity--
+            };
+            return element
+        });
+        setOrderItemList(newArray);
         return;
     }
 
@@ -58,14 +81,23 @@ export default function PreInsertOrderItem({itemList, setItemList, setOrderState
                 contentContainerStyle={{paddingBottom: 20}}
                     showsVerticalScrollIndicator={true}
                 >  
-                {itemList.map((element, index) => (
+                {orderItemList.map((element, index) => (
                     <View>
                         <View 
                             style={preInsertOrderItemStyle.eachItem}
                             key={element.item.id}
                         >   
                             <View style={{alignItems: 'center'}}>
+                                <TouchableOpacity onPressIn={() => increaseItemQuantity(index)}>
+                                    <Icons name="chevron-up" size={25}/>
+                                </TouchableOpacity>
+
                                 <Text>{element.quantity}</Text>
+
+                                <TouchableOpacity onPressIn={() => decreaseQuantity(index)}>
+                                    <Icons name="chevron-down" size={25}/>
+                                </TouchableOpacity>
+
                                 <Text>R$ {element.item.price.toFixed(2)}</Text>
                             </View>
 
