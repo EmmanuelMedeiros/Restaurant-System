@@ -6,9 +6,9 @@ POST {{baseUrl}}/item
 Content-Type: application/json
 
 {
-    "name": "Carne de porco",
-    "description": "porkin",
-    "price": 48.00,
+    "name": "Carne de sol de porco",
+    "description": "Almoço",
+    "price": 61.00,
     "category": {
         "id": 1
     }
@@ -28,10 +28,10 @@ PUT {{baseUrl}}/item/16
 Content-Type: application/json
 
 {   
-    "name": "Carne de porco",
-    "description": "É carne e é de porco e agora é tira-gosto",
+    "name": "Carne de boi",
+    "description": "É carne e é boi e agora é tira-gosto",
     "category": {
-        "id": 4
+        "id": 1
     }
 }
 

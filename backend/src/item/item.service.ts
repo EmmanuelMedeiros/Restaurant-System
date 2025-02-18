@@ -37,7 +37,11 @@ export class ItemService {
     }
 
     async findAll() {
-        const itemList: Item[]|null = await this.itemRepository.find();
+        const itemList: Item[]|null = await this.itemRepository.find({
+            relations: {
+                category: true
+            }
+        });
         return itemList;
     }
 

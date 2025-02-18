@@ -7,7 +7,7 @@ import { IItem } from "../../../interface/IItem";
 import { IOrderItem } from "../../../interface/IOrderItem";
 import { useLocalSearchParams } from "expo-router";
 import { IApiResponse } from "../../../interface/IApiResponse";
-import { TablesEndpoint } from "@/tables/table.endpoint";
+import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "../../../interface/ITable";
 import { TableStatus } from "../../../enum/TableStatus";
 

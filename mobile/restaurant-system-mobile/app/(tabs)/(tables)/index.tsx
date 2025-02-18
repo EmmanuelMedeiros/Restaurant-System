@@ -4,7 +4,7 @@ import Table from "@/components/table";
 import { useEffect, useState } from "react";
 import TableCard from "@/components/tableCard";
 import { TableStatus } from "@/enum/TableStatus";
-import { TablesEndpoint } from "@/tables/table.endpoint";
+import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "@/interface/ITable";
 import { IApiResponse } from "@/interface/IApiResponse";
 

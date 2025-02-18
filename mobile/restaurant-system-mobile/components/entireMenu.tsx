@@ -10,8 +10,17 @@ import { BackHandler } from "react-native";
 
 import { Link, router } from "expo-router";
 import { ITable } from "../interface/ITable";
+import { ItemEndpoint } from "@/fuctions/item.endpoint";
+import { IApiResponse } from "@/interface/IApiResponse";
 
 const itemList: IItem[] = [
+    {
+        category: {id: 1, title: 'olá'},
+        createdAt: '2024/02/23',
+        id: 1,
+        name: 'CARNE DE SOL DE PORCO - PRATO COMPLETO',
+        price: 75.50,
+    },
     {
         category: {id: 1, title: 'olá'},
         createdAt: '2024/02/23',
@@ -19,55 +28,6 @@ const itemList: IItem[] = [
         name: 'CARNE DE SOL DE BOI - PRATO COMPLETO',
         price: 75.50,
     },
-    {
-        category: {id: 1, title: 'Tira-gosto'},
-        createdAt: '2024/02/23',
-        id: 2,
-        name: 'CARNE DE SOL DE PORCO - PRATO COMPLETO',
-        price: 45.10,
-    },
-    {
-        category: {id: 2, title: 'Tira-gosto'},
-        createdAt: '2024/02/23',
-        id: 3,
-        name: 'CALDINHO DE SURURU',
-        price: 10.00,
-    },
-    {
-        category: {id: 2, title: 'Tira-gosto'},
-        createdAt: '2024/02/23',
-        id: 4,
-        name: 'CALDINHO DE SIRI',
-        price: 10.00,
-    },
-    {
-        category: {id: 3, title: 'Bebida'},
-        createdAt: '2024/02/23',
-        id: 5,
-        name: 'SUCO DE LARANJA',
-        price: 10.00,
-    },
-    {
-        category: {id: 3, title: 'Bebida'},
-        createdAt: '2024/02/23',
-        id: 5,
-        name: 'SUCO DE LARANJA',
-        price: 10.00,
-    },
-    {
-        category: {id: 3, title: 'Bebida'},
-        createdAt: '2024/02/23',
-        id: 5,
-        name: 'SUCO DE LARANJA',
-        price: 10.00,
-    },
-    {
-        category: {id: 3, title: 'Bebida'},
-        createdAt: '2024/02/23',
-        id: 5,
-        name: 'SUCO DE LARANJA',
-        price: 10.00,
-    }
 ];
 
 const menuCategoryList: IItemCategory[] = [
@@ -86,6 +46,8 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
     const [itemsList, setItemsList]                     = useState<IItem[]>(itemList);
     const [itemCategoryToShow, setItemCategoryToShow]   = useState<number>(1);
 
+    const itemEndpoint: ItemEndpoint = new ItemEndpoint();
+
     const toggleItemChooseOnHandle = (item: IItem) => {
 
         const itemPositionInStorage: number = storedItems.findIndex(x => x === item);
@@ -103,11 +65,24 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
     }
 
+    async function getAllItems() {
+        const apiResponse: IApiResponse = await itemEndpoint.getAll();
+        if(apiResponse.statusCode !== 200) {
+            console.log("ERRO EM GETALLITEMS");
+            return;
+        }
+        setItemsList(() => {
+            return(apiResponse.data)
+        })
+        return;
+    }
+
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
             router.navigate('/(tabs)/(tables)');
             return true;
         });
+        getAllItems();
     }, [])
 
     return(
@@ -138,8 +113,9 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
                 {menuCategoryList.map((element, index) => (
                     <TouchableOpacity 
                         key={index}
+                        id={index.toString()}
                         style={entireMenuStyle.menuCategoryList}
-                        onPressOut={() => setItemCategoryToShow(element.id)}
+                        onPressOut={() => {setItemCategoryToShow(element.id), console.log(element.id)}}
                     >
                         <Text style={itemCategoryToShow == element.id ? {textDecorationLine: 'underline', fontWeight: 'bold'} : null}>{element.title}</Text>
                     </TouchableOpacity>
@@ -160,8 +136,8 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
                             style={entireMenuStyle.eachItem}
                             key={element.id}
                         >
-                            <Text>R$ {element.price.toFixed(2)}</Text>
-                            <Text style={entireMenuStyle.itemName}>{element.name}</Text>
+                            <Text>R$ {Number(element.price).toFixed(2)}</Text>
+                            <Text style={entireMenuStyle.itemName}>{element.name.toUpperCase()}</Text>
                             <TouchableOpacity
                                 onPressIn={() => toggleItemChooseOnHandle(element)}
                             >
