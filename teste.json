@@ -1,0 +1,382 @@
+{
+    "janis_response": {
+        "orderGroupId": "67ae3b75d7e881240ca5b6df",
+        "commerceSequentialId": "503756",
+        "commerceDateCreated": "2025-02-13T18:35:13.802Z",
+        "commerceSalesChannel": "1",
+        "totalAmount": 44.28,
+        "shippings": [
+            {
+                "carrierId": "62349fdc486d7b0009720910",
+                "addressCommerceId": "B006",
+                "deliveryWindow": {
+                    "initialDate": "2025-02-14T17:01:00.000Z",
+                    "finalDate": "2025-02-14T19:00:00.000Z",
+                    "additionalPrice": 0
+                },
+                "deliveryEstimateDate": "2025-02-14T17:01:00.000Z",
+                "price": 0,
+                "slaName": "Retirada em Loja (B006)",
+                "companyName": "Retirada em Loja B006",
+                "isPickup": true,
+                "pickupInfo": {
+                    "name": "Retire em Loja - Jardins Aracaju",
+                    "address": {
+                        "commerceId": "B006",
+                        "type": "pickup",
+                        "countryCode": "BRA",
+                        "state": "SE",
+                        "city": "Aracaju",
+                        "neighborhood": "Jardins",
+                        "postalCode": "49025-400",
+                        "streetName": "Avenida Deputado S\u00edlvio Teixeira",
+                        "streetNumber": "831",
+                        "complement": "",
+                        "reference": null,
+                        "receiverName": null,
+                        "geolocation": [
+                            -37.05858,
+                            -10.94187
+                        ]
+                    },
+                    "additionalInfo": "Comparecer no local de retirada na hora agendada munido de documento com foto do titular do pedido",
+                    "warehouseRefId": "B006"
+                },
+                "polygonName": "",
+                "items": [
+                    {
+                        "index": 0,
+                        "id": "DFF5F45238044AFCBB1A907ECA0938F5",
+                        "quantity": 12
+                    }
+                ],
+                "id": "053426d8-1c0c-4267-bd2a-3ee458acfd31",
+                "status": "pending",
+                "type": "store_pickup",
+                "carrierRefId": "gbarbosaqab006-1e96bd2",
+                "dateModified": "2025-02-13T18:36:22.178Z",
+                "deliveryId": "67ae3b9cf3953063c1deec27",
+                "dispatchDate": "2025-02-14T17:01:00.000Z",
+                "locationId": "62349fd42891f10009565c65",
+                "realTimeId": "250214-AH9LHBJB",
+                "warehouseId": "62349fd60b51830009a008e6"
+            }
+        ],
+        "seller": {
+            "name": "gbarbosaqab006",
+            "externalIds": {
+                "vtex": "gbarbosaqab006",
+                "account": "618ae95ef6cfa20009fdd4ae"
+            },
+            "email": "joseph.ponte@cencosud.com.br",
+            "documentNumber": "",
+            "logoUrl": "",
+            "phone": "",
+            "restrictedToDeliveryCompanies": [],
+            "id": "618bd711d161e40008358385"
+        },
+        "currency": "BRL",
+        "salesChannelPrefix": "1",
+        "salesChannelName": "gbarbosaqa-Principal",
+        "skipPicking": false,
+        "externalPaymentValidation": false,
+        "automaticCapturePostPicking": false,
+        "account": {
+            "id": "618ae95ef6cfa20009fdd4ae",
+            "name": "GbarbosaQA-Principal",
+            "ecommerceName": "gbarbosaqa",
+            "referenceId": "gbarbosaqa",
+            "platform": "vtex"
+        },
+        "salesChannelReferenceId": "gbarbosaqa-1",
+        "salesChannelId": "618aef8a750b1200091e5054",
+        "sellerSalesChannelId": "62349fd0a5a12a0009a1d153",
+        "sellerSalesChannelReferenceId": "gbarbosaqab006-1",
+        "sellerSalesChannelName": "gbarbosaqab006-Principal",
+        "addresses": [
+            {
+                "commerceId": "B006",
+                "type": "pickup",
+                "countryCode": "BRA",
+                "state": "SE",
+                "city": "Aracaju",
+                "neighborhood": "Jardins",
+                "postalCode": "49025-400",
+                "streetName": "Avenida Deputado S\u00edlvio Teixeira",
+                "streetNumber": "831",
+                "complement": "",
+                "reference": null,
+                "receiverName": "Eliomar Santos",
+                "geolocation": [
+                    -37.05858,
+                    -10.94187
+                ]
+            }
+        ],
+        "commerceId": "GB503756-01",
+        "orderGroupCommerceId": "GB503756-01",
+        "status": "readyForDelivery",
+        "originalAmount": 44.28,
+        "totals": {
+            "items": {
+                "originalAmount": 44.28,
+                "amount": 44.28
+            },
+            "discounts": {
+                "originalAmount": 0,
+                "amount": 0
+            },
+            "taxes": {
+                "originalAmount": 0,
+                "amount": 0
+            },
+            "shipping": {
+                "originalAmount": 0,
+                "amount": 0
+            },
+            "costs": {
+                "originalAmount": 0,
+                "amount": 0
+            },
+            "invoice": {
+                "amount": 44.28
+            }
+        },
+        "steps": {
+            "new": {
+                "status": "finished",
+                "dateStart": "2025-02-13T18:35:36.907Z",
+                "dateEnd": "2025-02-13T18:36:25.487Z"
+            },
+            "newOrderAudit": {
+                "status": "finished",
+                "dateStart": "2025-02-13T18:36:24.588Z",
+                "dateEnd": "2025-02-13T18:36:25.487Z"
+            },
+            "picking": {
+                "dateStart": "2025-02-13T18:39:59.491Z",
+                "status": "finished",
+                "dateEnd": "2025-02-13T18:40:25.043Z"
+            },
+            "postPickingAudit": {
+                "status": "finished",
+                "dateStart": "2025-02-13T18:40:25.231Z",
+                "dateEnd": "2025-02-13T18:40:25.311Z"
+            },
+            "invoice": {
+                "status": "finished",
+                "dateStart": "2025-02-13T18:46:17.491Z",
+                "dateEnd": "2025-02-13T18:46:26.967Z"
+            },
+            "packing": {
+                "status": "skipped"
+            }
+        },
+        "userCreated": null,
+        "dateCreated": "2025-02-13T18:35:36.907Z",
+        "userModified": null,
+        "dateModified": "2025-02-13T18:47:08.636Z",
+        "fulfillmentPlanId": "67ae3b8fde617f4b6a8405f9",
+        "statusPerLocation": {
+            "62349fd42891f10009565c65": {
+                "status": "readyForDelivery",
+                "name": "B006"
+            }
+        },
+        "statusPerWarehouse": {
+            "62349fd60b51830009a008e6": {
+                "status": "readyForDelivery",
+                "name": "B006",
+                "locationId": "62349fd42891f10009565c65"
+            }
+        },
+        "invoiceIds": [
+            "67ae3df9d8477473119a6d84"
+        ],
+        "invoices": [
+            {
+                "id": "67ae3df9d8477473119a6d84",
+                "number": "000000024",
+                "value": 44.28
+            }
+        ],
+        "settlementRequested": true,
+        "packages": [
+            {
+                "ean": "1ZFX4IIXV2XWN",
+                "referenceId": "NVWOE5",
+                "packageTypeId": "6195d8ef4af84e00096bbd28",
+                "orderItems": [
+                    {
+                        "id": "DFF5F45238044AFCBB1A907ECA0938F5-01",
+                        "quantity": 12
+                    }
+                ],
+                "location": {
+                    "warehouseId": "62349fd60b51830009a008e6"
+                },
+                "packageId": "67ae3e19bb18ab2593d138da"
+            }
+        ],
+        "deliveryPackagesReady": true,
+        "readyForDeliveryMailSent": true,
+        "id": "67ae3b788da480f30b262533",
+        "items": [
+            {
+                "commerceSkuId": "52",
+                "commerceProductId": "57",
+                "name": "cerveja antarctica orig pilsen ln 300ml",
+                "purchasedPrice": 3.69,
+                "purchasedListPrice": 3.69,
+                "purchasedPricePerMeasurementUnit": 3.69,
+                "listPricePerMeasurementUnit": 3.69,
+                "purchasedQuantity": 12,
+                "sellingMeasurementUnit": "un",
+                "sellingUnitMultiplier": 1,
+                "imageUrl": "https://gbarbosaqa.vteximg.com.br/arquivos/ids/155680-250-250/623b73e6b473660d1c20ee8e.png?v=637836602638770000",
+                "isGift": false,
+                "shippingPrice": 0,
+                "brandId": "2000065",
+                "brandName": "Antarctica",
+                "categories": [
+                    {
+                        "commerceId": "108",
+                        "name": "Fresca"
+                    },
+                    {
+                        "commerceId": "106",
+                        "name": "Fruta"
+                    },
+                    {
+                        "commerceId": "105",
+                        "name": "Hortifruti"
+                    }
+                ],
+                "dimensions": {
+                    "width": 6,
+                    "height": 19,
+                    "length": 6,
+                    "weight": 498,
+                    "cubicweight": 0.1425
+                },
+                "promotions": [],
+                "taxes": [],
+                "warehouses": {
+                    "pickingSuggestion": {
+                        "id": "62349fd60b51830009a008e6",
+                        "referenceId": "B006",
+                        "locationId": "62349fd42891f10009565c65",
+                        "locationReferenceId": "nKJGPA56"
+                    },
+                    "delivery": {
+                        "id": "62349fd60b51830009a008e6",
+                        "referenceId": "B006",
+                        "locationId": "62349fd42891f10009565c65",
+                        "locationReferenceId": "nKJGPA56"
+                    },
+                    "picking": {
+                        "id": "62349fd60b51830009a008e6",
+                        "referenceId": "B006",
+                        "locationId": "62349fd42891f10009565c65",
+                        "locationReferenceId": "nKJGPA56"
+                    }
+                },
+                "id": "DFF5F45238044AFCBB1A907ECA0938F5",
+                "refId": "1647038",
+                "ean": "7891991009584",
+                "substitutionCriteria": "doNotSubstitute",
+                "categoriesIds": [
+                    "62d7eca95866387ed355e062",
+                    "622267f4d06d8465385e48bc",
+                    "6222682bd06d8465385e48bd"
+                ],
+                "eans": [
+                    "7891991009584"
+                ],
+                "measurementUnit": "un",
+                "productGroups": [],
+                "skuId": "623b16a47cb9a5c2ab72cf2f",
+                "unitMultiplier": 1,
+                "locationId": "62349fd42891f10009565c65",
+                "pickingPointId": "62349fd60b51830009a008e6",
+                "waveId": "67ae2dae6d4b413e90546a73",
+                "hasCandidates": false,
+                "isPicked": true,
+                "pickingResult": [
+                    {
+                        "id": "DFF5F45238044AFCBB1A907ECA0938F5-01",
+                        "ean": "7891991009584",
+                        "skuId": "623b16a47cb9a5c2ab72cf2f",
+                        "eanCount": 12,
+                        "pickerId": "628b956d0d63bfa4f1837849",
+                        "price": 3.69,
+                        "refId": "1647038",
+                        "name": "cerveja antarctica orig pilsen ln 300ml",
+                        "imageUrl": "https://gbarbosaqa.vteximg.com.br/arquivos/ids/155680-250-250/623b73e6b473660d1c20ee8e.png?v=637836602638770000",
+                        "batch": null,
+                        "expirationDate": null,
+                        "sellingMeasurementUnit": "un",
+                        "sellingUnitMultiplier": 1,
+                        "measurementUnit": "un",
+                        "unitMultiplier": 1,
+                        "pricePerMeasurementUnit": 3.69,
+                        "productGroups": [],
+                        "totalQuantity": 12,
+                        "locations": [
+                            {
+                                "warehouseId": "62349fd60b51830009a008e6",
+                                "quantity": 12,
+                                "totalQuantity": 12
+                            }
+                        ]
+                    }
+                ],
+                "pickingSessionId": "67ae3bdf0d1ee159405d92bb",
+                "imageThumbnail": {
+                    "path": "cdn/cnbrzqa/thumbnails/1647038/d1d5b945422024d9192c25adb0707b2251f94e0d.webp",
+                    "width": 250,
+                    "height": 250,
+                    "url": "https://cdn.oms.janisqa.in/cnbrzqa/thumbnails/1647038/d1d5b945422024d9192c25adb0707b2251f94e0d.webp"
+                }
+            }
+        ],
+        "customer": {
+            "firstName": "Eliomar",
+            "lastName": "Santos",
+            "commerceId": "a439d32c-6131-4364-9eb9-c884cff66337",
+            "trackedEmail": "eliomarssantos@gmail.com-252600375059b.ct.vtex.com.br",
+            "email": "eliomarssantos@gmail.com",
+            "documentType": "CPF",
+            "documentNumber": "00467297550",
+            "phone": "+5579991441161",
+            "isCorporate": false,
+            "clusters": [],
+            "habeasDataAccepted": false,
+            "id": "67aca3b6da9197d3c25d555c",
+            "isBlacklisted": false,
+            "isFirstOrder": false,
+            "fullname": "Eliomar Santos",
+            "emailShortened": "eliomarssantos@gmail.com"
+        },
+        "payments": [
+            {
+                "id": "E9EE4F595CCC41D39A4B9F2914097DD4",
+                "transactionId": "51841AED3AE84EEBA218A03E80A8F766",
+                "merchantName": "GBARBOSAQAB006",
+                "paymentGroup": "promissory",
+                "paymentSystemCommerceId": "17",
+                "paymentSystemName": "Promissory",
+                "amount": 44.28,
+                "amountWithoutInterests": 44.28,
+                "installments": 1,
+                "tid": null,
+                "authorizationId": null,
+                "status": "finished",
+                "isOnlinePayment": true,
+                "isOnlinePaymentUponDelivery": false,
+                "isPaymentUponDelivery": false
+            }
+        ]
+    },
+    "contact_whatsapp": "5582996589766"
+}

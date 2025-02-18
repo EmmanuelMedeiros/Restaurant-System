@@ -98,7 +98,7 @@ export default function PreInsertOrderItem({orderItemList, setOrderItemList, set
                                     <Icons name="chevron-down" size={25}/>
                                 </TouchableOpacity>
 
-                                <Text>R$ {element.item.price.toFixed(2)}</Text>
+                                <Text>R$ {(element.item.price * element.quantity).toFixed(2)}</Text>
                             </View>
 
                             <Text style={preInsertOrderItemStyle.itemName}>{element.item.name}</Text>
