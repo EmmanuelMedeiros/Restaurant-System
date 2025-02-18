@@ -42,7 +42,7 @@ export class OrderController {
             throw new HttpException(`No user found for this UUID`, HttpStatus.NOT_FOUND);
         };
 
-        const orderItem: {item: Item, quantity: number}[] = []
+        const orderItem: CreateOrderItemDTO[] = []
         for(let i: number = 0; i < createOrderDTO.orderItemList.length; i++) {
             const fetchedItem: Item|null = await this.itemService.findOne(Number(createOrderDTO.orderItemList[i].item.id));
 
@@ -127,6 +127,27 @@ export class OrderController {
             throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
         }
         return serviceResponse;
+    }
+
+    @Post('/insert_item/:uuid')
+    async insertOrderItem(@Param("uuid") uuid:string, @Body() createOrderItemDTO: CreateOrderItemDTO[]) {
+        const fetchedOrder: Order|null = await this.orderService.findOne(uuid)
+        if(!fetchedOrder) {
+            throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
+        };
+        const orderItem: CreateOrderItemDTO[] = [];
+        for(let i: number = 0; i < createOrderItemDTO.length; i++) {
+            const fetchedItem: Item|null = await this.itemService.findOne(Number(createOrderItemDTO[i].item.id));
+
+            if(!fetchedItem) {
+                throw new HttpException(`No item found for this ID`, HttpStatus.NOT_FOUND);
+            };
+
+            orderItem.push({
+                item: fetchedItem,
+                quantity: createOrderItemDTO[i].quantity
+            });
+        }
     }
 
 /*     @HttpCode(HttpStatus.OK)
