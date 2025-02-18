@@ -82,10 +82,11 @@ export default function PreInsertOrderItem({orderItemList, setOrderItemList, set
                     showsVerticalScrollIndicator={true}
                 >  
                 {orderItemList.map((element, index) => (
-                    <View>
+                    <View
+                        key={index}
+                    >
                         <View 
                             style={preInsertOrderItemStyle.eachItem}
-                            key={element.item.id}
                         >   
                             <View style={{alignItems: 'center'}}>
                                 <TouchableOpacity onPressIn={() => increaseItemQuantity(index)}>

@@ -1,15 +1,15 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { IItem } from "../interface/IItem";
+import { IItem } from "@/interface/IItem";
 
 import Icons from '@expo/vector-icons/Feather'
-import { IItemCategory } from "../interface/IItemCategory";
+import { IItemCategory } from "@/interface/IItemCategory";
 import { useEffect, useState } from "react";
-import { OrderCreationStates } from "../enum/OrderCreationStates";
+import { OrderCreationStates } from "@/enum/OrderCreationStates";
 
 import { BackHandler } from "react-native";
 
 import { Link, router } from "expo-router";
-import { ITable } from "../interface/ITable";
+import { ITable } from "@/interface/ITable";
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { IApiResponse } from "@/interface/IApiResponse";
 
@@ -38,12 +38,12 @@ interface EntireMenuComponentProps {
     storedItems: IItem[],
     setStoredItems: React.Dispatch<React.SetStateAction<IItem[]>>,
     setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>,
-    currentTable: ITable | undefined,
-    itemsList: IItem[]|undefined 
+    currentTable: ITable | undefined
 }
 
-export default function EntireMenuComponent({storedItems, setStoredItems, setOrderState, currentTable, itemsList}: EntireMenuComponentProps) {
+export default function EntireMenuComponent({storedItems, setStoredItems, setOrderState, currentTable}: EntireMenuComponentProps) {
 
+    const [itemsList, setItemsList]                     = useState<IItem[]>([]);
     const [itemCategoryToShow, setItemCategoryToShow]   = useState<number>(1);
 
     const itemEndpoint: ItemEndpoint = new ItemEndpoint();
@@ -65,11 +65,29 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
     }
 
+    async function getAllItems() {
+        const apiResponse: IApiResponse = await itemEndpoint.getAll();
+        if(apiResponse.statusCode !== 200) {
+            console.log("ERRO EM GETALLITEMS");
+            return;
+        }
+        setItemsList(() => {
+            return(apiResponse.data)
+        })
+        return;
+    }
+
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
             router.navigate('/(tabs)/(tables)');
             return true;
         });
+
+        if(itemsList.length < 1) {
+            console.log("cai auqi")
+            getAllItems();
+        };
+        return;
     }, [])
 
     return(
@@ -117,7 +135,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
             contentContainerStyle={{paddingBottom: 20}}
                 showsVerticalScrollIndicator={true}
             >
-                {itemsList?.filter(x => x.category.id === itemCategoryToShow).map((element, index) => (
+                {itemsList.filter(x => x.category.id === itemCategoryToShow).map((element, index) => (
                     <View
                         key={index}
                     >

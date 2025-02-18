@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import EntireMenuComponent from "../../../components/entireMenu";
 import { useEffect, useState } from "react";
+import EntireMenuComponent from "@/components/entireMenu";
 import { OrderCreationStates } from "../../../enum/OrderCreationStates";
 import PreInsertOrderItem from "../../../components/preInsertOrderItem";
 import { IItem } from "../../../interface/IItem";
@@ -9,7 +9,7 @@ import { useLocalSearchParams } from "expo-router";
 import { IApiResponse } from "../../../interface/IApiResponse";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "../../../interface/ITable";
-import { TableStatus } from "../../../enum/TableStatus";
+import { ItemEndpoint } from "@/fuctions/item.endpoint";
 
 export default function CreateOrder() {
 
@@ -18,8 +18,11 @@ export default function CreateOrder() {
     const [currentState, setCurrentState]                   = useState<OrderCreationStates>(OrderCreationStates.CREATE);
     const [choosenItems, setChooseItems]                    = useState<IItem[]>([]);
     const [preInsertOrderItems, setPreInsertOrderItems]     = useState<IOrderItem[]>([]);
+    const [itemList, setItemList]                           = useState<IItem[]>([]);
 
     const [currentTable, setCurrentTable]                   = useState<ITable>();
+
+    const itemEndpoint: ItemEndpoint = new ItemEndpoint();
 
     const {tableID} = useLocalSearchParams<{tableID: string}>();
 
@@ -29,6 +32,18 @@ export default function CreateOrder() {
             return console.log(apiResult.data);
         };
         setCurrentTable(apiResult.data)
+        return;
+    }
+
+    async function getAllItems() {
+        const apiResponse: IApiResponse = await itemEndpoint.getAll();
+        if(apiResponse.statusCode !== 200) {
+            console.log("ERRO EM GETALLITEMS");
+            return;
+        }
+        setItemList(() => {
+            return(apiResponse.data)
+        })
         return;
     }
 
@@ -49,6 +64,7 @@ export default function CreateOrder() {
 
     useEffect(() => {
         getTable();
+        getAllItems();
     }, [])
 
     return(
@@ -62,6 +78,7 @@ export default function CreateOrder() {
                             setStoredItems={setChooseItems}
                             storedItems={choosenItems}
                             setOrderState={setCurrentState}
+                            itemsList={itemList}
                         />
                     </View>
                 :
