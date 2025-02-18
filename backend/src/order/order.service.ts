@@ -45,14 +45,14 @@ export class OrderService {
                 undefined,
                 undefined
             )
-            const orderItem: OrderItem = new OrderItem(
-                crypto.randomUUID(),
-                createOrderDTO.orderItem.item,
-                order,
-                createOrderDTO.orderItem.quantity
-            )
+            const orderItemList: OrderItem[] = []
+            createOrderDTO.orderItemList.forEach((element) => {
+                orderItemList.push(
+                    new OrderItem(crypto.randomUUID(), element.item, order, element.quantity)
+                )
+            })
             await queryRunner.manager.insert(Order, order);
-            await queryRunner.manager.insert(OrderItem, orderItem);
+            await queryRunner.manager.insert(OrderItem, orderItemList);
             await queryRunner.manager.update(Table, order.table.id, updatedTable)
             await queryRunner.commitTransaction();
             return endMessage = {data: order, status: HttpStatus.CREATED};
@@ -128,7 +128,7 @@ export class OrderService {
         }
     }
 
-    async manipulateOrderItem(order: Order, orderItem: CreateOrderItemDTO) {
+/*     async manipulateOrderItem(order: Order, orderItem: CreateOrderItemDTO[]) {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
         try {
             const thisOrderItems: OrderItem[]|null = await this.findOrderItems(order);
@@ -171,6 +171,6 @@ export class OrderService {
         }catch(err) {
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
-    }
+    } */
 
 }

@@ -6,7 +6,6 @@ import { EndMessage } from 'src/interface/EndMessage';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { JWTGuard } from 'src/common/guard/jwt.guard';
 
-@UseGuards(JWTGuard)
 @Controller('user')
 export class UserController {
     constructor(

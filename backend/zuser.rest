@@ -3,8 +3,6 @@
 ### GET ALL USERS
 
 GET {{baseUrl}}/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMTRjMjJhM2QtYzQxNS00YmZlLTgwN2QtMGEzZmQzZGY0ZjEzIiwiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3Mzk0MDg4OTksImV4cCI6MTczOTQxMjQ5OSwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIn0.1qTkqmN19DEC6thUod-zvVT8sntusSHgGoKIIrilCfA
-
 ### GET USER BY UUID
 
 GET {{baseUrl}}/user/e7dbb9e8-0d8a-47dc-8efc-3366993f7bb9

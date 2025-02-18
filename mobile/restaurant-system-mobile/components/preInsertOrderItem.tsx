@@ -59,6 +59,10 @@ export default function PreInsertOrderItem({orderItemList, setOrderItemList, set
         return;
     }
 
+    const submitOrder = () => {
+        console.log()
+    }
+
     return(
         <SafeAreaView style={preInsertOrderItemStyle.container}>
             <TouchableOpacity
@@ -135,6 +139,7 @@ export default function PreInsertOrderItem({orderItemList, setOrderItemList, set
                                 fontSize: 15
                             }
                         }
+                        onPress={() => submitOrder}
                     />
                 </View>
 

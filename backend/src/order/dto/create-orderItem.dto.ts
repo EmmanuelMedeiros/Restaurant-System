@@ -6,13 +6,10 @@ export class CreateOrderItemDTO {
 
     public readonly item: Item;
 
-    public readonly order: Order;
-
     public readonly quantity: number;
 
-    constructor(item: Item, order: Order, quantity:number) {
+    constructor(item: Item, quantity:number) {
         this.item = item,
-        this.order = order,
         this.quantity = quantity
     }
 }

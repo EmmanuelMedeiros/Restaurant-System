@@ -41,16 +41,21 @@ export class OrderController {
         if(!fetchedUser) {
             throw new HttpException(`No user found for this UUID`, HttpStatus.NOT_FOUND);
         };
-        const fetchedItem: Item|null = await this.itemService.findOne(Number(createOrderDTO.orderItem.item.id))
-        if(!fetchedItem) {
-            throw new HttpException(`No item found for this ID`, HttpStatus.NOT_FOUND);
+
+        const orderItem: {item: Item, quantity: number}[] = []
+        for(let i: number = 0; i < createOrderDTO.orderItemList.length; i++) {
+            const fetchedItem: Item|null = await this.itemService.findOne(Number(createOrderDTO.orderItemList[i].item.id));
+
+            if(!fetchedItem) {
+                throw new HttpException(`No item found for this ID`, HttpStatus.NOT_FOUND);
+            };
+
+            orderItem.push({
+                item: fetchedItem,
+                quantity: createOrderDTO.orderItemList[i].quantity
+            });
         };
-        const orderItem: OrderItem = {
-            uuid: "",
-            item: fetchedItem,
-            order: createOrderDTO.orderItem.order,
-            quantity: createOrderDTO.orderItem.quantity
-        }
+
         const createOrder: CreateOrderDTO = new CreateOrderDTO(
             fetchedTable,
             fetchedUser,
@@ -124,12 +129,14 @@ export class OrderController {
         return serviceResponse;
     }
 
-    @HttpCode(HttpStatus.OK)
+/*     @HttpCode(HttpStatus.OK)
     @Post('/manipulate_order_item/:uuid')
-    async manipulateOrderItem(@Param("uuid") uuid: string, @Body() orderItem: CreateOrderItemDTO) {
-        if(orderItem.quantity < 0) {
-            throw new HttpException("Quantity must be 0 or above", HttpStatus.BAD_REQUEST)
-        }
+    async manipulateOrderItem(@Param("uuid") uuid: string, @Body() orderItem: CreateOrderItemDTO[]) {
+        orderItem.forEach((item) => {
+            if(item.quantity < 0) {
+                throw new HttpException("Quantity must be 0 or above", HttpStatus.BAD_REQUEST)
+            }
+        });
         const fetchedOrder: Order|null = await this.orderService.findOne(uuid)
         if(!fetchedOrder) {
             throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
@@ -137,15 +144,11 @@ export class OrderController {
         if(fetchedOrder.finishedAt) {
             throw new HttpException("This order is already finished", HttpStatus.BAD_REQUEST);
         };
-        const fetchedItem: Item|null = await this.itemService.findOne(orderItem.item.id);
-        if(!fetchedItem) {
-            throw new HttpException("No item found for this ID", HttpStatus.NOT_FOUND);
-        };
         const serviceResponse: EndMessage = await this.orderService.manipulateOrderItem(fetchedOrder, orderItem);
         if(serviceResponse.status !== HttpStatus.OK) {
             throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
         }
         return serviceResponse;
-    }
+    } */
     
 }

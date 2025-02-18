@@ -11,16 +11,24 @@ Content-Type: application/json
         "id": 1
     },
     "waiter": {
-        "uuid": "12a4cd40-d103-4577-826d-3289f5615513"
+        "uuid": "dfd36b3b-f40b-42d9-ab51-aa1a8460cea9"
     },
-    "orderItem": {
-        "item": {
-            "id": 1
+    "orderItemList": [
+        {
+            "item": {
+                "id": 1
+            },
+            "quantity": 3
         },
-        "quantity": 3
-    }
-
+        {
+            "item": {
+                "id": 3
+            },
+            "quantity": 1
+        }
+        ]
 }
+
 
 ### GET SPECIFIC ORDER
 
