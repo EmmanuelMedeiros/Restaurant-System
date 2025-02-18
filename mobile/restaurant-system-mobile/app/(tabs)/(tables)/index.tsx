@@ -1,12 +1,12 @@
 import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Table from "../component/table";
+import Table from "@/components/table";
 import { useEffect, useState } from "react";
-import TableCard from "../component/tableCard";
-import { TableStatus } from "../enum/TableStatus";
-import { TablesEndpoint } from "../fuctions/tables/table.endpoint";
-import { ITable } from "../interface/ITable";
-import { IApiResponse } from "../interface/IApiResponse";
+import TableCard from "@/components/tableCard";
+import { TableStatus } from "@/enum/TableStatus";
+import { TablesEndpoint } from "@/tables/table.endpoint";
+import { ITable } from "@/interface/ITable";
+import { IApiResponse } from "@/interface/IApiResponse";
 
 export default function TablesScreen() {
 
@@ -38,10 +38,13 @@ export default function TablesScreen() {
         getAllTables();
     }, [])
 
+    
+
     return(
         <SafeAreaView 
             style={ !openTableCard ? tableScreenStyle.container : tableScreenStyle.greyBackgroundContainer }
         >   
+
         
             <Pressable 
                 style={{height: '80%', width: '90%'}}
@@ -87,6 +90,7 @@ export default function TablesScreen() {
     )
 
 }
+
 
 const tableScreenStyle = StyleSheet.create({
     container: {

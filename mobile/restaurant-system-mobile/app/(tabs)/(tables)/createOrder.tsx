@@ -1,15 +1,15 @@
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import EntireMenuComponent from "../component/entireMenu";
+import EntireMenuComponent from "../../../components/entireMenu";
 import { useEffect, useState } from "react";
-import { OrderCreationStates } from "../enum/OrderCreationStates";
-import PreInsertOrderItem from "../component/preInsertOrderItem";
-import { IItem } from "../interface/IItem";
-import { IOrderItem } from "../interface/IOrderItem";
+import { OrderCreationStates } from "../../../enum/OrderCreationStates";
+import PreInsertOrderItem from "../../../components/preInsertOrderItem";
+import { IItem } from "../../../interface/IItem";
+import { IOrderItem } from "../../../interface/IOrderItem";
 import { useLocalSearchParams } from "expo-router";
-import { IApiResponse } from "../interface/IApiResponse";
-import { TablesEndpoint } from "../fuctions/tables/table.endpoint";
-import { ITable } from "../interface/ITable";
-import { TableStatus } from "../enum/TableStatus";
+import { IApiResponse } from "../../../interface/IApiResponse";
+import { TablesEndpoint } from "@/tables/table.endpoint";
+import { ITable } from "../../../interface/ITable";
+import { TableStatus } from "../../../enum/TableStatus";
 
 export default function CreateOrder() {
 

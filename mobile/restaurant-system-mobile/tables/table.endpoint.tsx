@@ -1,4 +1,4 @@
-import { IApiResponse } from '@/app/interface/IApiResponse';
+import { IApiResponse } from '@/interface/IApiResponse';
 import axios from 'axios';
 
 export class TablesEndpoint {
