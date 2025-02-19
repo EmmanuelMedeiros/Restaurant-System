@@ -45,15 +45,23 @@ PUT {{baseUrl}}/order/finish/2c622264-0dd9-4a09-8b4e-6c14b06c5b5d
 
 ### MANIPULATE ORDER ITEM
 
-POST {{baseUrl}}/order/manipulate_order_item/2c622264-0dd9-4a09-8b4e-6c14b06c5b5d
+POST {{baseUrl}}/order/update_item/21d32ccf-d4b1-4a04-af02-44579c07af49
 Content-Type: application/json
 
-{
-    "item": {
-        "id": 2
+[
+    {
+        "item": {
+            "id": 2
+        },
+        "quantity": 3
     },
-    "quantity": 2
-}
+    {
+        "item": {
+            "id": 1
+        },
+        "quantity": 4
+    }
+]
 
 ### DELETE ORDER
 

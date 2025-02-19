@@ -12,6 +12,7 @@ import { OrderItem } from './entity/orderItem.entity';
 import { TableStatus } from 'src/enum/TableStatus';
 import { Table } from 'src/table/entity/table.entity';
 import { CreateOrderItemDTO } from './dto/create-orderItem.dto';
+import { Item } from 'src/item/entity/item.entity';
 
 @Injectable()
 export class OrderService {
@@ -128,49 +129,37 @@ export class OrderService {
         }
     }
 
-/*     async manipulateOrderItem(order: Order, orderItem: CreateOrderItemDTO[]) {
+    async manipulateOrderItem(order: Order, createOrderItemDTO: CreateOrderItemDTO[]): Promise<EndMessage> {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
-        try {
-            const thisOrderItems: OrderItem[]|null = await this.findOrderItems(order);
-            const specificOrderItem: OrderItem|undefined = thisOrderItems.find(x => x.item.id === orderItem.item.id);
-            if(specificOrderItem && orderItem.quantity > 0) {
-                await this.orderItemRepository.query(`update
-                                                    	order_item
-                                                    set
-                                                    	quantity = $1
-                                                    where
-                                                    	"orderUuid" = $2
-                                                    AND
-                                                        "itemID" = $3`, [orderItem.quantity, order.uuid, orderItem.item.id]);
-                await this.orderRepository.update(order.uuid, {
-                    modifiedAt: moment().format('YYYY/MM/DD HH:mm:ss')
-                })
-                return endMessage = {data: orderItem, status: HttpStatus.OK};
-            } else if(specificOrderItem && orderItem.quantity === 0) {
-                await this.orderItemRepository.delete(specificOrderItem.uuid)
-                await this.orderRepository.update(order.uuid, {
-                    modifiedAt: moment().format('YYYY/MM/DD HH:mm:ss')
-                })
-                return endMessage = {data: orderItem, status: HttpStatus.OK};
-            } else if(orderItem.quantity > 1){
-                const itemToInsert: OrderItem = new OrderItem(
-                    crypto.randomUUID(),
-                    orderItem.item,
-                    order,
-                    orderItem.quantity
-                )
-                await this.orderItemRepository.insert(itemToInsert);
-                await this.orderRepository.update(order.uuid, {
-                    modifiedAt: moment().format('YYYY/MM/DD HH:mm:ss')
-                })
-                return endMessage = {data: itemToInsert, status: HttpStatus.OK};
+        const thisOrderItems: OrderItem[]|null = await this.findOrderItems(order);
+        const orderItemList: OrderItem[] = [];
+        try{
+            if(!thisOrderItems || thisOrderItems.length < 1) {
+                for(let i: number = 0; i < createOrderItemDTO.length; i++) {
+                    orderItemList.push(
+                        new OrderItem(crypto.randomUUID(), createOrderItemDTO[i].item, order, createOrderItemDTO[i].quantity)
+                    );
+                };
             } else {
-                return endMessage = {data: `To insert a new item, it's quantity must be above 0`, status: HttpStatus.BAD_REQUEST};
+                for(let i: number = 0; i < createOrderItemDTO.length; i++) {
+                    const checkIfItemAlreadyExists: OrderItem|undefined = thisOrderItems.find(x => x.item.id === createOrderItemDTO[i].item.id);
+                    if(!checkIfItemAlreadyExists) {
+                        orderItemList.push(
+                            new OrderItem(crypto.randomUUID(), createOrderItemDTO[i].item, order, createOrderItemDTO[i].quantity)
+                        );
+                    } else {
+                        orderItemList.push(
+                            new OrderItem(checkIfItemAlreadyExists.uuid, checkIfItemAlreadyExists.item, order, createOrderItemDTO[i].quantity)
+                        )
+                    };
+                };
             }
-
+            await this.orderItemRepository.save(orderItemList);
+            return endMessage = {data: orderItemList, status: HttpStatus.OK};
         }catch(err) {
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
-    } */
+    }
+
 
 }

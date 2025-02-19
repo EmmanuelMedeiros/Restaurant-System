@@ -129,9 +129,9 @@ export class OrderController {
         return serviceResponse;
     }
 
-    @Post('/insert_item/:uuid')
+    @Post('/update_item/:uuid')
     async insertOrderItem(@Param("uuid") uuid:string, @Body() createOrderItemDTO: CreateOrderItemDTO[]) {
-        const fetchedOrder: Order|null = await this.orderService.findOne(uuid)
+        const fetchedOrder: Order|null = await this.orderService.findOne(uuid);
         if(!fetchedOrder) {
             throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
         };
@@ -142,12 +142,16 @@ export class OrderController {
             if(!fetchedItem) {
                 throw new HttpException(`No item found for this ID`, HttpStatus.NOT_FOUND);
             };
-
             orderItem.push({
                 item: fetchedItem,
                 quantity: createOrderItemDTO[i].quantity
             });
+        };
+        const serviceResponse: EndMessage = await this.orderService.manipulateOrderItem(fetchedOrder, orderItem)
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
         }
+        return serviceResponse;
     }
 
 /*     @HttpCode(HttpStatus.OK)
