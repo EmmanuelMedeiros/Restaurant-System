@@ -67,7 +67,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
-            router.navigate('/(tabs)/(tables)');
+            router.back()
             return true;
         });
     }, [])
@@ -77,7 +77,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
             
             <TouchableOpacity
                 style={{position: 'absolute', right: 10, top: 10, zIndex: 10}}
-                onPress={() => router.navigate('/(tabs)/(tables)')}
+                onPress={() => router.back()}
             >
                 <Icons name='x' 
                     size={30} 

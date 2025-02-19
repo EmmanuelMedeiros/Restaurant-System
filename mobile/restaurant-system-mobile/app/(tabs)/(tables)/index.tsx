@@ -7,6 +7,7 @@ import { TableStatus } from "@/enum/TableStatus";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "@/interface/ITable";
 import { IApiResponse } from "@/interface/IApiResponse";
+import { router } from "expo-router";
 
 export default function TablesScreen() {
 
@@ -27,8 +28,6 @@ export default function TablesScreen() {
         if(apiResult.statusCode != 200) {
             return console.log(apiResult.data);
         };
-
-        console.log("again")
 
         const tableList: ITable[] = apiResult.data;
         tableList.sort((a, b) => a.id - b.id);

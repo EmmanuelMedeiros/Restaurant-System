@@ -5,7 +5,7 @@ import { OrderCreationStates } from "../../../enum/OrderCreationStates";
 import PreInsertOrderItem from "../../../components/preInsertOrderItem";
 import { IItem } from "../../../interface/IItem";
 import { IOrderItem } from "../../../interface/IOrderItem";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { IApiResponse } from "../../../interface/IApiResponse";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "../../../interface/ITable";
@@ -59,17 +59,16 @@ export default function CreateOrder() {
                 table,
                 waiter,
                 preInsertOrderItems
-            );
-    
-            setOrderReady(false);    
+            );  
 
             const apiResponse: IApiResponse = await orderEndpoint.create(createOrderDTO);
             if(apiResponse.statusCode !== 201) {
-                console.log("ERRO NA CRIAÇÃO DE ORDER");
-                console.log(apiResponse.data)
+                console.log("ERRO NA CRIAÇÃO DE ORDER" + apiResponse.data);
+                setOrderReady(false);  
                 return;
             }
-            return
+            router.replace("/(tabs)/(tables)")
+            return;
         }
 
     };
