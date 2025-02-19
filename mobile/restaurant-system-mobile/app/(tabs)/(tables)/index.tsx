@@ -28,9 +28,11 @@ export default function TablesScreen() {
             return console.log(apiResult.data);
         };
 
+        console.log("again")
+
         const tableList: ITable[] = apiResult.data;
         tableList.sort((a, b) => a.id - b.id);
-        return setTablesList(tableList);
+        return setTablesList(tableList.reverse());
 
     }
 
@@ -59,7 +61,7 @@ export default function TablesScreen() {
                         contentContainerStyle={{flexWrap: "wrap", width: '105%', flexDirection: 'column', justifyContent: "flex-end"}}
 
                     >
-                        {tablesList.reverse().map((element) => (
+                        {tablesList.map((element) => (
                             <View 
                                 style={tableScreenStyle.tableList}
                                 key={element.id}

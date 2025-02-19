@@ -10,10 +10,14 @@ import { IApiResponse } from "../../../interface/IApiResponse";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "../../../interface/ITable";
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
+import { OrderEndpoint } from "@/fuctions/order.endpoint";
+import { CreateOrderDTO } from "@/dto/create-order.dto";
 
 export default function CreateOrder() {
 
     const tablesEndpoint: TablesEndpoint = new TablesEndpoint();
+    const itemEndpoint: ItemEndpoint = new ItemEndpoint();
+    const orderEndpoint: OrderEndpoint = new OrderEndpoint();
 
     const [currentState, setCurrentState]                   = useState<OrderCreationStates>(OrderCreationStates.CREATE);
     const [choosenItems, setChooseItems]                    = useState<IItem[]>([]);
@@ -21,8 +25,7 @@ export default function CreateOrder() {
     const [itemList, setItemList]                           = useState<IItem[]>([]);
 
     const [currentTable, setCurrentTable]                   = useState<ITable>();
-
-    const itemEndpoint: ItemEndpoint = new ItemEndpoint();
+    const [orderReady, setOrderReady]                       = useState<boolean>(false);
 
     const {tableID} = useLocalSearchParams<{tableID: string}>();
 
@@ -47,6 +50,36 @@ export default function CreateOrder() {
         return;
     }
 
+    async function createOrder() {
+        if(currentTable) {
+            
+            const table: {id: number}  = {id: currentTable.id}
+            const waiter: {uuid: string} = {uuid: "dfd36b3b-f40b-42d9-ab51-aa1a8460cea9"};
+            const createOrderDTO: CreateOrderDTO = new CreateOrderDTO(
+                table,
+                waiter,
+                preInsertOrderItems
+            );
+    
+            setOrderReady(false);    
+
+            const apiResponse: IApiResponse = await orderEndpoint.create(createOrderDTO);
+            if(apiResponse.statusCode !== 201) {
+                console.log("ERRO NA CRIAÇÃO DE ORDER");
+                console.log(apiResponse.data)
+                return;
+            }
+            return
+        }
+
+    };
+
+    useEffect(() => {
+        if(orderReady) {
+            createOrder();
+        };
+    }, [orderReady])
+
     useEffect(() => {
 
         if(currentState === OrderCreationStates.CONFIRM) {
@@ -65,7 +98,7 @@ export default function CreateOrder() {
     useEffect(() => {
         getTable();
         getAllItems();
-    }, [])
+    }, []);
 
     return(
         <SafeAreaView style={createOrderStyle.container}>
@@ -88,6 +121,7 @@ export default function CreateOrder() {
                         orderItemList={preInsertOrderItems}
                         setItemList={setChooseItems}
                         setOrderState={setCurrentState}
+                        setOrderReady={setOrderReady}
                     />
                 </View>
             }

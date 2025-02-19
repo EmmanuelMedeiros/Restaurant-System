@@ -14,9 +14,10 @@ interface PreInsertOrderItemProps {
     setItemList: React.Dispatch<React.SetStateAction<IItem[]>>,
     setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>
     setOrderItemList: React.Dispatch<React.SetStateAction<IOrderItem[]>>,
+    setOrderReady: React.Dispatch<boolean>
 };
 
-export default function PreInsertOrderItem({orderItemList, setOrderItemList, setItemList, setOrderState}: PreInsertOrderItemProps) {
+export default function PreInsertOrderItem({orderItemList, setOrderItemList, setItemList, setOrderState, setOrderReady}: PreInsertOrderItemProps) {
 
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
@@ -106,7 +107,7 @@ export default function PreInsertOrderItem({orderItemList, setOrderItemList, set
                                 <Text>R$ {(element.item.price * element.quantity).toFixed(2)}</Text>
                             </View>
 
-                            <Text style={preInsertOrderItemStyle.itemName}>{element.item.name}</Text>
+                            <Text style={preInsertOrderItemStyle.itemName}>{element.item.name.toUpperCase()}</Text>
 
                             <TouchableOpacity
                                 onPressIn={() => deleteItemOnHandle(index)}
@@ -139,7 +140,7 @@ export default function PreInsertOrderItem({orderItemList, setOrderItemList, set
                                 fontSize: 15
                             }
                         }
-                        onPress={() => submitOrder}
+                        onPress={() => setOrderReady(true)}
                     />
                 </View>
 

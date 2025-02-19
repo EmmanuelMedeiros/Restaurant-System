@@ -102,7 +102,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
                         key={index}
                         id={index.toString()}
                         style={entireMenuStyle.menuCategoryList}
-                        onPressOut={() => {setItemCategoryToShow(element.id), console.log(element.id)}}
+                        onPressOut={() => setItemCategoryToShow(element.id)}
                     >
                         <Text style={itemCategoryToShow == element.id ? {textDecorationLine: 'underline', fontWeight: 'bold'} : null}>{element.title}</Text>
                     </TouchableOpacity>
