@@ -46,8 +46,6 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
     const [itemCategoryToShow, setItemCategoryToShow]   = useState<number>(1);
 
-    const itemEndpoint: ItemEndpoint = new ItemEndpoint();
-
     const toggleItemChooseOnHandle = (item: IItem) => {
 
         const itemPositionInStorage: number = storedItems.findIndex(x => x === item);

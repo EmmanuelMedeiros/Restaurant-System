@@ -45,7 +45,6 @@ export default function TablesScreen() {
         <SafeAreaView 
             style={ !openTableCard ? tableScreenStyle.container : tableScreenStyle.greyBackgroundContainer }
         >   
-
         
             <Pressable 
                 style={{height: '80%', width: '90%'}}

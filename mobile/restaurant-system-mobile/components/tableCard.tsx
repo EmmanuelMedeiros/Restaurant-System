@@ -22,7 +22,11 @@ export default function TableCard({setShow, table}: TableCardProps) {
     table?.status === TableStatus.BUSY ? [statusColor = "#A87F26", closeOrderBGColor = "#255247"]: [statusColor = "grey", closeOrderBGColor = "rgba(37, 82, 71, .3)"];
 
     function goToCreateOrder() {
-        router.navigate({pathname: '/(tabs)/(tables)/createOrder', params: { tableID: table?.id }})
+        router.push({pathname: '/(tabs)/(tables)/createOrder', params: { tableID: table?.id }})
+    }
+
+    function goToTableOrders() {
+        router.push({pathname: '/(tabs)/(tables)/tableOrder', params: {tableID: table?.id}})
     }
 
     return(
@@ -55,7 +59,7 @@ export default function TableCard({setShow, table}: TableCardProps) {
                                 }
                             }
                             isDisabled={false}
-                            onPress={() => {table?.status === TableStatus.BUSY ? null : goToCreateOrder()}}
+                            onPress={() => {table?.status === TableStatus.BUSY ? goToTableOrders() : goToCreateOrder()}}
                         />
                     </View>
                     
