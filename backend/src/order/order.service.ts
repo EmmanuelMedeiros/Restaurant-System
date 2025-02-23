@@ -63,6 +63,28 @@ export class OrderService {
         }
     }
 
+    async findByTableID(table: Table): Promise<Order[]|null> {
+        try {
+            const sqlQuery: string = `
+                                    select
+                    	                "uuid",
+                    	                "createdAt",
+                    	                "modifiedAt" ,
+                    	                "finishedAt" 
+                                        from
+                                        	"order" o
+                                        where
+                                        	o."tableId" = $1
+                                        order by "createdAt" desc
+                                        limit 1
+            `
+            const fetchOrder = await this.orderRepository.query(sqlQuery, [table.id]);
+            return fetchOrder;
+        }catch(err) {
+            return null;
+        }
+    }
+
     async findOne(uuid: string): Promise<Order|null> {
         const user: Order|null = await this.orderRepository.findOne({
             where: {

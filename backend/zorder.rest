@@ -39,6 +39,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMTRjMjJhM
 
 GET {{baseUrl}}/order/order-items/31589a74-dcef-466d-b84b-b4fe7385a7b0
 
+### GET ORDER BY TABLE'S ID
+
+GET {{baseUrl}}/order?tableID=2
+
 ### FINISH ORDER 
 
 PUT {{baseUrl}}/order/finish/2c622264-0dd9-4a09-8b4e-6c14b06c5b5d
