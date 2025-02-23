@@ -80,6 +80,19 @@ export class OrderController {
         return order;
     }
 
+    @Get("")
+    async findByTable(@Query("tableID") tableID: number) {
+        const fetchedTable: Table|null = await this.tableService.findOne(tableID);
+        if(!fetchedTable) {
+            throw new HttpException("No table found for this ID", HttpStatus.NOT_FOUND);
+        };
+        const fetchOrder: Order[]|null = await this.orderService.findByTableID(fetchedTable);
+        if(!fetchOrder || fetchOrder.length === 0) {
+            throw new HttpException("No order found for this table", HttpStatus.NOT_FOUND);
+        };
+        return fetchOrder;
+    }
+
     @Delete("/:uuid")
     async deleteOne(@Param("uuid") uuid: string) {
         const order: Order|null = await this.orderService.findOne(uuid)
