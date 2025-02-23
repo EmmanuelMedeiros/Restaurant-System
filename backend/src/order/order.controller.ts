@@ -153,27 +153,5 @@ export class OrderController {
         }
         return serviceResponse;
     }
-
-/*     @HttpCode(HttpStatus.OK)
-    @Post('/manipulate_order_item/:uuid')
-    async manipulateOrderItem(@Param("uuid") uuid: string, @Body() orderItem: CreateOrderItemDTO[]) {
-        orderItem.forEach((item) => {
-            if(item.quantity < 0) {
-                throw new HttpException("Quantity must be 0 or above", HttpStatus.BAD_REQUEST)
-            }
-        });
-        const fetchedOrder: Order|null = await this.orderService.findOne(uuid)
-        if(!fetchedOrder) {
-            throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
-        };
-        if(fetchedOrder.finishedAt) {
-            throw new HttpException("This order is already finished", HttpStatus.BAD_REQUEST);
-        };
-        const serviceResponse: EndMessage = await this.orderService.manipulateOrderItem(fetchedOrder, orderItem);
-        if(serviceResponse.status !== HttpStatus.OK) {
-            throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
-        }
-        return serviceResponse;
-    } */
     
 }

@@ -1,69 +1,108 @@
 import { router } from "expo-router"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
+import { BackHandler } from "react-native";
+
 import Icons from '@expo/vector-icons/Feather'
 import { IItemCategory } from "@/interface/IItemCategory";
 import { IItem } from "@/interface/IItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IOrderItem } from "@/interface/IOrderItem";
+import ButtonToAction from "./buttonToAction";
 
 const menuCategoryList: IItemCategory[] = [
     {id: 0, title: "TODOS"}, {id: 1, title: "ALMOÇO"}, {id: 2, title: "TIRA-GOSTO"}, {id: 3, title: "BEBIDAS"}, {id: 4, title: "GUARNIÇÕES"}
 ];
 
 interface MenuProps {
+    title: string,
+    subtitle?: string
     posActionItemList: IItem[]|IOrderItem[],
-    itemPressableIcon: any[],
-    pressableIconFunction: any,
+    itemPressableIcon?: any[],
+    pressableIconFunction?: any,
     itemList?: IItem[]|undefined,
-    orderItemList?: IOrderItem[]|undefined
+    orderItemList?: IOrderItem[]|undefined,
+    showHeader: boolean,
+    goBackFunction?: () => void,
+    bottomButton?: any
 }
 
-export default function Menu({posActionItemList ,itemPressableIcon, pressableIconFunction, itemList, orderItemList}: MenuProps) {
+export default function Menu({bottomButton, title, subtitle, posActionItemList ,itemPressableIcon, pressableIconFunction, itemList, orderItemList, showHeader, goBackFunction}: MenuProps) {
 
     const [itemCategoryToShow, setItemCategoryToShow] = useState<number>(1);
     
+    useEffect(() => {
+        if(goBackFunction) {
+            BackHandler.addEventListener("hardwareBackPress", () => {
+                goBackFunction();
+                return true;
+            });
+        };
+    })
 
     return(
         <View style={entireMenuStyle.container}>
-            
-            <TouchableOpacity
-                style={{position: 'absolute', right: 10, top: 10, zIndex: 10}}
-                onPress={() => router.back()}
-            >
-                <Icons name='x' 
-                    size={30} 
-                    color={'#6C3232'}
-                />
 
-            </TouchableOpacity>
+            {!goBackFunction
+                ?
+                    <TouchableOpacity
+                        style={{position: 'absolute', right: 10, top: 10, zIndex: 10}}
+                        onPress={() => router.back()}
+                    >
+                        <Icons name='x' 
+                            size={30} 
+                            color={'#6C3232'}
+                        />
+                    </TouchableOpacity>
+                :
+                    <TouchableOpacity
+                        style={{position: 'absolute', left: 10, top: 20, zIndex: 10}}
+                        onPress={goBackFunction}
+                    >
+                        <Icons name='chevron-left' 
+                            size={30} 
+                            color={'#171717'}
+                        />
+                    </TouchableOpacity>
+            }
 
-            <Text style={entireMenuStyle.title}>Menu</Text>
+            <Text style={entireMenuStyle.title}>{title}</Text>
+            <Text style={entireMenuStyle.subTitle}>{subtitle}</Text>
 
 
             <View style={entireMenuStyle.lighHorizontalLine}/>
 
-            <ScrollView
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}
-                contentContainerStyle={{height: 90,}}
-                style={{ maxHeight: 50 }}
-            >
-                {menuCategoryList.map((element, index) => (
-                    <TouchableOpacity 
-                        key={index}
-                        id={index.toString()}
-                        style={entireMenuStyle.menuCategoryList}
-                        onPressOut={() => setItemCategoryToShow(element.id)}
+            {showHeader
+                ?
+                    <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        horizontal={true}
+                        contentContainerStyle={{height: 90,}}
+                        style={{ maxHeight: 50 }}
                     >
-                        <Text>{element.title}</Text>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
-                            
-            <View style={{marginTop: -30}}>
-                <View style={entireMenuStyle.blackHorizontalLine}/>
-            </View>
+                        {menuCategoryList.map((element, index) => (
+                            <TouchableOpacity 
+                                key={index}
+                                id={index.toString()}
+                                style={entireMenuStyle.menuCategoryList}
+                                onPressOut={() => setItemCategoryToShow(element.id)}
+                            >
+                                <Text>{element.title}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                :
+                    null
+            }
+
+            {showHeader
+                ?
+                    <View style={{marginTop: -30}}>
+                        <View style={entireMenuStyle.blackHorizontalLine}/>
+                    </View>
+                :
+                    null
+            }
 
             <ScrollView
             contentContainerStyle={{paddingBottom: 20}}
@@ -82,12 +121,19 @@ export default function Menu({posActionItemList ,itemPressableIcon, pressableIco
                             <Text style={[entireMenuStyle.itemName, 
                                 posActionItemList.find(x => x === element) ? {textDecorationLine: 'line-through'} : null
                             ]}>{element.name.toUpperCase()}</Text>
-                            <TouchableOpacity
-                                onPress={() => pressableIconFunction(element)}
-                            >  
-                            
-                                {!posActionItemList.find(x => x === element) ? itemPressableIcon[0] : itemPressableIcon[1]}
-                            </TouchableOpacity>
+
+                            {itemPressableIcon
+                                ?
+                                    <TouchableOpacity
+                                        onPress={() => pressableIconFunction(element)}
+                                    >  
+
+                                        {!posActionItemList.find(x => x === element) ? itemPressableIcon[0] : itemPressableIcon[1]}
+                                    </TouchableOpacity>
+                                :
+                                    null
+                            }
+
                         </View>
                         <View style={{marginBlock: -15}}>
                             <View style={entireMenuStyle.lighHorizontalLine}/>
@@ -103,17 +149,27 @@ export default function Menu({posActionItemList ,itemPressableIcon, pressableIco
                         <View 
                             style={entireMenuStyle.eachItem}
                             key={element.item.id}
-                        >
-                            <Text>R$ {Number(element.item.price).toFixed(2)}</Text>
+                        >   
+                            <View style={{alignItems: 'center', gap: 8}}>
+                                <Text>QTD.: {element.quantity}</Text>
+                                <Text>R$ {Number(element.item.price * element.quantity).toFixed(2)}</Text>
+                            </View>
                             <Text style={[entireMenuStyle.itemName, 
                                 posActionItemList.find(x => x === element) ? {textDecorationLine: 'line-through'} : null
                             ]}>{element.item.name.toUpperCase()}</Text>
-                            <TouchableOpacity
-                                onPress={() => pressableIconFunction(element)}
-                            >  
-                            
-                                {!posActionItemList.find(x => x === element) ? itemPressableIcon[0] : itemPressableIcon[1]}
-                            </TouchableOpacity>
+
+                            {itemPressableIcon
+                                ?
+                                    <TouchableOpacity
+                                        onPress={() => pressableIconFunction(element)}
+                                    >  
+    
+                                        {!posActionItemList.find(x => x === element) ? itemPressableIcon[0] : itemPressableIcon[1]}
+                                    </TouchableOpacity>
+                                :
+                                    null
+                            }
+
                         </View>
                         <View style={{marginBlock: -15}}>
                             <View style={entireMenuStyle.lighHorizontalLine}/>
@@ -121,7 +177,14 @@ export default function Menu({posActionItemList ,itemPressableIcon, pressableIco
                     </View>
                 ))} 
 
-
+                {bottomButton
+                    ?
+                        <View style={{width: '100%', height: 80, marginInline: 'auto', marginTop: 20}}>
+                            {bottomButton}
+                        </View>
+                    :
+                        null
+                }
 
             </ScrollView>
 

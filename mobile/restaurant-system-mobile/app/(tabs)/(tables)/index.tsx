@@ -37,9 +37,7 @@ export default function TablesScreen() {
 
     useEffect(() => {
         getAllTables();
-    }, [])
-
-    
+    }, []) 
 
     return(
         <SafeAreaView 
