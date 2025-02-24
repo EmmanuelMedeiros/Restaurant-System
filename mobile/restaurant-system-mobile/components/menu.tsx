@@ -34,7 +34,7 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
         BackHandler.addEventListener("hardwareBackPress", () => {
             if(goBackFunction) {
                 goBackFunction();
-                return;
+                return true;
             };
             router.back();
             return true;

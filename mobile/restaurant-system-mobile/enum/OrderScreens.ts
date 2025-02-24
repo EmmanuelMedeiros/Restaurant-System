@@ -1,4 +1,5 @@
 export enum OrderScreens {
     "ORDER" = 1,
-    "TRASH"
+    "TRASH",
+    "ADD_ITEM"
 }

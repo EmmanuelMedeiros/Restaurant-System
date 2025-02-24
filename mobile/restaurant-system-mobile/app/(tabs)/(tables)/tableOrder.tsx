@@ -4,16 +4,17 @@ import { IItem } from "@/interface/IItem";
 import { BackHandler, SafeAreaView, StyleSheet, View } from "react-native";
 
 import Icons from '@expo/vector-icons/Feather'
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import QuantityFloatComponent from "@/components/quantityFloatComponent";
 import { IOrderItem } from "@/interface/IOrderItem";
 import { OrderScreens } from "@/enum/OrderScreens";
 import ButtonToAction from "@/components/buttonToAction";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { goBack } from "expo-router/build/global-state/routing";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { OrderEndpoint } from "@/fuctions/order.endpoint";
 import { IOrder } from "@/interface/IOrder";
+import { TableStatus } from "@/enum/TableStatus";
 
 const items: IOrderItem[] = [
     {
@@ -59,7 +60,9 @@ export default function TableOrder() {
 
     const [itemList, setItemList]                       = useState<IOrderItem[]>([]);
     const [itemsToRemove, setItemsToRemove]             = useState<IOrderItem[]>([]);
-    const [currentOrderScreen, setCurrentOrderScreen]   = useState<OrderScreens>(OrderScreens.ORDER)
+    const [currentOrderScreen, setCurrentOrderScreen]   = useState<OrderScreens>(OrderScreens.ORDER);
+
+
 
     const {tableID} = useLocalSearchParams<{tableID: string}>();
     const orderEndpoint: OrderEndpoint = new OrderEndpoint();
@@ -108,7 +111,8 @@ export default function TableOrder() {
             if(order) {
                 const apiResponse: IApiResponse = await orderEndpoint.getSpecificOrderItems(order.uuid)
                 if(apiResponse.statusCode !== 200) {
-                    console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                    console.log(`get order's items endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                    setItemList([])
                     return
                 } else {
                     setItemList(apiResponse.data);
@@ -123,15 +127,65 @@ export default function TableOrder() {
         }
     }
 
-    useEffect(() => {
-        orderByTableID();
-    }, [])
+    async function deleteOrderItems() {
+        try {
+            if(order) {
+
+                const itemsToDelete: IOrderItem[] = itemsToRemove.map((element) => {
+                    return({
+                        item: element.item,
+                        quantity: 0,
+                        uuid: element.uuid
+                    });
+                });
+
+                const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(order.uuid, itemsToDelete)
+                if(apiResponse.statusCode !== 200) {
+                    console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                    return
+                } else {
+                    orderByTableID()
+                    setItemsToRemove([]);
+                    setCurrentOrderScreen(OrderScreens.ORDER)
+            }
+        }
+        }catch(err) {
+            console.log("ERROR " + err)
+        }
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            orderByTableID()
+        }, [])
+    )
 
     useEffect(() => {
         if(order) {
             getOrderItemsByOrderID();
         };
     }, [order])
+
+    useEffect(() => {
+        if(currentOrderScreen === OrderScreens.ADD_ITEM) {
+
+            const alreadyExistingItemsID: number[] = itemList.map((element) => {
+                return(element.item.id);
+            })
+
+            router.push(
+                {pathname: "/(tabs)/(tables)/createOrder", params: 
+                    {   
+                        tableID: tableID, 
+                        alreadyExistingItemsID: alreadyExistingItemsID,
+                        isInsertion: 1,
+                        orderUUID: order?.uuid
+                    }
+                });
+            setCurrentOrderScreen(OrderScreens.ORDER)
+        };  
+        return;
+    }, [currentOrderScreen])
 
     return(
         <SafeAreaView style={tableOrder.container}>
@@ -165,7 +219,7 @@ export default function TableOrder() {
                                                     fontSize: 20
                                                 }
                                             }
-                                            onPress={() => {}}
+                                            onPress={() => setCurrentOrderScreen(OrderScreens.ADD_ITEM)}
                                         />
                                     }
                             />
@@ -197,13 +251,23 @@ export default function TableOrder() {
                                             fontSize: 20
                                         }
                                     }
-                                    onPress={() => {}}
+                                    onPress={() => deleteOrderItems()}
                                 />
                             }
                         />
                     :
                         null
                 }
+
+
+{/*                 {currentOrderScreen === OrderScreens.ADD_ITEM
+                    ?
+                        <EntireMenuComponent
+                            currentTable={{status: TableStatus.BUSY, id: Number(tableID), name: tableID}}
+                            itemsList={}
+                        />
+                    :    
+                } */}
 
             </View>
             

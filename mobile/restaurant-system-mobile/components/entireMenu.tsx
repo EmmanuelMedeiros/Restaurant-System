@@ -65,6 +65,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
+            const isPossible: boolean = router.canGoBack();
             router.back()
             return true;
         });
@@ -75,7 +76,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
             
             <TouchableOpacity
                 style={{position: 'absolute', right: 10, top: 10, zIndex: 10}}
-                onPress={() => router.back()}
+                onPress={() => router.dismiss()}
             >
                 <Icons name='x' 
                     size={30} 

@@ -1,4 +1,5 @@
 import { CreateOrderDTO } from "@/dto/create-order.dto";
+import { CreateOrderItemDTO } from "@/dto/create-orderItem.dto";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { IOrder } from "@/interface/IOrder";
 import { IOrderItem } from "@/interface/IOrderItem";
@@ -44,6 +45,19 @@ export class OrderEndpoint {
         let apiResponse: IApiResponse;
 
         const apiResult = await axios.get(`${this.apiUrl}/order/order-items/${orderID}`)
+        .then((response) => {
+            return apiResponse = {data: response.data, statusCode: 200}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
+        return apiResult;
+    }
+
+    async manipulateOrderItems(orderUUID: string, orderItems: IOrderItem[]|CreateOrderItemDTO[]): Promise<IApiResponse> {
+        let apiResponse: IApiResponse;
+
+        const apiResult = await axios.put(`${this.apiUrl}/order/update_item/${orderUUID}`, orderItems)
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 200}
         })

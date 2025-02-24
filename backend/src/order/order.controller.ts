@@ -143,7 +143,7 @@ export class OrderController {
         return serviceResponse;
     }
 
-    @Post('/update_item/:uuid')
+    @Put('/update_item/:uuid')
     async insertOrderItem(@Param("uuid") uuid:string, @Body() createOrderItemDTO: CreateOrderItemDTO[]) {
         const fetchedOrder: Order|null = await this.orderService.findOne(uuid);
         if(!fetchedOrder) {

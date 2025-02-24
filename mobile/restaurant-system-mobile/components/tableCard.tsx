@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { BackHandler, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Icons from '@expo/vector-icons/Feather'
 import ButtonToAction from "./buttonToAction";
@@ -28,6 +28,13 @@ export default function TableCard({setShow, table}: TableCardProps) {
     function goToTableOrders() {
         router.push({pathname: '/(tabs)/(tables)/tableOrder', params: {tableID: table?.id}})
     }
+
+    useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", () => {
+            setShow(false)
+            return true;
+        })
+    }, [])
 
     return(
         <View 

@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { BackHandler, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import EntireMenuComponent from "@/components/entireMenu";
 import { OrderCreationStates } from "../../../enum/OrderCreationStates";
@@ -29,7 +29,7 @@ export default function CreateOrder() {
     const [currentTable, setCurrentTable]                   = useState<ITable>();
     const [orderReady, setOrderReady]                       = useState<boolean>(false);
 
-    const {tableID} = useLocalSearchParams<{tableID: string}>();
+    const {tableID, alreadyExistingItemsID, isInsertion, orderUUID} = useLocalSearchParams();
 
     async function getTable() {
         const apiResult: IApiResponse = await tablesEndpoint.getOne(Number(tableID));
@@ -41,14 +41,33 @@ export default function CreateOrder() {
     }
 
     async function getAllItems() {
+        console.log(alreadyExistingItemsID)
         const apiResponse: IApiResponse = await itemEndpoint.getAll();
         if(apiResponse.statusCode !== 200) {
             console.log("ERRO EM GETALLITEMS");
             return;
         }
+
+        if(!alreadyExistingItemsID) {
+            setItemList(() => {
+                return(apiResponse.data)
+            })
+            return;
+        }
+
+        const alreadyExistingOrderItemsID: string[] = alreadyExistingItemsID.toString().split(",");
+        let itemsToShow: IItem[] = apiResponse.data.map((element: IItem) => {
+            if(!alreadyExistingOrderItemsID.find(x => Number(x) === element.id)) {
+                return element
+            }
+        });
+
+        itemsToShow = itemsToShow.filter(x => x !== undefined);
+
         setItemList(() => {
-            return(apiResponse.data)
-        })
+            return(itemsToShow);
+        });
+
         return;
     }
 
@@ -72,13 +91,33 @@ export default function CreateOrder() {
             router.replace({pathname: "/(tabs)/(tables)/tableOrder", params: {tableID: tableID}})
             return;
         }
-
     };
+
+    async function insertToOrder() {
+        
+        if(orderUUID) {
+            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(orderUUID), preInsertOrderItems)
+            if(apiResponse.statusCode !== 200) {
+                console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                return
+            } else {
+                router.back();
+            }
+        } else {
+            console.log("No order to insert item!");
+            return
+        }
+    }
 
     useEffect(() => {
         if(orderReady) {
-            createOrder();
+            if(!isInsertion || Number(isInsertion) === 0) {
+                createOrder();
+            } else {
+                insertToOrder();
+            };
         };
+        return;
     }, [orderReady])
 
     useEffect(() => {
