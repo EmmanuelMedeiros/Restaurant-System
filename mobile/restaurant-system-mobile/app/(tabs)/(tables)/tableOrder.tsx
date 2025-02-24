@@ -11,6 +11,9 @@ import { OrderScreens } from "@/enum/OrderScreens";
 import ButtonToAction from "@/components/buttonToAction";
 import { router, useLocalSearchParams } from "expo-router";
 import { goBack } from "expo-router/build/global-state/routing";
+import { IApiResponse } from "@/interface/IApiResponse";
+import { OrderEndpoint } from "@/fuctions/order.endpoint";
+import { IOrder } from "@/interface/IOrder";
 
 const items: IOrderItem[] = [
     {
@@ -21,7 +24,8 @@ const items: IOrderItem[] = [
             name: 'Item A',
             price: 40,
         },
-        quantity: 10
+        quantity: 10,
+        uuid: "a"
     },
     {
         item: {
@@ -32,6 +36,8 @@ const items: IOrderItem[] = [
             price: 40,
         },
         quantity: 2
+        ,
+        uuid: "b"
     },
     {
         item: {
@@ -42,16 +48,21 @@ const items: IOrderItem[] = [
             price: 40,
         },
         quantity: 3
+        ,
+        uuid: "c"
     }
 ]
 
 export default function TableOrder() {
 
-    const [itemList, setItemList]                       = useState<IOrderItem[]>(items);
+    const [order, setOrder]                             = useState<Pick<IOrder, "uuid"|"createdAt"|"modifiedAt"|"finishedAt">>();
+
+    const [itemList, setItemList]                       = useState<IOrderItem[]>([]);
     const [itemsToRemove, setItemsToRemove]             = useState<IOrderItem[]>([]);
     const [currentOrderScreen, setCurrentOrderScreen]   = useState<OrderScreens>(OrderScreens.ORDER)
 
     const {tableID} = useLocalSearchParams<{tableID: string}>();
+    const orderEndpoint: OrderEndpoint = new OrderEndpoint();
 
     function toggleItemFromRemoveItemsList(orderItem: IOrderItem): void {
 
@@ -68,6 +79,60 @@ export default function TableOrder() {
         return
     }
 
+    async function orderByTableID() {
+        try{
+            const apiResponse: IApiResponse = await orderEndpoint.getByTableID(Number(tableID));
+            if(apiResponse.statusCode !== 200) {
+                console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                return
+            } else {
+                setOrder(apiResponse.data);
+                return;
+            }
+        }catch(err) {
+            console.log(err)
+        }
+    }
+
+    function updateOrderItemsInThreeSeconds() {
+        const updateTimeout = setTimeout(() => {
+            console.log("OrderItems")
+            getOrderItemsByOrderID();
+            clearTimeout(updateTimeout)
+            updateOrderItemsInThreeSeconds()
+        }, 3000)
+    }
+
+    async function getOrderItemsByOrderID() {
+        try{
+            if(order) {
+                const apiResponse: IApiResponse = await orderEndpoint.getSpecificOrderItems(order.uuid)
+                if(apiResponse.statusCode !== 200) {
+                    console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                    return
+                } else {
+                    setItemList(apiResponse.data);
+                    return;
+                }
+            } else {
+                console.log("No order to fetch!");
+                return;
+            };
+        }catch(err) {
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        orderByTableID();
+    }, [])
+
+    useEffect(() => {
+        if(order) {
+            getOrderItemsByOrderID();
+        };
+    }, [order])
+
     return(
         <SafeAreaView style={tableOrder.container}>
 
@@ -82,8 +147,8 @@ export default function TableOrder() {
                                 itemPressableIcon={[<Icons name="trash-2" size={20}/>, <Icons name="plus" size={20}/>]}
                                 pressableIconFunction={toggleItemFromRemoveItemsList}
                                 showHeader={true}
-                                title="PEDIDO"
-                                subtitle={`MESA ${tableID}`}
+                                title={`MESA ${tableID}`}
+                                subtitle={`PEDIDO`}
                                 bottomButton=
                                     {   
                                         <ButtonToAction

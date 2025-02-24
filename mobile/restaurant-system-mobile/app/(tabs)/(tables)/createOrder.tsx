@@ -12,6 +12,8 @@ import { ITable } from "../../../interface/ITable";
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { OrderEndpoint } from "@/fuctions/order.endpoint";
 import { CreateOrderDTO } from "@/dto/create-order.dto";
+import { IOrder } from "@/interface/IOrder";
+import { CreateOrderItemDTO } from "@/dto/create-orderItem.dto";
 
 export default function CreateOrder() {
 
@@ -21,7 +23,7 @@ export default function CreateOrder() {
 
     const [currentState, setCurrentState]                   = useState<OrderCreationStates>(OrderCreationStates.CREATE);
     const [choosenItems, setChooseItems]                    = useState<IItem[]>([]);
-    const [preInsertOrderItems, setPreInsertOrderItems]     = useState<IOrderItem[]>([]);
+    const [preInsertOrderItems, setPreInsertOrderItems]     = useState<CreateOrderItemDTO[]>([]);
     const [itemList, setItemList]                           = useState<IItem[]>([]);
 
     const [currentTable, setCurrentTable]                   = useState<ITable>();
@@ -32,7 +34,7 @@ export default function CreateOrder() {
     async function getTable() {
         const apiResult: IApiResponse = await tablesEndpoint.getOne(Number(tableID));
         if(apiResult.statusCode != 200) {
-            return console.log(apiResult.data);
+            return console.log("GET TABLE'S ERROR:" +  apiResult.data);
         };
         setCurrentTable(apiResult.data)
         return;
@@ -67,7 +69,7 @@ export default function CreateOrder() {
                 setOrderReady(false);  
                 return;
             }
-            router.replace("/(tabs)/(tables)")
+            router.replace({pathname: "/(tabs)/(tables)/tableOrder", params: {tableID: tableID}})
             return;
         }
 
@@ -82,8 +84,8 @@ export default function CreateOrder() {
     useEffect(() => {
 
         if(currentState === OrderCreationStates.CONFIRM) {
-            const orderItems: IOrderItem[] = choosenItems.map((element) => {
-                const alreadyChosenItem: IOrderItem|undefined = preInsertOrderItems.find(x => x.item === element);
+            const orderItems: CreateOrderItemDTO[] = choosenItems.map((element) => {
+                const alreadyChosenItem: CreateOrderItemDTO|undefined = preInsertOrderItems.find(x => x.item === element);
                 if(!alreadyChosenItem) {
                     return {item: element, quantity: 1};
                 };

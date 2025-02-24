@@ -115,7 +115,10 @@ export class OrderService {
                 order: order
             },
             relations: {
-                item: true            
+                item: {
+                    category: true
+                },
+                       
             }
         })
         return orderItems;
@@ -166,13 +169,20 @@ export class OrderService {
                 for(let i: number = 0; i < createOrderItemDTO.length; i++) {
                     const checkIfItemAlreadyExists: OrderItem|undefined = thisOrderItems.find(x => x.item.id === createOrderItemDTO[i].item.id);
                     if(!checkIfItemAlreadyExists) {
-                        orderItemList.push(
-                            new OrderItem(crypto.randomUUID(), createOrderItemDTO[i].item, order, createOrderItemDTO[i].quantity)
-                        );
+                        if(createOrderItemDTO[i].quantity > 0) {
+                            orderItemList.push(
+                                new OrderItem(crypto.randomUUID(), createOrderItemDTO[i].item, order, createOrderItemDTO[i].quantity)
+                            );
+                        };
                     } else {
-                        orderItemList.push(
-                            new OrderItem(checkIfItemAlreadyExists.uuid, checkIfItemAlreadyExists.item, order, createOrderItemDTO[i].quantity)
-                        )
+                        if(createOrderItemDTO[i].quantity > 0) {
+                            orderItemList.push(
+                                new OrderItem(checkIfItemAlreadyExists.uuid, checkIfItemAlreadyExists.item, order, createOrderItemDTO[i].quantity)
+                            )
+                        } else {
+                            console.log("cai aqui")
+                            await this.orderItemRepository.remove(checkIfItemAlreadyExists)
+                        }
                     };
                 };
             }

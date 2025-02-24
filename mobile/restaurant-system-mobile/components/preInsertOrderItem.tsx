@@ -8,12 +8,13 @@ import { OrderCreationStates } from "../enum/OrderCreationStates";
 import Icons from '@expo/vector-icons/Feather'
 import { IOrderItem } from "../interface/IOrderItem";
 import ButtonToAction from "./buttonToAction";
+import { CreateOrderItemDTO } from "@/dto/create-orderItem.dto";
 
 interface PreInsertOrderItemProps {
-    orderItemList: IOrderItem[],
+    orderItemList: CreateOrderItemDTO[],
     setItemList: React.Dispatch<React.SetStateAction<IItem[]>>,
     setOrderState: React.Dispatch<React.SetStateAction<OrderCreationStates>>
-    setOrderItemList: React.Dispatch<React.SetStateAction<IOrderItem[]>>,
+    setOrderItemList: React.Dispatch<React.SetStateAction<CreateOrderItemDTO[]>>,
     setOrderReady: React.Dispatch<boolean>
 };
 

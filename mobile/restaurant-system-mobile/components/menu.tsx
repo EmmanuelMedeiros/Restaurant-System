@@ -8,7 +8,6 @@ import { IItemCategory } from "@/interface/IItemCategory";
 import { IItem } from "@/interface/IItem";
 import { useEffect, useState } from "react";
 import { IOrderItem } from "@/interface/IOrderItem";
-import ButtonToAction from "./buttonToAction";
 
 const menuCategoryList: IItemCategory[] = [
     {id: 0, title: "TODOS"}, {id: 1, title: "ALMOÇO"}, {id: 2, title: "TIRA-GOSTO"}, {id: 3, title: "BEBIDAS"}, {id: 4, title: "GUARNIÇÕES"}
@@ -29,15 +28,17 @@ interface MenuProps {
 
 export default function Menu({bottomButton, title, subtitle, posActionItemList ,itemPressableIcon, pressableIconFunction, itemList, orderItemList, showHeader, goBackFunction}: MenuProps) {
 
-    const [itemCategoryToShow, setItemCategoryToShow] = useState<number>(1);
+    const [itemCategoryToShow, setItemCategoryToShow] = useState<number>(0);
     
     useEffect(() => {
-        if(goBackFunction) {
-            BackHandler.addEventListener("hardwareBackPress", () => {
+        BackHandler.addEventListener("hardwareBackPress", () => {
+            if(goBackFunction) {
                 goBackFunction();
-                return true;
-            });
-        };
+                return;
+            };
+            router.back();
+            return true;
+        });
     })
 
     return(
@@ -87,7 +88,7 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
                                 style={entireMenuStyle.menuCategoryList}
                                 onPressOut={() => setItemCategoryToShow(element.id)}
                             >
-                                <Text>{element.title}</Text>
+                                <Text style={itemCategoryToShow === element.id ? {fontWeight: 'bold', textDecorationLine: 'underline'} : null }>{element.title}</Text>
                             </TouchableOpacity>
                         ))}
                     </ScrollView>
@@ -160,7 +161,7 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
 
                             {itemPressableIcon
                                 ?
-                                    <TouchableOpacity
+                                    <TouchableOpacity style={{ padding: 10 }}
                                         onPress={() => pressableIconFunction(element)}
                                     >  
     

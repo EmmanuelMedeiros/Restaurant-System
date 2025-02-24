@@ -1,13 +1,13 @@
 import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Table from "@/components/table";
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TableCard from "@/components/tableCard";
 import { TableStatus } from "@/enum/TableStatus";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "@/interface/ITable";
 import { IApiResponse } from "@/interface/IApiResponse";
-import { router } from "expo-router";
+import { router, useFocusEffect, useNavigation } from "expo-router";
 
 export default function TablesScreen() {
 
@@ -15,6 +15,7 @@ export default function TablesScreen() {
 
     const [openTableCard, setOpenTableCard] = useState<boolean>(false);
     const [selectedTable, setSelectedTable] = useState<ITable>();
+
 
     const [tablesList, setTablesList] = useState<ITable[]>([]);
 
@@ -34,6 +35,14 @@ export default function TablesScreen() {
         return setTablesList(tableList.reverse());
 
     }
+
+    useFocusEffect(
+        useCallback(() => {
+            getAllTables();
+            setOpenTableCard(false);
+        }, [])
+    )
+
 
     useEffect(() => {
         getAllTables();
@@ -55,7 +64,6 @@ export default function TablesScreen() {
                         alwaysBounceVertical={true}
                         showsHorizontalScrollIndicator={true}
                         contentContainerStyle={{flexWrap: "wrap", width: '105%', flexDirection: 'column', justifyContent: "flex-end"}}
-
                     >
                         {tablesList.map((element) => (
                             <View 

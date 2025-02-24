@@ -70,7 +70,7 @@ export class OrderController {
         return serviceResponse;
     }
 
-    @UseGuards(new UserRoleGuard(Role.WAITER))
+/*     @UseGuards(new UserRoleGuard(Role.WAITER)) */
     @Get("/:uuid")
     async findOne(@Param("uuid") uuid:string) {
         const order: Order|null = await this.orderService.findOne(uuid)
@@ -80,6 +80,7 @@ export class OrderController {
         return order;
     }
 
+    @HttpCode(HttpStatus.OK)
     @Get("")
     async findByTable(@Query("tableID") tableID: number) {
         const fetchedTable: Table|null = await this.tableService.findOne(tableID);
@@ -90,7 +91,7 @@ export class OrderController {
         if(!fetchOrder || fetchOrder.length === 0) {
             throw new HttpException("No order found for this table", HttpStatus.NOT_FOUND);
         };
-        return fetchOrder;
+        return fetchOrder[0];
     }
 
     @Delete("/:uuid")
