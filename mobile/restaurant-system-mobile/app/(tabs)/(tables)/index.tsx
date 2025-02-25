@@ -1,4 +1,4 @@
-import { BackHandler, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { BackHandler, Pressable, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Table from "@/components/table";
 import React, { useCallback, useEffect, useState } from "react";
@@ -57,9 +57,11 @@ export default function TablesScreen() {
 
 
     return(
-        <SafeAreaView 
+        <View 
             style={ !openTableCard ? tableScreenStyle.container : tableScreenStyle.greyBackgroundContainer }
         >   
+
+            <StatusBar hidden={true}/>
         
             <Pressable 
                 style={{height: '80%', width: '90%'}}
@@ -100,7 +102,7 @@ export default function TablesScreen() {
                 />
             </View>
 
-        </SafeAreaView>
+        </View>
     )
 
 }
