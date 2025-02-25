@@ -8,7 +8,7 @@ Content-Type: application/json
 {
 
     "table": {
-        "id": 3
+        "id": 5
     },
     "waiter": {
         "uuid": "dfd36b3b-f40b-42d9-ab51-aa1a8460cea9"
@@ -49,7 +49,7 @@ PUT {{baseUrl}}/order/finish/2c622264-0dd9-4a09-8b4e-6c14b06c5b5d
 
 ### MANIPULATE ORDER ITEM
 
-PUT {{baseUrl}}/order/update_item/568e0ec1-d8a8-4447-9e4d-e21453601af2
+PUT {{baseUrl}}/order/update_item/f5494f82-3f3c-451d-b667-71257ceaf9ea
 Content-Type: application/json
 
 [
@@ -57,20 +57,8 @@ Content-Type: application/json
         "item": {
             "id": 1
         },
-        "quantity": 3
-    },
-    {
-        "item": {
-            "id": 2
-        },
         "quantity": 0
-    },
-    {
-        "item": {
-        "id": 3
-        },
-        "quantity": 2
-    }    
+    }
 ]
 
 ### DELETE ORDER

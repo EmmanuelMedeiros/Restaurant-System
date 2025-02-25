@@ -180,7 +180,6 @@ export class OrderService {
                                 new OrderItem(checkIfItemAlreadyExists.uuid, checkIfItemAlreadyExists.item, order, createOrderItemDTO[i].quantity)
                             )
                         } else {
-                            console.log("cai aqui")
                             await this.orderItemRepository.remove(checkIfItemAlreadyExists)
                         }
                     };

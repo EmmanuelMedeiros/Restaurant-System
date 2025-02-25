@@ -85,8 +85,8 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
 
             </TouchableOpacity>
 
-            <Text style={entireMenuStyle.title}>Table {currentTable?.name}</Text>
-            <Text style={entireMenuStyle.subTitle}>Adicionar Item</Text>
+            <Text style={entireMenuStyle.title}>MENU</Text>
+            <Text style={entireMenuStyle.subTitle}>MESA {currentTable?.name}</Text>
 
             <View style={entireMenuStyle.lighHorizontalLine}/>
 

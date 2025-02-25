@@ -144,7 +144,7 @@ export class OrderController {
     }
 
     @Put('/update_item/:uuid')
-    async insertOrderItem(@Param("uuid") uuid:string, @Body() createOrderItemDTO: CreateOrderItemDTO[]) {
+    async manipulateOrderItem(@Param("uuid") uuid:string, @Body() createOrderItemDTO: CreateOrderItemDTO[]) {
         const fetchedOrder: Order|null = await this.orderService.findOne(uuid);
         if(!fetchedOrder) {
             throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
@@ -165,7 +165,8 @@ export class OrderController {
         if(serviceResponse.status !== HttpStatus.OK) {
             throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
         }
-        return serviceResponse;
+        const currentOrderItems: OrderItem[] = await this.orderService.findOrderItems(fetchedOrder);
+        return currentOrderItems;
     }
     
 }

@@ -112,18 +112,28 @@ export default function TableOrder() {
 
         if(order) {
 
-            if(editedOrder === itemList) {
+            if(editedOrder === itemList && itemsToRemove.length === 0) {
                 console.log("Tudo igualzinho");
                 setCurrentOrderScreen(OrderScreens.ORDER);
                 return;
-            }
+            };
 
-            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(order.uuid), editedOrder)
+            const manipulatedOrder: IOrderItem[] = editableItemList.map((element: IOrderItem) => {
+                if(itemsToRemove.find(x => x.item.id === element.item.id)) {
+                    return {item: element.item, quantity: 0, uuid: element.uuid};
+                } else {
+                    return element;
+                };
+            });
+
+            console.log(manipulateOrder)
+
+            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(order.uuid), manipulatedOrder)
             if(apiResponse.statusCode !== 200) {
                 console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
                 return
             } else {
-                setItemList(editableItemList);
+                setItemList(apiResponse.data);
                 setCurrentOrderScreen(OrderScreens.ORDER);
                 return;
             }
@@ -154,7 +164,7 @@ export default function TableOrder() {
         }
     }
 
-    async function deleteOrderItems() {
+/*     async function deleteOrderItems() {
         try {
             if(order) {
 
@@ -179,7 +189,7 @@ export default function TableOrder() {
         }catch(err) {
             console.log("ERROR " + err)
         }
-    }
+    } */
 
     useFocusEffect(
         useCallback(() => {
@@ -228,12 +238,12 @@ export default function TableOrder() {
                         <View>
                             <Menu
                                 orderItemList={itemList}
-                                posActionItemList={itemsToRemove}
+                                posActionItemList={[]}
                                 itemPressableIcon={[<Icons name="trash-2" size={20}/>, <Icons name="plus" size={20}/>]}
                                 pressableIconFunction={toggleItemFromRemoveItemsList}
                                 showHeader={true}
-                                title={`MESA ${tableID}`}
-                                subtitle={`PEDIDO`}
+                                title={`PEDIDO`}
+                                subtitle={`MESA ${tableID}`}
                                 bottomButton={
                                     [
                                         
@@ -268,14 +278,15 @@ export default function TableOrder() {
                         null
                 }
 
-                {currentOrderScreen === OrderScreens.TRASH
+{/*                 {currentOrderScreen === OrderScreens.TRASH
                     ?
                         <Menu
                             orderItemList={itemsToRemove}
                             posActionItemList={itemsToRemove}
                             showHeader={false}
                             goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
-                            title="Confirmar Exclusão"
+                            title="EXCLUIR"
+                            subtitle={`MESA ${tableID}`}
                             bottomButton={
                                 [
                                 <ButtonToAction
@@ -299,17 +310,20 @@ export default function TableOrder() {
                         />
                     :
                         null
-                }
+                } */}
 
                     {currentOrderScreen === OrderScreens.EDIT
                         ?
                             <Menu
                                 orderItemList={editableItemList}
                                 setOrderItemList={setEditableItemList}
-                                posActionItemList={[]}
+                                posActionItemList={itemsToRemove}
                                 showHeader={true}
+                                itemPressableIcon={[<Icons name="trash-2" size={20}/>, <Icons name="plus" size={20}/>]}
+                                pressableIconFunction={toggleItemFromRemoveItemsList}
                                 goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
-                                title="Editar itens"
+                                title="EDITAR"
+                                subtitle={`MESA ${tableID}`}
                                 isQuantityChangeable={true}
                                 bottomButton={
                                     [
@@ -346,7 +360,7 @@ export default function TableOrder() {
 
             </View>
             
-            {currentOrderScreen === OrderScreens.ORDER && itemsToRemove.length > 0
+{/*             {currentOrderScreen === OrderScreens.EDIT && itemsToRemove.length > 0
                 ?
                     <QuantityFloatComponent
                         quantity={itemsToRemove.length}
@@ -355,7 +369,7 @@ export default function TableOrder() {
                     />
                 :
                     null
-            }
+            } */}
         </SafeAreaView>
     )
 }
