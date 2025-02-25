@@ -4,7 +4,6 @@ import EntireMenuComponent from "@/components/entireMenu";
 import { OrderCreationStates } from "../../../enum/OrderCreationStates";
 import PreInsertOrderItem from "../../../components/preInsertOrderItem";
 import { IItem } from "../../../interface/IItem";
-import { IOrderItem } from "../../../interface/IOrderItem";
 import { router, useLocalSearchParams } from "expo-router";
 import { IApiResponse } from "../../../interface/IApiResponse";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
@@ -12,7 +11,6 @@ import { ITable } from "../../../interface/ITable";
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { OrderEndpoint } from "@/fuctions/order.endpoint";
 import { CreateOrderDTO } from "@/dto/create-order.dto";
-import { IOrder } from "@/interface/IOrder";
 import { CreateOrderItemDTO } from "@/dto/create-orderItem.dto";
 
 export default function CreateOrder() {
@@ -41,7 +39,6 @@ export default function CreateOrder() {
     }
 
     async function getAllItems() {
-        console.log(alreadyExistingItemsID)
         const apiResponse: IApiResponse = await itemEndpoint.getAll();
         if(apiResponse.statusCode !== 200) {
             console.log("ERRO EM GETALLITEMS");

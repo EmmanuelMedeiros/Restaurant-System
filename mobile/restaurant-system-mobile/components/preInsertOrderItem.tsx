@@ -61,9 +61,6 @@ export default function PreInsertOrderItem({orderItemList, setOrderItemList, set
         return;
     }
 
-    const submitOrder = () => {
-        console.log()
-    }
 
     return(
         <SafeAreaView style={preInsertOrderItemStyle.container}>

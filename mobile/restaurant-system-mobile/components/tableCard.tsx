@@ -29,13 +29,6 @@ export default function TableCard({setShow, table}: TableCardProps) {
         router.push({pathname: '/(tabs)/(tables)/tableOrder', params: {tableID: table?.id}})
     }
 
-    useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", () => {
-            setShow(false)
-            return true;
-        })
-    }, [])
-
     return(
         <View 
             style={tableCardStyle.container}

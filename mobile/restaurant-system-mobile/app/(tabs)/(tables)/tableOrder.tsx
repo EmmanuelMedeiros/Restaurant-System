@@ -1,7 +1,7 @@
 import EntireMenuComponent from "@/components/entireMenu";
 import Menu from "@/components/menu";
 import { IItem } from "@/interface/IItem";
-import { BackHandler, SafeAreaView, StyleSheet, View } from "react-native";
+import { BackHandler, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import Icons from '@expo/vector-icons/Feather'
 import { useCallback, useEffect, useState } from "react";
@@ -62,6 +62,8 @@ export default function TableOrder() {
     const [itemsToRemove, setItemsToRemove]             = useState<IOrderItem[]>([]);
     const [currentOrderScreen, setCurrentOrderScreen]   = useState<OrderScreens>(OrderScreens.ORDER);
 
+    const [editableItemList, setEditableItemList]       = useState<IOrderItem[]>([]);
+
 
 
     const {tableID} = useLocalSearchParams<{tableID: string}>();
@@ -104,6 +106,31 @@ export default function TableOrder() {
             clearTimeout(updateTimeout)
             updateOrderItemsInThreeSeconds()
         }, 3000)
+    }
+
+    async function manipulateOrder(editedOrder: IOrderItem[]) {
+
+        if(order) {
+
+            if(editedOrder === itemList) {
+                console.log("Tudo igualzinho");
+                setCurrentOrderScreen(OrderScreens.ORDER);
+                return;
+            }
+
+            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(order.uuid), editedOrder)
+            if(apiResponse.statusCode !== 200) {
+                console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                return
+            } else {
+                setItemList(editableItemList);
+                setCurrentOrderScreen(OrderScreens.ORDER);
+                return;
+            }
+        } else {
+            console.log("No order to edit!");
+            return
+        }
     }
 
     async function getOrderItemsByOrderID() {
@@ -167,6 +194,10 @@ export default function TableOrder() {
     }, [order])
 
     useEffect(() => {
+        setEditableItemList(itemList);
+    }, [itemList])
+
+    useEffect(() => {
         if(currentOrderScreen === OrderScreens.ADD_ITEM) {
 
             const alreadyExistingItemsID: number[] = itemList.map((element) => {
@@ -203,25 +234,34 @@ export default function TableOrder() {
                                 showHeader={true}
                                 title={`MESA ${tableID}`}
                                 subtitle={`PEDIDO`}
-                                bottomButton=
-                                    {   
-                                        <ButtonToAction
-                                            buttonStyle={
-                                                {
-                                                    backgroundColor: '#c1c1c1'
-                                                }
-                                            }
-                                            buttonTitle="Adicionar Item"
-                                            isDisabled={false}
-                                            textStyle={
-                                                {
-                                                    color: 'rgba(37, 82, 71, .8)',
-                                                    fontSize: 20
-                                                }
-                                            }
-                                            onPress={() => setCurrentOrderScreen(OrderScreens.ADD_ITEM)}
-                                        />
-                                    }
+                                bottomButton={
+                                    [
+                                        
+                                        <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignContent: 'center'}}>
+                                            <TouchableOpacity 
+                                                style={{ padding: 20 }}
+                                                onPress={() => setCurrentOrderScreen(OrderScreens.EDIT)}    
+                                            >
+                                                <Icons 
+                                                    name="edit" 
+                                                    size={30}
+                                                    color={'rgba(0, 0, 0, .5)'}
+                                                />
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity 
+                                                style={{ padding: 20 }}
+                                                onPress={() => setCurrentOrderScreen(OrderScreens.ADD_ITEM)}
+                                            >
+                                                <Icons 
+                                                    name="plus" 
+                                                    size={30}
+                                                    color={'rgba(37, 82, 71, .8)'}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    ]
+                                }
                             />
                         </View>
                     :
@@ -237,6 +277,7 @@ export default function TableOrder() {
                             goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
                             title="Confirmar Exclusão"
                             bottomButton={
+                                [
                                 <ButtonToAction
                                     buttonStyle={
                                         {
@@ -253,21 +294,55 @@ export default function TableOrder() {
                                     }
                                     onPress={() => deleteOrderItems()}
                                 />
-                            }
+                            ]
+                        }
                         />
                     :
                         null
                 }
 
+                    {currentOrderScreen === OrderScreens.EDIT
+                        ?
+                            <Menu
+                                orderItemList={editableItemList}
+                                setOrderItemList={setEditableItemList}
+                                posActionItemList={[]}
+                                showHeader={true}
+                                goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
+                                title="Editar itens"
+                                isQuantityChangeable={true}
+                                bottomButton={
+                                    [
+                                        <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignContent: 'center'}}>
+                                            <TouchableOpacity 
+                                                style={{ padding: 20 }}
+                                                onPress={() => setCurrentOrderScreen(OrderScreens.ORDER)}    
+                                            >
+                                                <Icons 
+                                                    name="x" 
+                                                    size={30}
+                                                    color={'rgba(108, 50, 50, .8)'}
+                                                />
+                                            </TouchableOpacity>
 
-{/*                 {currentOrderScreen === OrderScreens.ADD_ITEM
-                    ?
-                        <EntireMenuComponent
-                            currentTable={{status: TableStatus.BUSY, id: Number(tableID), name: tableID}}
-                            itemsList={}
-                        />
-                    :    
-                } */}
+                                            <TouchableOpacity 
+                                                style={{ padding: 20 }}
+                                                onPress={() => manipulateOrder(editableItemList)}
+                                            >
+                                                <Icons 
+                                                    name="check" 
+                                                    size={30}
+                                                    color={'rgba(37, 82, 71, .8)'}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    ]
+                                }
+                            />
+                        :
+                            null
+                    }
+
 
             </View>
             
@@ -281,7 +356,6 @@ export default function TableOrder() {
                 :
                     null
             }
-
         </SafeAreaView>
     )
 }

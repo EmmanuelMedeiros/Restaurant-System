@@ -20,16 +20,44 @@ interface MenuProps {
     itemPressableIcon?: any[],
     pressableIconFunction?: any,
     itemList?: IItem[]|undefined,
+    setItemList?: React.Dispatch<React.SetStateAction<IItem[]>>,
     orderItemList?: IOrderItem[]|undefined,
+    setOrderItemList?: React.Dispatch<React.SetStateAction<IOrderItem[]>>,
     showHeader: boolean,
     goBackFunction?: () => void,
-    bottomButton?: any
+    bottomButton?: any[],
+    isQuantityChangeable?: boolean
 }
 
-export default function Menu({bottomButton, title, subtitle, posActionItemList ,itemPressableIcon, pressableIconFunction, itemList, orderItemList, showHeader, goBackFunction}: MenuProps) {
+export default function Menu({bottomButton, title, subtitle, posActionItemList ,itemPressableIcon, pressableIconFunction, itemList, orderItemList, setOrderItemList, showHeader, goBackFunction, isQuantityChangeable}: MenuProps) {
 
     const [itemCategoryToShow, setItemCategoryToShow] = useState<number>(0);
     
+    const increaseItemQuantity = (index: number) => {
+        if(orderItemList && setOrderItemList) {
+            const newArray = orderItemList.map((element, pos) => {
+                if(index === pos) {
+                    element.quantity++
+                };
+                return element
+            });
+            setOrderItemList(newArray);
+        }
+        return;
+    }
+
+    const decreaseItemQuantity = (index: number) => {
+        if(orderItemList && setOrderItemList) {
+            const newArray = orderItemList.map((element, pos) => {
+                if(index === pos && element.quantity > 1) {
+                    element.quantity--
+                };
+                return element
+            });
+            setOrderItemList(newArray);
+        }
+        return;
+    }
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", () => {
             if(goBackFunction) {
@@ -69,7 +97,6 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
 
             <Text style={entireMenuStyle.title}>{title}</Text>
             <Text style={entireMenuStyle.subTitle}>{subtitle}</Text>
-
 
             <View style={entireMenuStyle.lighHorizontalLine}/>
 
@@ -151,10 +178,30 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
                             style={entireMenuStyle.eachItem}
                             key={element.item.id}
                         >   
+
                             <View style={{alignItems: 'center', gap: 8}}>
+
+                                <TouchableOpacity 
+                                    style={!isQuantityChangeable ? {display: 'none'} : null}
+                                    onPress={() => increaseItemQuantity(index)}
+                                >
+                                    <Icons name="chevron-up" size={20} style={{padding: 3}}/>
+                                </TouchableOpacity>
+
                                 <Text>QTD.: {element.quantity}</Text>
+                                
+                                <TouchableOpacity 
+                                    style={!isQuantityChangeable ? {display: 'none'} : null}
+                                    onPress={() => decreaseItemQuantity(index)}
+                                >
+                                    <Icons name="chevron-down" size={20} style={{padding: 3}}/>
+                                </TouchableOpacity>
+                                
                                 <Text>R$ {Number(element.item.price * element.quantity).toFixed(2)}</Text>
+
                             </View>
+
+
                             <Text style={[entireMenuStyle.itemName, 
                                 posActionItemList.find(x => x === element) ? {textDecorationLine: 'line-through'} : null
                             ]}>{element.item.name.toUpperCase()}</Text>
@@ -178,13 +225,11 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
                     </View>
                 ))} 
 
-                {bottomButton
-                    ?
-                        <View style={{width: '100%', height: 80, marginInline: 'auto', marginTop: 20}}>
-                            {bottomButton}
-                        </View>
-                    :
-                        null
+                {bottomButton?.map((element, index) => (
+                    <View key={index} style={{width: '100%', height: 80, marginInline: 'auto', marginTop: 20}}>
+                        {element}
+                    </View>
+                ))
                 }
 
             </ScrollView>

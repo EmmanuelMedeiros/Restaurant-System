@@ -43,10 +43,18 @@ export default function TablesScreen() {
         }, [])
     )
 
+    useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", () => {
+            setOpenTableCard(false);
+            return true;
+        })
+    }, [])
 
     useEffect(() => {
         getAllTables();
     }, []) 
+
+
 
     return(
         <SafeAreaView 
@@ -85,7 +93,7 @@ export default function TablesScreen() {
                 </ScrollView>
             </Pressable>
 
-            <View style={[tableScreenStyle.tableCard, !openTableCard ? tableScreenStyle.notShow : null]}>
+            <View style={[tableScreenStyle.tableCard, !openTableCard ? tableScreenStyle.notShow : {display: 'flex'}]}>
                 <TableCard
                     table={selectedTable}
                     setShow={setOpenTableCard}
