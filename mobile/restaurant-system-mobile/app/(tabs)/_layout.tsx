@@ -5,6 +5,7 @@ import Icons from '@expo/vector-icons/Feather'
 export default function TablesTabs() {
     return(
         <Tabs screenOptions={{headerShown: false}}>
+
             <Tabs.Screen name="(tables)" 
                 options={
                     {
@@ -13,6 +14,7 @@ export default function TablesTabs() {
                     }
                 }
             />
+            
         </Tabs>
     )
 }

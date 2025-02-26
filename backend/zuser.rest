@@ -13,9 +13,9 @@ POST {{baseUrl}}/user
 Content-Type: application/json
 
 {
-    "email": "waiter@email.com",
-    "password": "waiterwaiter",
-    "role": "waiter"
+    "email": "admin@email.com",
+    "password": "adminadmin",
+    "role": "admin"
 }
 
 ### MISSING: DELETE USER/ UPDATE USER/ JWT AUTH

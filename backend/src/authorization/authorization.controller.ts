@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, HttpStatus, Inject, Injectable, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpException, HttpStatus, Inject, Injectable, Post } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { EndMessage } from "src/interface/EndMessage";
 import { AuthUserDTO } from "src/user/dto/auth.user.dto";
@@ -15,6 +15,7 @@ export class AuthorizationController {
     ) {}
 
 
+    @HttpCode(HttpStatus.OK)
     @Post()
     async authenticate(@Body() authUser: AuthUserDTO) {
         console.log(authUser)

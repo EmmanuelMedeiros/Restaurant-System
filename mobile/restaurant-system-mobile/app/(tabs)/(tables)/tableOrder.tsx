@@ -164,33 +164,6 @@ export default function TableOrder() {
         }
     }
 
-/*     async function deleteOrderItems() {
-        try {
-            if(order) {
-
-                const itemsToDelete: IOrderItem[] = itemsToRemove.map((element) => {
-                    return({
-                        item: element.item,
-                        quantity: 0,
-                        uuid: element.uuid
-                    });
-                });
-
-                const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(order.uuid, itemsToDelete)
-                if(apiResponse.statusCode !== 200) {
-                    console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
-                    return
-                } else {
-                    orderByTableID()
-                    setItemsToRemove([]);
-                    setCurrentOrderScreen(OrderScreens.ORDER)
-            }
-        }
-        }catch(err) {
-            console.log("ERROR " + err)
-        }
-    } */
-
     useFocusEffect(
         useCallback(() => {
             orderByTableID()
@@ -249,7 +222,7 @@ export default function TableOrder() {
                                         
                                         <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignContent: 'center'}}>
                                             <TouchableOpacity 
-                                                style={{ padding: 20 }}
+                                                style={ itemList.length > 0 ? { padding: 20 } : {display: 'none'} }
                                                 onPress={() => setCurrentOrderScreen(OrderScreens.EDIT)}    
                                             >
                                                 <Icons 
@@ -277,40 +250,6 @@ export default function TableOrder() {
                     :
                         null
                 }
-
-{/*                 {currentOrderScreen === OrderScreens.TRASH
-                    ?
-                        <Menu
-                            orderItemList={itemsToRemove}
-                            posActionItemList={itemsToRemove}
-                            showHeader={false}
-                            goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
-                            title="EXCLUIR"
-                            subtitle={`MESA ${tableID}`}
-                            bottomButton={
-                                [
-                                <ButtonToAction
-                                    buttonStyle={
-                                        {
-                                            backgroundColor: '#c1c1c1'
-                                        }
-                                    }
-                                    buttonTitle="Excluir Itens"
-                                    isDisabled={false}
-                                    textStyle={
-                                        {
-                                            color: 'rgba(108, 50, 50, .8)',
-                                            fontSize: 20
-                                        }
-                                    }
-                                    onPress={() => deleteOrderItems()}
-                                />
-                            ]
-                        }
-                        />
-                    :
-                        null
-                } */}
 
                     {currentOrderScreen === OrderScreens.EDIT
                         ?

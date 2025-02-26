@@ -1,15 +1,18 @@
 import { BackHandler, Pressable, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Table from "@/components/table";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import TableCard from "@/components/tableCard";
 import { TableStatus } from "@/enum/TableStatus";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "@/interface/ITable";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { router, useFocusEffect, useNavigation } from "expo-router";
+import UserContext from "@/context/user.context";
 
 export default function TablesScreen() {
+
+    const userContext = useContext(UserContext);
 
     const tablesEndpoint: TablesEndpoint = new TablesEndpoint();
 
@@ -38,6 +41,7 @@ export default function TablesScreen() {
 
     useFocusEffect(
         useCallback(() => {
+            backToLoginScreen();
             getAllTables();
             setOpenTableCard(false);
         }, [])
@@ -49,6 +53,16 @@ export default function TablesScreen() {
             return true;
         })
     }, [])
+
+    function backToLoginScreen() {
+        if(!userContext.role) {
+            console.log(userContext.role)
+            router.replace('/(authentication)/login');
+            return;
+        }
+        return;
+
+    }
 
     useEffect(() => {
         getAllTables();
