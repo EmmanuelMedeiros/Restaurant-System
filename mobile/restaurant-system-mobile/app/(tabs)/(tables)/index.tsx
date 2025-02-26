@@ -54,9 +54,11 @@ export default function TablesScreen() {
         })
     }, [])
 
-    function backToLoginScreen() {
-        if(!userContext.role) {
-            console.log(userContext.role)
+    async function backToLoginScreen() {
+
+        const userJWTRefreshToken: string|null = await userContext.getRefreshToken();
+
+        if(!userJWTRefreshToken) {
             router.replace('/(authentication)/login');
             return;
         }

@@ -20,8 +20,6 @@ export default function Login() {
 
     async function authenticateUser() {
 
-        console.log("Olá")
-
         const userToAuth: AuthUserDTO = new AuthUserDTO(
             loginCredential,
             pwdCredential
@@ -33,9 +31,10 @@ export default function Login() {
             console.log("Erro no login: " + apiResult.data);
             return;
         }
-        console.log("Usuário LOGADO");
-        userContext.setRole(UserRole.ADMIN);
-        router.replace('/(tabs)/(tables)')
+
+        userContext.setJwtToken(apiResult.data.jwtToken);
+        userContext.saveRefreshToken(apiResult.data.refreshToken);
+        router.replace('/(tabs)/(tables)');
         return
     }
     return(
@@ -85,10 +84,6 @@ export default function Login() {
                         }
                     />
                 </View>
-            
-            <TouchableOpacity onPress={() => console.log(userContext.role)}>
-                <Text>See role</Text>
-            </TouchableOpacity>
 
             </View>
 
