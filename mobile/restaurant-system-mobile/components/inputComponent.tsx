@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextInput, View, StyleSheet } from "react-native";
+import { TextInput, View, StyleSheet, KeyboardAvoidingView } from "react-native";
 
 import Icons from '@expo/vector-icons/Feather'
 
@@ -9,26 +9,29 @@ interface InputElement {
     placeholderText: string,
     isPassword: boolean,
     isNumeric: boolean,
-    setInputValue: React.Dispatch<React.SetStateAction<any>>
+    setInputValue: React.Dispatch<React.SetStateAction<any>>,
+    customFontSize?: number,
+    onFocusFunction?: () => void
 }
 
-export default function InputComponent({inputBgColor, inputTextColor, placeholderText, isPassword, setInputValue, isNumeric}: InputElement) {
+export default function InputComponent({inputBgColor, inputTextColor, placeholderText, isPassword, setInputValue, isNumeric, customFontSize, onFocusFunction}: InputElement) {
 
     const [seePassword, setSeePassword] = useState(isPassword)
 
-    return(
+    return( 
 
         <View>
 
             <TextInput 
                     keyboardType={isNumeric ? 'numeric' : 'default'}
                     pointerEvents="box-none"
-                    style={[inputStyle.input, {backgroundColor: inputBgColor, color: inputTextColor}]}
+                    style={[inputStyle.input, {backgroundColor: inputBgColor, color: inputTextColor, fontSize: customFontSize || 15}]}
                     placeholder={placeholderText}
-                    placeholderTextColor={inputTextColor}
+                    placeholderTextColor={'grey'}
                     secureTextEntry={seePassword}
                     autoCapitalize="none"
                     onChangeText={(ev) => setInputValue(ev.valueOf())}
+                    onFocus={onFocusFunction}
                 />
 
                 {isPassword && seePassword

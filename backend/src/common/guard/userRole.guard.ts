@@ -6,10 +6,10 @@ import { Role } from "src/enum/Role";
 @Injectable()
 export class UserRoleGuard implements CanActivate {
 
-    private readonly userRole: Role
+    private readonly acceptedRoles: Role[]
 
-    constructor(userRole: Role) {
-        this.userRole = userRole
+    constructor(acceptedRoles: Role[]) {
+        this.acceptedRoles = acceptedRoles
     };
 
     async canActivate(context: ExecutionContext): Promise<boolean>{
@@ -17,12 +17,11 @@ export class UserRoleGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         try {
             const userRole: string|undefined = request.jwt_payload.role;
-            switch(userRole) {
-                case this.userRole:
-                    return true;
-                default: 
-                    return false;
-            }
+
+            if(this.acceptedRoles.find(x => x === userRole)) {
+                return true;
+            };
+            return false;
         } catch(err) {
             console.log(err);
             return false;

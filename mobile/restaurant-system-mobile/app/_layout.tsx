@@ -1,7 +1,11 @@
-import { router, Stack, Tabs } from "expo-router";
+import { router, Stack, Tabs, useFocusEffect } from "expo-router";
 
-import { UserContextProvider } from "@/context/user.context";
+import UserContext, { UserContextProvider } from "@/context/user.context";
 import { View } from "react-native";
+import { useCallback, useContext, useState } from "react";
+import { ItemEndpoint } from "@/fuctions/item.endpoint";
+import { IItem } from "@/interface/IItem";
+import { IApiResponse } from "@/interface/IApiResponse";
 
 export default function RootLayout() {
 
@@ -10,7 +14,6 @@ export default function RootLayout() {
         <Stack initialRouteName="(tabs)" screenOptions={{headerShown: false}}>
               <Stack.Screen name="(authentication)" />
               <Stack.Screen name="(tabs)"/>
-
         </Stack>
     </UserContextProvider>
   )

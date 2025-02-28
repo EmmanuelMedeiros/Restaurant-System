@@ -26,6 +26,29 @@ export class AuthEndpoint {
         return apiResult;
     };
 
+    async generateJwtToken(refreshToken: string|null): Promise<string|null> {
+        let apiResponse: IApiResponse;
+
+        const apiResult: IApiResponse = await axios.post(`${this.apiUrl}/auth/refresh`,
+             {
+                refreshToken: refreshToken
+             }
+        )
+        .then((response) => {
+            return apiResponse = {data: response.data.data, statusCode: response.data.status}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
+
+        if(apiResult.statusCode === 200) {
+            return apiResult.data.newJWTToken;
+        } else {
+            return null;
+        };
+
+    }
+
     async saveRefreshTokenOnCache(refreshToken: string): Promise<boolean> {
         try {
             await AsyncStorage.setItem("refreshToken", refreshToken);

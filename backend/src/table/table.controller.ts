@@ -1,13 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { TableService } from './table.service';
 import { CreateTableDTO } from './dto/create-table.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 import { Table } from './entity/table.entity';
+import { UserRoleGuard } from 'src/common/guard/userRole.guard';
+import { Role } from 'src/enum/Role';
 
+@UseGuards(new UserRoleGuard([Role.WAITER, Role.ADMIN]))
 @Controller('table')
 export class TableController {
     constructor(private readonly tableService: TableService) {};
 
+    @UseGuards(new UserRoleGuard([Role.ADMIN]))
     @HttpCode(HttpStatus.CREATED)
     @Post()
     async create(@Body() table: CreateTableDTO) {
@@ -38,6 +42,7 @@ export class TableController {
         return table;
     }
 
+    @UseGuards(new UserRoleGuard([Role.ADMIN]))
     @HttpCode(HttpStatus.OK)
     @Delete('/:id')
     async delete(@Param('id') id: number) {

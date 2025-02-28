@@ -5,6 +5,8 @@ import { User } from './entity/user.entity';
 import { EndMessage } from 'src/interface/EndMessage';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { JWTGuard } from 'src/common/guard/jwt.guard';
+import { UserRoleGuard } from 'src/common/guard/userRole.guard';
+import { Role } from 'src/enum/Role';
 
 @Controller('user')
 export class UserController {
@@ -22,6 +24,7 @@ export class UserController {
         return userList;
     } 
 
+    @UseGuards(new UserRoleGuard([Role.ADMIN]))
     @HttpCode(HttpStatus.CREATED)
     @Post()
     async create(@Body() createUserDTO: CreateUserDTO) {

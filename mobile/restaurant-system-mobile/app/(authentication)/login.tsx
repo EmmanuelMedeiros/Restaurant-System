@@ -32,7 +32,6 @@ export default function Login() {
             return;
         }
 
-        userContext.setJwtToken(apiResult.data.jwtToken);
         userContext.saveRefreshToken(apiResult.data.refreshToken);
         router.replace('/(tabs)/(tables)');
         return

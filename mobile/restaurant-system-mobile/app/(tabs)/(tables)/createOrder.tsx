@@ -1,5 +1,5 @@
 import { BackHandler, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import EntireMenuComponent from "@/components/entireMenu";
 import { OrderCreationStates } from "../../../enum/OrderCreationStates";
 import PreInsertOrderItem from "../../../components/preInsertOrderItem";
@@ -12,8 +12,11 @@ import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { OrderEndpoint } from "@/fuctions/order.endpoint";
 import { CreateOrderDTO } from "@/dto/create-order.dto";
 import { CreateOrderItemDTO } from "@/dto/create-orderItem.dto";
+import UserContext from "@/context/user.context";
 
 export default function CreateOrder() {
+
+    const userContext = useContext(UserContext);
 
     const tablesEndpoint: TablesEndpoint = new TablesEndpoint();
     const itemEndpoint: ItemEndpoint = new ItemEndpoint();
@@ -30,7 +33,11 @@ export default function CreateOrder() {
     const {tableID, alreadyExistingItemsID, isInsertion, orderUUID} = useLocalSearchParams();
 
     async function getTable() {
-        const apiResult: IApiResponse = await tablesEndpoint.getOne(Number(tableID));
+
+        const refreshToken: string|null = await userContext.getRefreshToken();
+        const token = await userContext.generateJwtToken(refreshToken);
+
+        const apiResult: IApiResponse = await tablesEndpoint.getOne(Number(tableID), token);
         if(apiResult.statusCode != 200) {
             return console.log("GET TABLE'S ERROR:" +  apiResult.data);
         };
@@ -39,7 +46,10 @@ export default function CreateOrder() {
     }
 
     async function getAllItems() {
-        const apiResponse: IApiResponse = await itemEndpoint.getAll();
+        const refreshToken: string|null = await userContext.getRefreshToken();
+        const token = await userContext.generateJwtToken(refreshToken);
+
+        const apiResponse: IApiResponse = await itemEndpoint.getAll(token);
         if(apiResponse.statusCode !== 200) {
             console.log("ERRO EM GETALLITEMS");
             return;
@@ -71,6 +81,9 @@ export default function CreateOrder() {
     async function createOrder() {
         if(currentTable) {
             
+            const refreshToken: string|null = await userContext.getRefreshToken();
+            const token = await userContext.generateJwtToken(refreshToken);
+
             const table: {id: number}  = {id: currentTable.id}
             const waiter: {uuid: string} = {uuid: "dfd36b3b-f40b-42d9-ab51-aa1a8460cea9"};
             const createOrderDTO: CreateOrderDTO = new CreateOrderDTO(
@@ -79,7 +92,7 @@ export default function CreateOrder() {
                 preInsertOrderItems
             );  
 
-            const apiResponse: IApiResponse = await orderEndpoint.create(createOrderDTO);
+            const apiResponse: IApiResponse = await orderEndpoint.create(createOrderDTO, token);
             if(apiResponse.statusCode !== 201) {
                 console.log("ERRO NA CRIAÇÃO DE ORDER" + apiResponse.data);
                 setOrderReady(false);  
@@ -93,7 +106,10 @@ export default function CreateOrder() {
     async function insertToOrder() {
         
         if(orderUUID) {
-            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(orderUUID), preInsertOrderItems)
+            const refreshToken: string|null = await userContext.getRefreshToken();
+            const token = await userContext.generateJwtToken(refreshToken);
+
+            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(orderUUID), preInsertOrderItems, token)
             if(apiResponse.statusCode !== 200) {
                 console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
                 return

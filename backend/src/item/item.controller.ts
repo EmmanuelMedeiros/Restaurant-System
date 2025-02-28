@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { EndMessage } from 'src/interface/EndMessage';
 import { CreateItemDTO } from './dto/create.item.dto';
@@ -7,7 +7,10 @@ import { ItemCategory } from 'src/item-category/entity/item-category.entity';
 import { UpdateItemDTO } from './dto/update.item.dto';
 import { Item } from './entity/item.entity';
 import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
+import { UserRoleGuard } from 'src/common/guard/userRole.guard';
+import { Role } from 'src/enum/Role';
 
+@UseGuards(new UserRoleGuard([Role.ADMIN, Role.WAITER]))
 @Controller('item')
 export class ItemController {
     constructor(
@@ -15,6 +18,7 @@ export class ItemController {
         private readonly itemCategoryService: ItemCategoryService
     ) {};
 
+    @UseGuards(new UserRoleGuard([Role.ADMIN]))
     @HttpCode(HttpStatus.CREATED)
     @Post()
     async create(@Body() createItemDTO: CreateItemDTO) {
@@ -56,6 +60,7 @@ export class ItemController {
         return item;
     }
 
+    @UseGuards(new UserRoleGuard([Role.ADMIN]))
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
     async update(@Body() updateItemDTO: UpdateItemDTO, @Param('id') id: number) {
@@ -83,6 +88,7 @@ export class ItemController {
         return serviceResponse;
     }
 
+    @UseGuards(new UserRoleGuard([Role.ADMIN]))
     @HttpCode(HttpStatus.OK)
     @Delete('/:id')
     async deleteOne(@Param('id') id: number) {

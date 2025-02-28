@@ -1,20 +1,15 @@
-import EntireMenuComponent from "@/components/entireMenu";
 import Menu from "@/components/menu";
-import { IItem } from "@/interface/IItem";
 import { BackHandler, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import Icons from '@expo/vector-icons/Feather'
-import { useCallback, useEffect, useState } from "react";
-import QuantityFloatComponent from "@/components/quantityFloatComponent";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { IOrderItem } from "@/interface/IOrderItem";
 import { OrderScreens } from "@/enum/OrderScreens";
-import ButtonToAction from "@/components/buttonToAction";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { goBack } from "expo-router/build/global-state/routing";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { OrderEndpoint } from "@/fuctions/order.endpoint";
 import { IOrder } from "@/interface/IOrder";
-import { TableStatus } from "@/enum/TableStatus";
+import UserContext from "@/context/user.context";
 
 const items: IOrderItem[] = [
     {
@@ -56,6 +51,8 @@ const items: IOrderItem[] = [
 
 export default function TableOrder() {
 
+    const userContext = useContext(UserContext);
+
     const [order, setOrder]                             = useState<Pick<IOrder, "uuid"|"createdAt"|"modifiedAt"|"finishedAt">>();
 
     const [itemList, setItemList]                       = useState<IOrderItem[]>([]);
@@ -86,7 +83,9 @@ export default function TableOrder() {
 
     async function orderByTableID() {
         try{
-            const apiResponse: IApiResponse = await orderEndpoint.getByTableID(Number(tableID));
+            const refreshToken: string|null = await userContext.getRefreshToken();
+            const token = await userContext.generateJwtToken(refreshToken);
+            const apiResponse: IApiResponse = await orderEndpoint.getByTableID(Number(tableID), token);
             if(apiResponse.statusCode !== 200) {
                 console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
                 return
@@ -126,9 +125,10 @@ export default function TableOrder() {
                 };
             });
 
-            console.log(manipulateOrder)
+            const refreshToken: string|null = await userContext.getRefreshToken();
+            const token = await userContext.generateJwtToken(refreshToken);
 
-            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(order.uuid), manipulatedOrder)
+            const apiResponse: IApiResponse = await orderEndpoint.manipulateOrderItems(String(order.uuid), manipulatedOrder, token)
             if(apiResponse.statusCode !== 200) {
                 console.log(`getByTableID endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
                 return
@@ -146,7 +146,10 @@ export default function TableOrder() {
     async function getOrderItemsByOrderID() {
         try{
             if(order) {
-                const apiResponse: IApiResponse = await orderEndpoint.getSpecificOrderItems(order.uuid)
+                const refreshToken: string|null = await userContext.getRefreshToken();
+                const token = await userContext.generateJwtToken(refreshToken);
+
+                const apiResponse: IApiResponse = await orderEndpoint.getSpecificOrderItems(order.uuid, token)
                 if(apiResponse.statusCode !== 200) {
                     console.log(`get order's items endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
                     setItemList([])

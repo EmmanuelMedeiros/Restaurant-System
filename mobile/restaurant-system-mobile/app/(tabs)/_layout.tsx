@@ -14,6 +14,15 @@ export default function TablesTabs() {
                     }
                 }
             />
+
+            <Tabs.Screen name="(items)"
+                options={
+                    {
+                        title: 'Items',
+                        tabBarIcon: () => <Icons name="paperclip" size={20}/>
+                    }
+                }
+            />
             
         </Tabs>
     )

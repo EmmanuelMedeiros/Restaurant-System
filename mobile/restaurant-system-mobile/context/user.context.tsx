@@ -1,36 +1,33 @@
 import { UserRole } from "@/enum/UserRole";
 import { AuthEndpoint } from "@/fuctions/auth.endpoint";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 let role: UserRole|undefined;
 let setRole: React.Dispatch<React.SetStateAction<UserRole | undefined>> = () => {};
-let refreshToken: string|undefined;
 let saveRefreshToken: (refreshToken: string) => Promise<void> = async () => {};
 let getRefreshToken: () => Promise<string|null> = async () => {return null};
 let jwtToken: string|undefined;
-let setJwtToken: React.Dispatch<React.SetStateAction<string | undefined>> = () => {};
+let generateJwtToken: (refreshToken: string|null) => Promise<string|null> = async (refreshToken: string|null) => {return null};
 
 const UserContext = createContext(
     {
         role,
         setRole,
-        refreshToken,
         saveRefreshToken,
         getRefreshToken,
         jwtToken,
-        setJwtToken
+        generateJwtToken
     }
 )
 
 export function UserContextProvider(props: React.PropsWithChildren) {
 
     const [role, setRole] = useState<UserRole|undefined>();
-    const [jwtToken, setJwtToken] = useState<string>();
+    let jwtToken: string|undefined = undefined;
 
     const authEndpoint: AuthEndpoint = new AuthEndpoint();
 
     async function saveRefreshToken(refreshToken: string) {
-
         const insertOnCacheResponse = await authEndpoint.saveRefreshTokenOnCache(refreshToken);
         if(!insertOnCacheResponse) {
             console.log("Error while trying to cache token");
@@ -38,6 +35,10 @@ export function UserContextProvider(props: React.PropsWithChildren) {
         };
     }
 
+    async function generateJwtToken(refreshToken: string|null): Promise<string|null> {
+        return await authEndpoint.generateJwtToken(refreshToken);
+    }
+    
     async function getRefreshToken(): Promise<string|null> {
         const storedRefreshToken = await authEndpoint.getStoredRefreshToken();
         if(!storedRefreshToken) {
@@ -47,14 +48,14 @@ export function UserContextProvider(props: React.PropsWithChildren) {
         return storedRefreshToken;
     }
 
+    
     const context = {
         role,
-        refreshToken,
         setRole,
         saveRefreshToken,
         getRefreshToken,
         jwtToken,
-        setJwtToken
+        generateJwtToken
     }
 
     return(

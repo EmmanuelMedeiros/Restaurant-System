@@ -1,8 +1,7 @@
 import { IApiResponse } from "@/interface/IApiResponse";
-import { IItem } from "@/interface/IItem";
 import axios from "axios";
 
-export class ItemEndpoint {
+export class ItemCategoryEndpoint {
     private apiUrl: string|undefined
 
     constructor() {
@@ -13,7 +12,7 @@ export class ItemEndpoint {
         
         let apiResponse: IApiResponse;
 
-        const apiResult = await axios.get(`${this.apiUrl}/item`, 
+        const apiResult = await axios.get(`${this.apiUrl}/item-category`, 
             {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`

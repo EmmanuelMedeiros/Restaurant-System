@@ -28,7 +28,15 @@ export default function TablesScreen() {
     ];
 
     async function getAllTables() {
-        const apiResult: IApiResponse = await tablesEndpoint.getAll();
+        const refreshToken: string|null = await userContext.getRefreshToken();
+        const token = await userContext.generateJwtToken(refreshToken);
+
+        if(!token) {
+            console.log("Invalid token for getAllTables request (It may be expired)")
+            router.replace('/(authentication)/login')
+            return;
+        }
+        const apiResult: IApiResponse = await tablesEndpoint.getAll(token);
         if(apiResult.statusCode != 200) {
             return console.log(apiResult.data);
         };

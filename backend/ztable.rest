@@ -9,7 +9,7 @@ Content-Type: application/json
     "name": "01"
 }
 
-### GET ALL TABLES
+### GET ONE TABLE
 
 GET {{baseUrl}}/table/2
 

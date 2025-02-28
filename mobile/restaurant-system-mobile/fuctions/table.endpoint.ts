@@ -10,11 +10,17 @@ export class TablesEndpoint {
     }
 
 
-    async getAll(): Promise<IApiResponse> {
+    async getAll(jwtToken: string): Promise<IApiResponse> {
 
         let apiResponse: IApiResponse;
 
-        const apiResult = await axios.get(`${this.apiUrl}/table`)
+        const apiResult = await axios.get(`${this.apiUrl}/table`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 200}
         })
@@ -24,10 +30,16 @@ export class TablesEndpoint {
         return apiResult;
     };
 
-    async getOne(id: number): Promise<IApiResponse> {
+    async getOne(id: number, jwtToken: string|null): Promise<IApiResponse> {
         let apiResponse: IApiResponse;
 
-        const apiResult = await axios.get(`${this.apiUrl}/table/${id}`)
+        const apiResult = await axios.get(`${this.apiUrl}/table/${id}`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 200}
         })

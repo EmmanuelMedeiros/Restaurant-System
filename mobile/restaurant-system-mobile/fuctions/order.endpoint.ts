@@ -12,11 +12,17 @@ export class OrderEndpoint {
         this.apiUrl = process.env.EXPO_PUBLIC_API_URL;
     };
 
-    async create(order: CreateOrderDTO): Promise<IApiResponse> {
+    async create(order: CreateOrderDTO, jwtToken: string|null): Promise<IApiResponse> {
         
         let apiResponse: IApiResponse;
 
-        const apiResult = await axios.post(`${this.apiUrl}/order`, order)
+        const apiResult = await axios.post(`${this.apiUrl}/order`, order, 
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 201}
         })
@@ -26,11 +32,17 @@ export class OrderEndpoint {
         return apiResult;
     }
 
-    async getByTableID(tableID: number): Promise<IApiResponse> {
+    async getByTableID(tableID: number, jwtToken: string|null): Promise<IApiResponse> {
 
         let apiResponse: IApiResponse;
 
-        const apiResult = await axios.get(`${this.apiUrl}/order?tableID=${tableID}`)
+        const apiResult = await axios.get(`${this.apiUrl}/order?tableID=${tableID}`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 200}
         })
@@ -40,11 +52,17 @@ export class OrderEndpoint {
         return apiResult;
     }
 
-    async getSpecificOrderItems(orderID: string): Promise<IApiResponse> {
+    async getSpecificOrderItems(orderID: string, jwtToken:string|null): Promise<IApiResponse> {
         
         let apiResponse: IApiResponse;
 
-        const apiResult = await axios.get(`${this.apiUrl}/order/order-items/${orderID}`)
+        const apiResult = await axios.get(`${this.apiUrl}/order/order-items/${orderID}`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 200}
         })
@@ -54,10 +72,16 @@ export class OrderEndpoint {
         return apiResult;
     }
 
-    async manipulateOrderItems(orderUUID: string, orderItems: IOrderItem[]|CreateOrderItemDTO[]): Promise<IApiResponse> {
+    async manipulateOrderItems(orderUUID: string, orderItems: IOrderItem[]|CreateOrderItemDTO[], jwtToken:string|null): Promise<IApiResponse> {
         let apiResponse: IApiResponse;
 
-        const apiResult = await axios.put(`${this.apiUrl}/order/update_item/${orderUUID}`, orderItems)
+        const apiResult = await axios.put(`${this.apiUrl}/order/update_item/${orderUUID}`, orderItems,
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 200}
         })

@@ -18,6 +18,7 @@ import { CreateOrderItemDTO } from './dto/create-orderItem.dto';
 import { JWTGuard } from 'src/common/guard/jwt.guard';
 import { UserRoleGuard } from 'src/common/guard/userRole.guard';
 
+@UseGuards(new UserRoleGuard([Role.ADMIN, Role.WAITER]))
 @Controller('order')
 export class OrderController {
     constructor(
