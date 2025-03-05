@@ -81,7 +81,7 @@ export default function ItemsView() {
                         />
                     </View>
                 :   
-                    <View style={{width: '100%'}}>
+                    <View style={{width: '100%', height: '100%'}}>
                         <View style={itemsViewStyle.menuComponent}>
                         <Menu
                             posActionItemList={[]}

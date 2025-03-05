@@ -95,10 +95,22 @@ export default function ItemScreen({currentItemID, currentItemCategory, currentI
             setIsEditing(false);
             return;
         };
-
-        console.log("You need to select a category to create an item!")
     }
 
+    async function deleteItem() {
+        const refreshToken: string|null = await userContext.getRefreshToken();
+        const token = await userContext.generateJwtToken(refreshToken);
+
+        if(currentItemID) {
+            const apiResponse: IApiResponse = await itemEndpoint.delete(currentItemID, token);
+            if(apiResponse.statusCode !== 200) {
+                console.log("Error while deleting item: " + apiResponse.data);
+                return; 
+            }
+            setIsEditing(false);
+        };
+        return;
+    };
     
     useFocusEffect(
       useCallback(() => {
@@ -106,7 +118,6 @@ export default function ItemScreen({currentItemID, currentItemCategory, currentI
       }, [])
     )
     
-
 
     return(
         
@@ -178,9 +189,9 @@ export default function ItemScreen({currentItemID, currentItemCategory, currentI
 
 
                 </View>
-
+                    
                     <TouchableOpacity 
-                             style={{paddingBlock: 30, marginBottom: 20, backgroundColor: '#255247', width: '90%', borderRadius: 10, marginInline: 'auto'}}
+                             style={{paddingBlock: 10, marginBottom: 5, backgroundColor: '#255247', width: '90%', borderRadius: 10, marginInline: 'auto'}}
                              onPress={() => {isEditing ? editItem() : createItem()}}
                         >
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
@@ -194,6 +205,29 @@ export default function ItemScreen({currentItemID, currentItemCategory, currentI
                                 />
                             </View>
                     </TouchableOpacity>
+
+                    {isEditing 
+                        ?
+                            <TouchableOpacity 
+                                style={{paddingBlock: 10, backgroundColor: '#6C3232', width: '90%', borderRadius: 10, marginInline: 'auto'}}
+                                onPress={() => deleteItem()}
+                            >
+                                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
+
+                                   <Text style={{color: 'white', textAlign: 'center', fontSize: 18}}>Deletar</Text>
+
+                                   <Icons 
+                                       name="x" 
+                                       size={30}
+                                       style={{position: 'absolute', left: 35 ,backgroundColor: '#D9D9D9', borderRadius: 100, width: 35, height: 35, padding: 3}}
+                                   />
+                                </View>
+                            </TouchableOpacity>
+                        :
+                            null
+                    }
+                    
+
 
         </KeyboardAvoidingView>
     )

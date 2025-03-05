@@ -66,7 +66,25 @@ export class ItemEndpoint {
             return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
         });
 
-        console.log(item)
+        return apiResult;
+    }
+
+    async delete(itemID: number, jwtToken: string|null): Promise<IApiResponse> {
+        let apiResponse: IApiResponse;
+
+        const apiResult = await axios.delete(`${this.apiUrl}/item/${itemID}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
+        .then((response) => {
+            return apiResponse = {data: response.data, statusCode: 200}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
 
         return apiResult;
     }

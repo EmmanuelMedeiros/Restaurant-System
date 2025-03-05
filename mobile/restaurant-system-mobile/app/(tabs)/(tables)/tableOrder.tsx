@@ -215,7 +215,7 @@ export default function TableOrder() {
                             <Menu
                                 orderItemList={itemList}
                                 posActionItemList={[]}
-                                itemPressableIcon={[<Icons name="trash-2" size={20}/>, <Icons name="plus" size={20}/>]}
+                                itemPressableIcon={[<Icons name="info" size={20}/>]}
                                 pressableIconFunction={toggleItemFromRemoveItemsList}
                                 showHeader={true}
                                 title={`PEDIDO`}
@@ -260,7 +260,7 @@ export default function TableOrder() {
                                 orderItemList={editableItemList}
                                 setOrderItemList={setEditableItemList}
                                 posActionItemList={itemsToRemove}
-                                showHeader={true}
+                                showHeader={false}
                                 itemPressableIcon={[<Icons name="trash-2" size={20}/>, <Icons name="plus" size={20}/>]}
                                 pressableIconFunction={toggleItemFromRemoveItemsList}
                                 goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
