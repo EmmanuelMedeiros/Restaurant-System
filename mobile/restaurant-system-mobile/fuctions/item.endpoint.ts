@@ -1,3 +1,4 @@
+import { CreateItemDTO } from "@/dto/create-item.dto";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { IItem } from "@/interface/IItem";
 import axios from "axios";
@@ -10,7 +11,6 @@ export class ItemEndpoint {
     };
 
     async getAll(jwtToken: string|null): Promise<IApiResponse> {
-        
         let apiResponse: IApiResponse;
 
         const apiResult = await axios.get(`${this.apiUrl}/item`, 
@@ -22,6 +22,25 @@ export class ItemEndpoint {
         )
         .then((response) => {
             return apiResponse = {data: response.data, statusCode: 200}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
+        return apiResult;
+    }
+
+    async create(item: CreateItemDTO, jwtToken: string|null): Promise<IApiResponse> {
+        let apiResponse: IApiResponse;
+
+        const apiResult = await axios.post(`${this.apiUrl}/item`, item,
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
+        .then((response) => {
+            return apiResponse = {data: response.data, statusCode: 201}
         })
         .catch((err) => {
             return apiResponse = {data: err.response.data.message, statusCode: err.response.status};

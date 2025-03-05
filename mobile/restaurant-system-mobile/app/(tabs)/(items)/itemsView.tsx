@@ -32,6 +32,11 @@ export default function ItemsView() {
     return;
   }
 
+  const editItemOnHandle = (item: IItem) => {
+    console.log(item);
+    return;
+  };
+
   useFocusEffect(
     useCallback(() => {
       getAllItems();
@@ -47,6 +52,8 @@ export default function ItemsView() {
                     itemList={itemList}
                     showHeader={true}
                     title="Items"
+                    itemPressableIcon={[<Icons name="edit" size={20} color={'rgba(0, 0, 0, .5)'}/>]}
+                    pressableIconFunction={editItemOnHandle}
                 />
             </View>
 
