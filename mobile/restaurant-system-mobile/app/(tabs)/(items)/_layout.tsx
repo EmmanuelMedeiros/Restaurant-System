@@ -6,7 +6,6 @@ export default function ItemsLayout() {
         <Stack screenOptions={{headerShown: false, animation: 'none'}}>
             <Stack.Screen name={"itemsView"}/>
             <Stack.Screen name={"newItem"}/>
-            <Stack.Screen name={"editItem"}/>
         </Stack>
     )
 

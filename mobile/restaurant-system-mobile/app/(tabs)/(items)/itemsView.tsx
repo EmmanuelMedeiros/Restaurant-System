@@ -4,10 +4,11 @@ import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { IItem } from "@/interface/IItem";
 import { router, useFocusEffect } from "expo-router";
-import { useCallback, useContext, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { BackHandler, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Icons from '@expo/vector-icons/Feather'
+import ItemScreen from "@/components/itemScreen";
 
 export default function ItemsView() {
 
@@ -16,6 +17,8 @@ export default function ItemsView() {
   const itemEndpoint: ItemEndpoint = new ItemEndpoint();
 
   const [itemList, setItemList] = useState<IItem[]>([]);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [currentItem, setCurrentItem] = useState<IItem>();
 
   async function getAllItems() {
 
@@ -33,8 +36,8 @@ export default function ItemsView() {
   }
 
   const editItemOnHandle = (item: IItem) => {
-    console.log(item);
-    return;
+    setCurrentItem(item);
+    setIsEditing(true);
   };
 
   useFocusEffect(
@@ -43,35 +46,72 @@ export default function ItemsView() {
     }, [])
   )
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+        if(isEditing) {
+            setIsEditing(false);
+        } else {
+            router.back();
+        }
+        return true;
+    })
+  })
+
+  useEffect(() => {
+    if(!isEditing) {
+        getAllItems();
+    }
+    return;
+  }, [isEditing])
+
     return(
         <SafeAreaView style={itemsViewStyle.container}>
 
-            <View style={itemsViewStyle.menuComponent}>
-                <Menu
-                    posActionItemList={[]}
-                    itemList={itemList}
-                    showHeader={true}
-                    title="Items"
-                    itemPressableIcon={[<Icons name="edit" size={20} color={'rgba(0, 0, 0, .5)'}/>]}
-                    pressableIconFunction={editItemOnHandle}
-                />
-            </View>
+            {isEditing && currentItem
+                ?   
+                    <View style={{width: '100%', height: '100%'}}>
+                        <ItemScreen
+                            currentItemCategory={currentItem.category}
+                            currentItemDescription={currentItem.description || ""}
+                            currentItemName={currentItem.name}
+                            currentItemPrice={currentItem.price.toString()}
+                            isEditing={true}
+                            setIsEditing={setIsEditing}
+                            currentItemID={currentItem.id}
+                        />
+                    </View>
+                :   
+                    <View style={{width: '100%'}}>
+                        <View style={itemsViewStyle.menuComponent}>
+                        <Menu
+                            posActionItemList={[]}
+                            itemList={itemList}
+                            showHeader={true}
+                            title="Items"
+                            itemPressableIcon={[<Icons name="edit" size={20} color={'rgba(0, 0, 0, .5)'}/>]}
+                            pressableIconFunction={editItemOnHandle}
+                        />
+                         </View>
 
-            <TouchableOpacity 
-                style={{paddingBlock: 30, marginBottom: 20, backgroundColor: '#333333', width: '90%', borderRadius: 10}}
-                onPress={() => router.navigate('/(tabs)/(items)/newItem')}    
-            >
-                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
 
-                    <Text style={{color: 'white', textAlign: 'center', fontSize: 18}}>Adicionar Item</Text>
+                        <TouchableOpacity 
+                            style={{paddingBlock: 30, marginBottom: 20, backgroundColor: '#333333', width: '90%', borderRadius: 10, marginInline: 'auto'}}
+                            onPress={() => router.navigate('/(tabs)/(items)/newItem')}    
+                        >
+                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
 
-                    <Icons 
-                        name="arrow-right" 
-                        size={30}
-                        style={{position: 'absolute', right: 35 ,backgroundColor: '#D9D9D9', borderRadius: 100, width: 35, height: 35, padding: 3}}
-                    />
-                </View>
-            </TouchableOpacity>
+                                <Text style={{color: 'white', textAlign: 'center', fontSize: 18}}>Adicionar Item</Text>
+
+                                <Icons 
+                                    name="arrow-right" 
+                                    size={30}
+                                    style={{position: 'absolute', right: 35 ,backgroundColor: '#D9D9D9', borderRadius: 100, width: 35, height: 35, padding: 3}}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+            }
+
 
         </SafeAreaView>
     )

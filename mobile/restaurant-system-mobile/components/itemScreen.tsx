@@ -10,21 +10,31 @@ import Icons from '@expo/vector-icons/Feather'
 import ProjectSelectInput from "@/components/projectSelectInput";
 import InputComponent from "@/components/inputComponent";
 
-import Constants from 'expo-constants';
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { CreateItemDTO } from "@/dto/create-item.dto";
+import { UpdateItemDTO } from "@/dto/update-item.dto";
 
-export default function NewItem() {
+interface EditItemProps {
+    currentItemID: number,
+    currentItemCategory: IItemCategory,
+    currentItemPrice: string,
+    currentItemName: string,
+    currentItemDescription: string,
+    isEditing: boolean,
+    setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function ItemScreen({currentItemID, currentItemCategory, currentItemDescription, currentItemName, currentItemPrice, isEditing, setIsEditing}: EditItemProps) {
 
     const userContext = useContext(UserContext);
     const itemCategoryEndpoint: ItemCategoryEndpoint = new ItemCategoryEndpoint();
     const itemEndpoint: ItemEndpoint = new ItemEndpoint();
 
     const [allCategories, setAllCategories]         = useState<IItemCategory[]>([]);
-    const [selectedCategory, setSelectedCategory]   = useState<IItemCategory>();
-    const [itemPrice, setItemPrice]                 = useState<string>("");
-    const [itemName, setItemName]                   = useState<string>("");
-    const [itemDescription, setItemDescription]     = useState<string>("");
+    const [selectedCategory, setSelectedCategory]   = useState<IItemCategory>(currentItemCategory);
+    const [itemPrice, setItemPrice]                 = useState<string>(currentItemPrice);
+    const [itemName, setItemName]                   = useState<string>(currentItemName);
+    const [itemDescription, setItemDescription]     = useState<string>(currentItemDescription);
     const [enableKeyLifting, setEnableLifting]      = useState<boolean>(false);
 
     async function getAllCategories() {
@@ -50,7 +60,7 @@ export default function NewItem() {
                 Number(itemPrice.replace(',', '.')),
                 selectedCategory,
                 itemDescription
-            );
+            )
 
             const apiResponse: IApiResponse = await itemEndpoint.create(itemToCreate, token);
             if(apiResponse.statusCode !== 201) {
@@ -58,6 +68,31 @@ export default function NewItem() {
                 return; 
             }
             router.back();
+            return;
+        };
+
+        console.log("You need to select a category to create an item!")
+    }
+
+    async function editItem() {
+        const refreshToken: string|null = await userContext.getRefreshToken();
+        const token = await userContext.generateJwtToken(refreshToken);
+
+        if(selectedCategory) {
+            const itemToEdit: UpdateItemDTO = new UpdateItemDTO(
+                currentItemID,
+                itemName,
+                Number(itemPrice.replace(',', '.')),
+                selectedCategory,
+                itemDescription
+            );
+
+            const apiResponse: IApiResponse = await itemEndpoint.edit(itemToEdit, token)
+            if(apiResponse.statusCode !== 200) {
+                console.log("Error while creating item: " + apiResponse.data);
+                return; 
+            }
+            setIsEditing(false);
             return;
         };
 
@@ -79,7 +114,7 @@ export default function NewItem() {
 
                 <View style={newItemStyle.creationContainer}>
 
-                    <Text style={{textAlign: 'center', marginTop: 40, fontSize: 18}}>CADASTRO DE ITEM</Text>
+                    <Text style={{textAlign: 'center', marginTop: 40, fontSize: 18}}>{isEditing ? "EDIÇÃO DE ITEM" : "CADASTRO DE ITEM" }</Text>
                     <View style={newItemStyle.blackHorizontalLine}/>
 
                     <ScrollView style={{position: 'relative'}}>
@@ -102,7 +137,7 @@ export default function NewItem() {
                                     inputTextColor="#181818"
                                     isNumeric={false}
                                     isPassword={false}
-                                    placeholderText="Nome do item"
+                                    placeholderText={ currentItemName || "Nome do item"}
                                     setInputValue={setItemName}
                                     customFontSize={15}
                                     onFocusFunction={() => setEnableLifting(false)}
@@ -115,9 +150,9 @@ export default function NewItem() {
                                     inputTextColor="#181818"
                                     isNumeric={true}
                                     isPassword={false}
-                                    placeholderText="R$"
+                                    placeholderText={"R$ " + currentItemPrice || "R$"}
                                     setInputValue={setItemPrice}
-                                    customFontSize={15}
+                                    customFontSize={11}
                                     onFocusFunction={() => setEnableLifting(false)}
                                 />
                             </View>
@@ -132,7 +167,7 @@ export default function NewItem() {
                                 inputTextColor="#181818"
                                 isNumeric={false}
                                 isPassword={false}
-                                placeholderText="Descrição"
+                                placeholderText={currentItemDescription || "Descrição"}
                                 setInputValue={setItemDescription}
                                 customFontSize={15}
                                 onFocusFunction={() => setEnableLifting(true)}
@@ -146,11 +181,11 @@ export default function NewItem() {
 
                     <TouchableOpacity 
                              style={{paddingBlock: 30, marginBottom: 20, backgroundColor: '#255247', width: '90%', borderRadius: 10, marginInline: 'auto'}}
-                            onPress={() => createItem()}
+                             onPress={() => {isEditing ? editItem() : createItem()}}
                         >
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
 
-                                <Text style={{color: 'white', textAlign: 'center', fontSize: 18}}>Adicionar Item</Text>
+                                <Text style={{color: 'white', textAlign: 'center', fontSize: 18}}>{isEditing ? "Editar" : "Adicionar Item"}</Text>
 
                                 <Icons 
                                     name="check" 
