@@ -123,6 +123,8 @@ const itemsViewStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#181818',
+
+        paddingBottom: 100
     },
 
     menuComponent: {

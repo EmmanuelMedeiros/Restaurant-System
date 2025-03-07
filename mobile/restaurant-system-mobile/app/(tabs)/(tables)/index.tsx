@@ -7,7 +7,7 @@ import { TableStatus } from "@/enum/TableStatus";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "@/interface/ITable";
 import { IApiResponse } from "@/interface/IApiResponse";
-import { router, useFocusEffect, useNavigation } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import UserContext from "@/context/user.context";
 
 export default function TablesScreen() {
@@ -18,6 +18,9 @@ export default function TablesScreen() {
 
     const [openTableCard, setOpenTableCard] = useState<boolean>(false);
     const [selectedTable, setSelectedTable] = useState<ITable>();
+
+    const [ticks, setTicks]                   = useState<number>(0);
+    const [stopRefreshing, setStopRefreshing] = useState<boolean>(false);
 
 
     const [tablesList, setTablesList] = useState<ITable[]>([]);
@@ -49,9 +52,16 @@ export default function TablesScreen() {
 
     useFocusEffect(
         useCallback(() => {
-            backToLoginScreen();
             getAllTables();
+            backToLoginScreen();
             setOpenTableCard(false);
+            
+            setStopRefreshing(false);
+            setTicks((prev) => (prev += 1))
+
+            return(() => {
+                setStopRefreshing(true);
+            }) 
         }, [])
     )
 
@@ -78,7 +88,14 @@ export default function TablesScreen() {
         getAllTables();
     }, []) 
 
-
+    useEffect(() => {
+        if(!stopRefreshing) {
+            setTimeout(() => {
+                getAllTables()
+                setTicks((prev) => (prev += 1))
+            }, 3000);
+        }
+    }, [ticks])
 
     return(
         <View 
@@ -138,6 +155,8 @@ const tableScreenStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#181818',
+
+        paddingBottom: 50
     },
 
     greyBackgroundContainer: {
@@ -145,6 +164,8 @@ const tableScreenStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, .7)',
+
+        paddingBottom: 50
     },
 
     tableList: {
