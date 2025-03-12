@@ -14,19 +14,35 @@ export class TableService {
     ) {};
     
 
-    async create(createTableDTO: CreateTableDTO): Promise<EndMessage>{
+    async create(): Promise<EndMessage>{
         let endMessage: EndMessage = {data: '', status: HttpStatus.CREATED};
-        console.log(createTableDTO.name)
+
         try {
-            const tableToInsert: Table = new Table(
-                0,
-                createTableDTO.name,
-                TableStatus.SLEEPING
-            )
-            const table: InsertResult = await this.tableRepository.insert(tableToInsert);
+            let tableToInsert: CreateTableDTO;
+            const maxTableName: {max: number} = await this.tableRepository.query(`select MAX(name) from "table"`);
+
+            if(!maxTableName[0]) {
+
+                tableToInsert = new CreateTableDTO(
+                    1,
+                    TableStatus.SLEEPING
+                );
+
+            } else {
+
+                tableToInsert = new CreateTableDTO(
+                    maxTableName[0].max + 1,
+                    TableStatus.SLEEPING
+                );
+            }
+
+
+            console.log(tableToInsert)
+
+            const table: InsertResult = await this.tableRepository.insert(tableToInsert)
             const insertedTable: Table = new Table(
                 table.raw[0].id,
-                createTableDTO.name,
+                maxTableName[0].max + 1,
                 TableStatus.SLEEPING
             )
             return endMessage = {data: insertedTable, status: HttpStatus.CREATED};

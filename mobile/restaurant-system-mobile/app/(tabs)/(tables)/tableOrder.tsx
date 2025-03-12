@@ -11,43 +11,6 @@ import { OrderEndpoint } from "@/fuctions/order.endpoint";
 import { IOrder } from "@/interface/IOrder";
 import UserContext from "@/context/user.context";
 
-const items: IOrderItem[] = [
-    {
-        item: {
-            category: {id: 1, title: ''},
-            createdAt: '',
-            id: 1,
-            name: 'Item A',
-            price: 40,
-        },
-        quantity: 10,
-        uuid: "a"
-    },
-    {
-        item: {
-            category: {id: 1, title: ''},
-            createdAt: '',
-            id: 2,
-            name: 'Item B',
-            price: 40,
-        },
-        quantity: 2
-        ,
-        uuid: "b"
-    },
-    {
-        item: {
-            category: {id: 2, title: ''},
-            createdAt: '',
-            id: 3,
-            name: 'Item C',
-            price: 40,
-        },
-        quantity: 3
-        ,
-        uuid: "c"
-    }
-]
 
 export default function TableOrder() {
 
@@ -96,15 +59,6 @@ export default function TableOrder() {
         }catch(err) {
             console.log(err)
         }
-    }
-
-    function updateOrderItemsInThreeSeconds() {
-        const updateTimeout = setTimeout(() => {
-            console.log("OrderItems")
-            getOrderItemsByOrderID();
-            clearTimeout(updateTimeout)
-            updateOrderItemsInThreeSeconds()
-        }, 3000)
     }
 
     async function manipulateOrder(editedOrder: IOrderItem[]) {

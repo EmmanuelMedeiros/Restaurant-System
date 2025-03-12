@@ -40,7 +40,7 @@ export default function TableCard({setShow, table}: TableCardProps) {
                     <View style={[tableCardStyle.statusBullet, {backgroundColor: statusColor}]}/>
                     <Text style={{color: 'white',fontFamily: 'inknutAntiqua-regular'}}>{table?.status}</Text>
                 </View>
-                <Text style={tableCardStyle.tableName}>Mesa {table?.id}</Text>
+                <Text style={tableCardStyle.tableName}>Mesa {table?.name}</Text>
 
                 <View style={tableCardStyle.cardButtons}>
 

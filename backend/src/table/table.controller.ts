@@ -6,16 +6,16 @@ import { Table } from './entity/table.entity';
 import { UserRoleGuard } from 'src/common/guard/userRole.guard';
 import { Role } from 'src/enum/Role';
 
-@UseGuards(new UserRoleGuard([Role.WAITER, Role.ADMIN]))
+/* @UseGuards(new UserRoleGuard([Role.WAITER, Role.ADMIN])) */
 @Controller('table')
 export class TableController {
     constructor(private readonly tableService: TableService) {};
 
-    @UseGuards(new UserRoleGuard([Role.ADMIN]))
+/*     @UseGuards(new UserRoleGuard([Role.ADMIN])) */
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    async create(@Body() table: CreateTableDTO) {
-        const serviceResponse: EndMessage = await this.tableService.create(table);
+    async create() {
+        const serviceResponse: EndMessage = await this.tableService.create();
         if(serviceResponse.status !== HttpStatus.CREATED) {
             throw new HttpException(serviceResponse.data, serviceResponse.status);
         }
@@ -27,7 +27,7 @@ export class TableController {
     async findAll() {
         const tableList: Table[]|null = await this.tableService.findAll();
         if(!tableList || tableList.length < 1) {
-            throw new HttpException("No user found", HttpStatus.NOT_FOUND);
+            throw new HttpException("No table found", HttpStatus.NOT_FOUND);
         }
         return tableList;
     }

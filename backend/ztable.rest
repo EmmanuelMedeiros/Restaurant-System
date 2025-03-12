@@ -5,10 +5,6 @@
 POST {{baseUrl}}/table
 Content-Type: application/json
 
-{
-    "name": "08"
-}
-
 ### GET ONE TABLE
 
 GET {{baseUrl}}/table/2
