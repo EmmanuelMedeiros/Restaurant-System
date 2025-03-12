@@ -168,9 +168,9 @@ const newItemStyle = StyleSheet.create({
 
     creationContainer: {
         margin: 'auto',
-        paddingBottom: 10,
-        marginTop: 75,
+        marginTop: 43,
         marginBottom: 25,
+
 
         width: '90%',
         height: '70%',

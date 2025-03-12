@@ -6,7 +6,7 @@ POST {{baseUrl}}/table
 Content-Type: application/json
 
 {
-    "name": "01"
+    "name": "08"
 }
 
 ### GET ONE TABLE

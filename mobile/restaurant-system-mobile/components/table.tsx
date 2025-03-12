@@ -49,7 +49,9 @@ const tableStyle = StyleSheet.create({
     },
     tableName: {
         color: 'white',
-        
+
+        fontFamily: 'inknutAntiqua-regular',
+
         marginTop: 7
     }
 })  

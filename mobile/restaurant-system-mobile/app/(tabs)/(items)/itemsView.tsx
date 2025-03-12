@@ -81,7 +81,7 @@ export default function ItemsView() {
                         />
                     </View>
                 :   
-                    <View style={{width: '100%', height: '100%'}}>
+                    <View style={{width: '100%', height: '110%'}}>
                         <View style={itemsViewStyle.menuComponent}>
                         <Menu
                             posActionItemList={[]}
@@ -95,7 +95,7 @@ export default function ItemsView() {
 
 
                         <TouchableOpacity 
-                            style={{paddingBlock: 30, marginBottom: 20, backgroundColor: '#333333', width: '90%', borderRadius: 10, marginInline: 'auto'}}
+                            style={{paddingBlock: 30, marginBottom: 60, marginTop: -20, backgroundColor: '#333333', width: '90%', borderRadius: 10, marginInline: 'auto'}}
                             onPress={() => router.navigate('/(tabs)/(items)/newItem')}    
                         >
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>

@@ -15,6 +15,8 @@ export class AuthEndpoint {
         
         let apiResponse: IApiResponse;
 
+        console.log(this.apiUrl)
+
         const apiResult: IApiResponse = await axios.post(`${this.apiUrl}/auth`, userToAuthenticate)
         .then((response) => {
             return apiResponse = {data: response.data.data, statusCode: response.data.status}
@@ -22,6 +24,8 @@ export class AuthEndpoint {
         .catch((err) => {
             return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
         });
+
+        console.log(apiResult)
 
         return apiResult;
     };

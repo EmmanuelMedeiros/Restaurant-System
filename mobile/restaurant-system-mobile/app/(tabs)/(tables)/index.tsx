@@ -1,14 +1,14 @@
-import { BackHandler, Pressable, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { BackHandler, ImageBackground, Pressable, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Table from "@/components/table";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import TableCard from "@/components/tableCard";
-import { TableStatus } from "@/enum/TableStatus";
 import { TablesEndpoint } from "@/fuctions/table.endpoint";
 import { ITable } from "@/interface/ITable";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { router, useFocusEffect } from "expo-router";
 import UserContext from "@/context/user.context";
+
+const blackboardBG = require('../../../assets/images/blackboard_bg.png')
 
 export default function TablesScreen() {
 
@@ -22,13 +22,7 @@ export default function TablesScreen() {
     const [ticks, setTicks]                   = useState<number>(0);
     const [stopRefreshing, setStopRefreshing] = useState<boolean>(false);
 
-
     const [tablesList, setTablesList] = useState<ITable[]>([]);
-
-    const tableObject: {id: string, status: TableStatus }[] = [
-        {id: "01", status: TableStatus.BUSY}, {id: "02", status: TableStatus.SLEEPING}, {id: "03", status: TableStatus.SLEEPING},
-        {id: "04", status: TableStatus.SLEEPING},  {id: "05", status: TableStatus.BUSY},  {id: "06", status: TableStatus.BUSY}
-    ];
 
     async function getAllTables() {
         const refreshToken: string|null = await userContext.getRefreshToken();
@@ -65,12 +59,10 @@ export default function TablesScreen() {
         }, [])
     )
 
-    useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", () => {
-            setOpenTableCard(false);
-            return true;
-        })
-    }, [])
+    BackHandler.addEventListener("hardwareBackPress", () => {
+        setOpenTableCard(false);
+        return true;
+    })
 
     async function backToLoginScreen() {
 
@@ -99,49 +91,52 @@ export default function TablesScreen() {
 
     return(
         <View 
-            style={ !openTableCard ? tableScreenStyle.container : tableScreenStyle.greyBackgroundContainer }
+            style={tableScreenStyle.container}
         >   
-
-            <StatusBar hidden={true}/>
         
-            <Pressable 
-                style={{height: '80%', width: '90%'}}
-                onPressIn={() => setOpenTableCard(false)}                
-            >
-                <ScrollView horizontal={true}>
-                    <ScrollView 
-                        style={tableScreenStyle.tableScroll}
-                        horizontal={true}
-                        alwaysBounceVertical={true}
-                        showsHorizontalScrollIndicator={true}
-                        contentContainerStyle={{flexWrap: "wrap", width: '105%', flexDirection: 'column', justifyContent: "flex-end"}}
-                    >
-                        {tablesList.map((element) => (
-                            <View 
-                                style={tableScreenStyle.tableList}
-                                key={element.id}
-                                onTouchEnd={() => setOpenTableCard(true)}
-                            >
-                                <TouchableOpacity 
+            <ImageBackground source={blackboardBG} style={ [{flex: 1, justifyContent: 'center', width: '100%', height: '110%'}, openTableCard ? {opacity: .7} : null] }>
+        
+                <StatusBar hidden={true}/>
+
+                <Pressable 
+                    style={{height: '80%', width: '90%'}}
+                    onPressIn={() => setOpenTableCard(false)}    
+                >
+                    <ScrollView horizontal={true}>
+                        <ScrollView 
+                            style={tableScreenStyle.tableScroll}
+                            horizontal={true}
+                            alwaysBounceVertical={true}
+                            showsHorizontalScrollIndicator={true}
+                            contentContainerStyle={{flexWrap: "wrap", width: '105%', flexDirection: 'column', justifyContent: "flex-end"}}
+                        >
+                            {tablesList.map((element) => (
+                                <View 
+                                    style={tableScreenStyle.tableList}
                                     key={element.id}
-                                    onPressIn={() => setSelectedTable(element)}
                                 >
-                                    <Table
-                                        tableName={element.name}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        ))}
+                                    <TouchableOpacity 
+                                        key={element.id}
+                                        onLongPress={() => {setOpenTableCard(true) , setSelectedTable(element)}}
+                                    >
+                                        <Table
+                                            tableName={element.name}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </ScrollView>
                     </ScrollView>
-                </ScrollView>
-            </Pressable>
+                </Pressable>
+
+            </ImageBackground>
 
             <View style={[tableScreenStyle.tableCard, !openTableCard ? tableScreenStyle.notShow : {display: 'flex'}]}>
-                <TableCard
-                    table={selectedTable}
-                    setShow={setOpenTableCard}
-                />
-            </View>
+                    <TableCard
+                        table={selectedTable}
+                        setShow={setOpenTableCard}
+                    />
+                </View>
 
         </View>
     )
@@ -154,18 +149,8 @@ const tableScreenStyle = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#181818',
 
-        paddingBottom: 50
-    },
-
-    greyBackgroundContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, .7)',
-
-        paddingBottom: 50
+        paddingBottom: 80,
     },
 
     tableList: {
@@ -184,6 +169,7 @@ const tableScreenStyle = StyleSheet.create({
 
         position: 'absolute',
         zIndex: 10,
+        
     },
 
     notShow: {

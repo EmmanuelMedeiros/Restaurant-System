@@ -191,6 +191,9 @@ const createOrderStyle = StyleSheet.create({
 
         backgroundColor: '#181818',
 
+        paddingBottom: 120,
+        paddingTop: 50,
+
         margin: 'auto'
     },
 

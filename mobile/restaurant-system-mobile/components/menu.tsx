@@ -256,8 +256,9 @@ const entireMenuStyle = StyleSheet.create({
     container: {
        backgroundColor: '#C1C1C1',
 
-       height: '100%',
+       height: '95%',
        width: '100%',
+
 
        position: 'relative'
     },

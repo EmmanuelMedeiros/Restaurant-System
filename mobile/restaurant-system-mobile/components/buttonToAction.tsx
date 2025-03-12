@@ -16,7 +16,7 @@ export default function ButtonToAction({buttonTitle, textStyle, buttonStyle, isD
             style={[{...buttonStyle}, buttonToActionStyle.button]}
             disabled={isDisabled}
         >
-            <Text style={{...textStyle, fontWeight: 'bold', textAlign: 'center', margin: 'auto'}}>{buttonTitle}</Text>
+            <Text style={{...textStyle, fontFamily: 'inknutAntiqua-regular', textAlign: 'center', margin: 'auto'}}>{buttonTitle}</Text>
         </TouchableOpacity>
     )
 }

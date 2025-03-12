@@ -255,46 +255,48 @@ export default function TableOrder() {
                 }
 
                     {currentOrderScreen === OrderScreens.EDIT
-                        ?
-                            <Menu
-                                orderItemList={editableItemList}
-                                setOrderItemList={setEditableItemList}
-                                posActionItemList={itemsToRemove}
-                                showHeader={false}
-                                itemPressableIcon={[<Icons name="trash-2" size={20}/>, <Icons name="plus" size={20}/>]}
-                                pressableIconFunction={toggleItemFromRemoveItemsList}
-                                goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
-                                title="EDITAR"
-                                subtitle={`MESA ${tableID}`}
-                                isQuantityChangeable={true}
-                                bottomButton={
-                                    [
-                                        <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignContent: 'center'}}>
-                                            <TouchableOpacity 
-                                                style={{ padding: 20 }}
-                                                onPress={() => setCurrentOrderScreen(OrderScreens.ORDER)}    
-                                            >
-                                                <Icons 
-                                                    name="x" 
-                                                    size={30}
-                                                    color={'rgba(108, 50, 50, .8)'}
-                                                />
-                                            </TouchableOpacity>
+                        ?   
+                            <View>
+                                <Menu
+                                    orderItemList={editableItemList}
+                                    setOrderItemList={setEditableItemList}
+                                    posActionItemList={itemsToRemove}
+                                    showHeader={false}
+                                    itemPressableIcon={[<Icons name="trash-2" size={20}/>, <Icons name="plus" size={20}/>]}
+                                    pressableIconFunction={toggleItemFromRemoveItemsList}
+                                    goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
+                                    title="EDITAR"
+                                    subtitle={`MESA ${tableID}`}
+                                    isQuantityChangeable={true}
+                                    bottomButton={
+                                        [
+                                            <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignContent: 'center'}}>
+                                                <TouchableOpacity 
+                                                    style={{ padding: 20 }}
+                                                    onPress={() => setCurrentOrderScreen(OrderScreens.ORDER)}    
+                                                >
+                                                    <Icons 
+                                                        name="x" 
+                                                        size={30}
+                                                        color={'rgba(108, 50, 50, .8)'}
+                                                    />
+                                                </TouchableOpacity>
 
-                                            <TouchableOpacity 
-                                                style={{ padding: 20 }}
-                                                onPress={() => manipulateOrder(editableItemList)}
-                                            >
-                                                <Icons 
-                                                    name="check" 
-                                                    size={30}
-                                                    color={'rgba(37, 82, 71, .8)'}
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                    ]
-                                }
-                            />
+                                                <TouchableOpacity 
+                                                    style={{ padding: 20 }}
+                                                    onPress={() => manipulateOrder(editableItemList)}
+                                                >
+                                                    <Icons 
+                                                        name="check" 
+                                                        size={30}
+                                                        color={'rgba(37, 82, 71, .8)'}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                        ]
+                                    }
+                                />
+                            </View>
                         :
                             null
                     }

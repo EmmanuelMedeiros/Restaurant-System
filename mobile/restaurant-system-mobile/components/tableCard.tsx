@@ -38,7 +38,7 @@ export default function TableCard({setShow, table}: TableCardProps) {
                 
                 <View style={tableCardStyle.statusView}>
                     <View style={[tableCardStyle.statusBullet, {backgroundColor: statusColor}]}/>
-                    <Text style={{color: 'white'}}>{table?.status}</Text>
+                    <Text style={{color: 'white',fontFamily: 'inknutAntiqua-regular'}}>{table?.status}</Text>
                 </View>
                 <Text style={tableCardStyle.tableName}>Mesa {table?.id}</Text>
 
@@ -50,7 +50,7 @@ export default function TableCard({setShow, table}: TableCardProps) {
                             textStyle={
                                 {
                                     color: '#181818',
-                                    fontSize: 15
+                                    fontSize: 13
                                 }
                             }
                             buttonStyle={
@@ -69,7 +69,7 @@ export default function TableCard({setShow, table}: TableCardProps) {
                             textStyle={
                                 {
                                     color: closeOrderBGColor === "#255247" ? '#C1C1C1' : 'rgba(193, 193, 193, .4)',
-                                    fontSize: 15
+                                    fontSize: 13
                                 }
                             }
                             buttonStyle={
@@ -92,13 +92,15 @@ const tableCardStyle = StyleSheet.create({
     container: {
         marginBlock: 'auto',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
 
     tableName: {
         color: 'white',
 
-        fontSize: 30
+        fontSize: 30,
+
+        fontFamily: 'inknutAntiqua-regular'
     },
 
     card: {
@@ -118,7 +120,8 @@ const tableCardStyle = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
 
-        position: 'relative'
+        position: 'relative',
+        
         
     },
 

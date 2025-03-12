@@ -26,7 +26,6 @@ export default function Login() {
         );
 
         const apiResult: IApiResponse = await authEndpoint.authenticate(userToAuth);
-        console.log(apiResult.statusCode)
         if(apiResult.statusCode !== 200) {
             console.log("Erro no login: " + apiResult.data);
             return;
