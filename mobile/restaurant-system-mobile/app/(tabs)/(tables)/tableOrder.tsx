@@ -26,7 +26,7 @@ export default function TableOrder() {
 
 
 
-    const {tableID} = useLocalSearchParams<{tableID: string}>();
+    const {tableID, tableName} = useLocalSearchParams<{tableID: string, tableName: string}>();
     const orderEndpoint: OrderEndpoint = new OrderEndpoint();
 
     function toggleItemFromRemoveItemsList(orderItem: IOrderItem): void {
@@ -173,7 +173,7 @@ export default function TableOrder() {
                                 pressableIconFunction={toggleItemFromRemoveItemsList}
                                 showHeader={true}
                                 title={`PEDIDO`}
-                                subtitle={`MESA ${tableID}`}
+                                subtitle={`MESA ${tableName}`}
                                 bottomButton={
                                     [
                                         
@@ -220,7 +220,7 @@ export default function TableOrder() {
                                     pressableIconFunction={toggleItemFromRemoveItemsList}
                                     goBackFunction={() => setCurrentOrderScreen(OrderScreens.ORDER)}
                                     title="EDITAR"
-                                    subtitle={`MESA ${tableID}`}
+                                    subtitle={`MESA ${tableName}`}
                                     isQuantityChangeable={true}
                                     bottomButton={
                                         [
