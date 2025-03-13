@@ -258,16 +258,6 @@ export default function TableOrder() {
 
             </View>
             
-{/*             {currentOrderScreen === OrderScreens.EDIT && itemsToRemove.length > 0
-                ?
-                    <QuantityFloatComponent
-                        quantity={itemsToRemove.length}
-                        icon={<Icons name="trash" size={30}/>}
-                        floatAction={() => setCurrentOrderScreen(OrderScreens.TRASH)}
-                    />
-                :
-                    null
-            } */}
         </SafeAreaView>
     )
 }

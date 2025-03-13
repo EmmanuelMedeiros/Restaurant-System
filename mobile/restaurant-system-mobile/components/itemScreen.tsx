@@ -13,6 +13,7 @@ import InputComponent from "@/components/inputComponent";
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { CreateItemDTO } from "@/dto/create-item.dto";
 import { UpdateItemDTO } from "@/dto/update-item.dto";
+import { TablesEndpoint } from "@/fuctions/table.endpoint";
 
 interface EditItemProps {
     currentItemID: number,
@@ -111,6 +112,7 @@ export default function ItemScreen({currentItemID, currentItemCategory, currentI
         };
         return;
     };
+
     
     useFocusEffect(
       useCallback(() => {

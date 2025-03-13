@@ -6,12 +6,12 @@ import { Table } from './entity/table.entity';
 import { UserRoleGuard } from 'src/common/guard/userRole.guard';
 import { Role } from 'src/enum/Role';
 
-/* @UseGuards(new UserRoleGuard([Role.WAITER, Role.ADMIN])) */
+@UseGuards(new UserRoleGuard([Role.WAITER, Role.ADMIN]))
 @Controller('table')
 export class TableController {
     constructor(private readonly tableService: TableService) {};
 
-/*     @UseGuards(new UserRoleGuard([Role.ADMIN])) */
+    @UseGuards(new UserRoleGuard([Role.ADMIN]))
     @HttpCode(HttpStatus.CREATED)
     @Post()
     async create() {

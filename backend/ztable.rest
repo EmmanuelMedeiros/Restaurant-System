@@ -4,6 +4,7 @@
 
 POST {{baseUrl}}/table
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyOTQxMjQ0Ni1hOTU3LTRiNjQtOTE4YS04ODA5MTFiYmNmMmIiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MTg2NTg1NiwiZXhwIjoxNzQxODY5NDU2LCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAifQ.Mjg9nEC7yawrA6Z8N8_kIDd8dvN-PJhXdL7_0HU4UzI
 
 ### GET ONE TABLE
 

@@ -5,40 +5,61 @@ import { IApiResponse } from "@/interface/IApiResponse";
 import { IItem } from "@/interface/IItem";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { BackHandler, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { BackHandler, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+
+const tableIcon = require('../../../assets/images/tableIcon.png')
 
 import Icons from '@expo/vector-icons/Feather'
 import ItemScreen from "@/components/itemScreen";
+import { TablesEndpoint } from "@/fuctions/table.endpoint";
 
 export default function ItemsView() {
 
     
   const userContext = useContext(UserContext);
   const itemEndpoint: ItemEndpoint = new ItemEndpoint();
+  const tableEndpoint: TablesEndpoint = new TablesEndpoint();
+
 
   const [itemList, setItemList] = useState<IItem[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<IItem>();
 
-  async function getAllItems() {
+    async function getAllItems() {
 
-    const refreshToken: string|null = await userContext.getRefreshToken();
-    const token = await userContext.generateJwtToken(refreshToken);
-    const apiResponse: IApiResponse = await itemEndpoint.getAll(token);
+        const refreshToken: string|null = await userContext.getRefreshToken();
+        const token = await userContext.generateJwtToken(refreshToken);
+        const apiResponse: IApiResponse = await itemEndpoint.getAll(token);
 
-    if(apiResponse.statusCode !== 200) {
-        console.log("ERRO EM GETALLITEMS: " + apiResponse.data);
+        if(apiResponse.statusCode !== 200) {
+            console.log("ERRO EM GETALLITEMS: " + apiResponse.data);
+            return;
+        }
+
+        setItemList(apiResponse.data)
         return;
-    }
-
-    setItemList(apiResponse.data)
-    return;
   }
 
   const editItemOnHandle = (item: IItem) => {
     setCurrentItem(item);
     setIsEditing(true);
   };
+
+    async function postTable() {
+        const refreshToken: string|null = await userContext.getRefreshToken();
+        const token = await userContext.generateJwtToken(refreshToken);
+
+        if(token) {
+            const apiResponse: IApiResponse = await tableEndpoint.post(token);
+            if(apiResponse.statusCode !== 201) {
+                console.log(`table's post endpoint error: ${JSON.stringify(apiResponse.data)}`);
+                return;
+            }
+            router.replace('/(tabs)/(tables)')
+        } else {
+            console.log("JWT Token wasn't provided when trying to use table's post endpoint")
+        }
+    }
 
   useFocusEffect(
     useCallback(() => {
@@ -95,7 +116,7 @@ export default function ItemsView() {
 
 
                         <TouchableOpacity 
-                            style={{paddingBlock: 30, marginBottom: 60, marginTop: -20, backgroundColor: '#333333', width: '90%', borderRadius: 10, marginInline: 'auto'}}
+                            style={{paddingBlock: 10, marginBottom: 5, marginTop: -25, backgroundColor: '#333333', width: '90%', borderRadius: 10, marginInline: 'auto'}}
                             onPress={() => router.navigate('/(tabs)/(items)/newItem')}    
                         >
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
@@ -106,6 +127,22 @@ export default function ItemsView() {
                                     name="arrow-right" 
                                     size={30}
                                     style={{position: 'absolute', right: 35 ,backgroundColor: '#D9D9D9', borderRadius: 100, width: 35, height: 35, padding: 3}}
+                                />
+                            </View>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity 
+                            style={{paddingBlock: 10, marginBottom: 60, marginTop: 0, backgroundColor: '#333333', width: '90%', borderRadius: 10, marginInline: 'auto'}}
+                            onPress={() => postTable()}
+                        >
+                            <View style={{flexDirection: 'row-reverse', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
+
+                                <Text style={{color: 'white', textAlign: 'center', fontSize: 18}}>Adicionar Mesa</Text>
+
+                                <Image 
+                                    source={tableIcon} 
+                                    style={{width: 35, height: 35, position: 'absolute', left: 30}}
                                 />
                             </View>
                         </TouchableOpacity>
