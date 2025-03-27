@@ -4,7 +4,7 @@
 A restaurant system that intends to work substituting all the pen and paper from the process of a restaurant by implementing a mobile restaurant app
 <br/>
 ## Main Features
-- **Authentication system:** the system has two roles: admin and employe, each one with 
+- **Authentication system:** the system has two roles: admin and employe, each one with its own functions
 - **JWT Authorization:** all endpoints of application requires the JWT authorization;
 - **Order by table:** with this system is possible to create an order by a table, generating its bill.
 - **Orders Queue** all the orders appears in a queue. Showing
