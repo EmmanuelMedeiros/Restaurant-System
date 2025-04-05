@@ -1,4 +1,5 @@
 export interface IItemCategory {
     id: number,
-    title: string
+    title: string,
+    deleted?: boolean
 }

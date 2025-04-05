@@ -56,14 +56,14 @@ export class ItemCategoryService {
     
 
     async findAll(): Promise<ItemCategory[]|null> {
-        const itemCategoriesList: ItemCategory[] = await this.itemCategoryRepository.find();
+        const itemCategoriesList: ItemCategory[] = await this.itemCategoryRepository.find({where: {deleted: true}});
         return itemCategoriesList;
     }
 
     async deleteOne(itemCategory: ItemCategory): Promise<EndMessage> {
         let endMessage: EndMessage = {data: '', status: HttpStatus.CREATED};
         try {
-            await this.itemCategoryRepository.delete(itemCategory);
+            await this.itemCategoryRepository.update(itemCategory, {deleted: true});
             return endMessage = {data: itemCategory, status: HttpStatus.OK};
         }catch(err) {
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
