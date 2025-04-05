@@ -102,7 +102,7 @@ export default function ItemsView() {
                         />
                     </View>
                 :   
-                    <View style={{width: '100%', height: '110%'}}>
+                    <View style={{width: '100%', height: '98%', marginTop: 10}}>
                         <View style={itemsViewStyle.menuComponent}>
                         <Menu
                             posActionItemList={[]}
@@ -144,6 +144,24 @@ export default function ItemsView() {
                                     source={tableIcon} 
                                     style={{width: 35, height: 35, position: 'absolute', left: 30}}
                                 />
+                            </View>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity 
+                            style={{paddingBlock: 10, marginBottom: 5, marginTop: -53, backgroundColor: '#333333', width: '90%', borderRadius: 10, marginInline: 'auto'}}
+                            onPress={() => router.navigate('/(tabs)/(items)/newCategory')}
+                        >
+                            <View style={{flexDirection: 'row-reverse', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
+
+                                <Text style={{color: 'white', textAlign: 'center', fontSize: 18}}>Adicionar Categoria</Text>
+
+                                <Icons name="archive" size={25} style={{color: 'white', position: 'absolute', right: 30}}/>
+
+                                {/* <Image 
+                                    source={tableIcon} 
+                                    style={{width: 35, height: 35, position: 'absolute', left: 30}}
+                                /> */}
                             </View>
                         </TouchableOpacity>
                     </View>

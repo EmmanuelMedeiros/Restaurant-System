@@ -9,6 +9,8 @@ import { IApiResponse } from "@/interface/IApiResponse";
 
 import { useFonts } from 'expo-font'
 
+import "@expo/metro-runtime";
+
 const blackboardBG = require('../assets/images/blackboard_bg.png')
 
 export default function RootLayout() {

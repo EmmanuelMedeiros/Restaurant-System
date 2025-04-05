@@ -1,4 +1,4 @@
-import { router } from "expo-router"
+import { router, useFocusEffect } from "expo-router"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import { BackHandler } from "react-native";
@@ -6,7 +6,7 @@ import { BackHandler } from "react-native";
 import Icons from '@expo/vector-icons/Feather'
 import { IItemCategory } from "@/interface/IItemCategory";
 import { IItem } from "@/interface/IItem";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { IOrderItem } from "@/interface/IOrderItem";
 import UserContext from "@/context/user.context";
 import { IApiResponse } from "@/interface/IApiResponse";
@@ -84,9 +84,13 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
         }
     }
 
-    useEffect(() => {
+    useFocusEffect(
+      useCallback(() => {
+          getItemCategory();
+      }, [])
+    )
 
-        getItemCategory();
+    useEffect(() => {
 
         BackHandler.addEventListener("hardwareBackPress", () => {
             if(goBackFunction) {

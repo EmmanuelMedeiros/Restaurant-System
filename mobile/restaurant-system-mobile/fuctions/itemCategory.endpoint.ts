@@ -26,5 +26,27 @@ export class ItemCategoryEndpoint {
             return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
         });
         return apiResult;
+    };
+
+    async create(categoryTitle: string, jwtToken: string|null): Promise<IApiResponse> {
+                
+        let apiResponse: IApiResponse;
+
+        const newCategory = {title: categoryTitle}
+
+        const apiResult = await axios.post(`${this.apiUrl}/item-category`, newCategory,
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
+        .then((response) => {
+            return apiResponse = {data: response.data, statusCode: 200}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
+        return apiResult;
     }
 }
