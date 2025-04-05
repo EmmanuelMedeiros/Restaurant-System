@@ -15,26 +15,6 @@ import { IApiResponse } from "@/interface/IApiResponse";
 import { ItemCategoryEndpoint } from "@/fuctions/itemCategory.endpoint";
 import UserContext from "@/context/user.context";
 
-const itemList: IItem[] = [
-    {
-        category: {id: 1, title: 'olá'},
-        createdAt: '2024/02/23',
-        id: 1,
-        name: 'CARNE DE SOL DE PORCO - PRATO COMPLETO',
-        price: 75.50,
-    },
-    {
-        category: {id: 1, title: 'olá'},
-        createdAt: '2024/02/23',
-        id: 1,
-        name: 'CARNE DE SOL DE BOI - PRATO COMPLETO',
-        price: 75.50,
-    },
-];
-
-const menuCategoryList: IItemCategory[] = [
-    {id: 1, title: "ALMOÇO"}, {id: 2, title: "TIRA-GOSTO"}, {id: 3, title: "BEBIDAS"}, {id: 4, title: "GUARNIÇÕES"}
-];
 
 interface EntireMenuComponentProps {
     storedItems: IItem[],
@@ -50,6 +30,25 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
     const itemCategoryEndpoint: ItemCategoryEndpoint = new ItemCategoryEndpoint();
 
     const [itemCategoryToShow, setItemCategoryToShow]   = useState<number>(1);
+    const [menuCategoryList, setMenuCategoryList]     = useState<IItemCategory[]>([]);
+
+    async function getItemCategory() {
+        try{
+            const refreshToken: string|null = await userContext.getRefreshToken();
+            const token = await userContext.generateJwtToken(refreshToken);
+
+            const apiResponse: IApiResponse = await itemCategoryEndpoint.getAll(token);
+            if(apiResponse.statusCode !== 200) {
+                console.log(`Get ALL item categories endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                return
+            } else {
+                setMenuCategoryList(apiResponse.data);
+                return;
+            }
+        }catch(err) {
+            console.log(err)
+        }
+    }
 
     const toggleItemChooseOnHandle = (item: IItem) => {
 
@@ -69,6 +68,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
     }
 
     useEffect(() => {
+        getItemCategory();
         BackHandler.addEventListener("hardwareBackPress", () => {
             const isPossible: boolean = router.canGoBack();
             router.back()
@@ -108,7 +108,7 @@ export default function EntireMenuComponent({storedItems, setStoredItems, setOrd
                         style={entireMenuStyle.menuCategoryList}
                         onPressOut={() => setItemCategoryToShow(element.id)}
                     >
-                        <Text style={itemCategoryToShow == element.id ? {textDecorationLine: 'underline', fontWeight: 'bold'} : null}>{element.title}</Text>
+                        <Text style={itemCategoryToShow == element.id ? {textDecorationLine: 'underline', fontWeight: 'bold'} : null}>{element.title.toUpperCase()}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
