@@ -14,10 +14,14 @@ export class Table implements ITable {
     @Column({type: 'enum', enum: TableStatus})
     public readonly status: TableStatus
 
-	constructor(id: number, name: number, status: TableStatus) {
+    @Column({ type: "boolean", default: false})
+    public readonly deleted: boolean;
+
+	constructor(id: number, name: number, status: TableStatus, deleted: boolean) {
 		this.id = id;
 		this.name = name;
-        this.status = status
+        this.status = status;
+        this.deleted = deleted;
 	}
 
 }

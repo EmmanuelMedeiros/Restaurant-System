@@ -7,5 +7,6 @@ export interface IItem {
     price: number,
     category: ItemCategory,
     createdAt: string,
-    updatedAt?: string
+    updatedAt?: string,
+    deleted?: boolean
 }

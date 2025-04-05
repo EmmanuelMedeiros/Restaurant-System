@@ -40,6 +40,9 @@ export class ItemService {
         const itemList: Item[]|null = await this.itemRepository.find({
             relations: {
                 category: true
+            },
+            where: {
+                deleted: true
             }
         });
         return itemList;
@@ -60,7 +63,7 @@ export class ItemService {
     async deleteOne(itemToDelete: Item) {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
         try {
-            await this.itemRepository.delete(itemToDelete.id);
+            await this.itemRepository.update(itemToDelete.id, {deleted: true});
             return endMessage = {data: itemToDelete, status: HttpStatus.OK};
         }catch(err) {
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};

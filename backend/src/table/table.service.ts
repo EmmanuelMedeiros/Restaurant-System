@@ -43,7 +43,8 @@ export class TableService {
             const insertedTable: Table = new Table(
                 table.raw[0].id,
                 maxTableName[0].max + 1,
-                TableStatus.SLEEPING
+                TableStatus.SLEEPING,
+                false
             )
             return endMessage = {data: insertedTable, status: HttpStatus.CREATED};
         }catch(err){
@@ -52,7 +53,7 @@ export class TableService {
     }
 
     async findAll(): Promise<Table[]|null> {
-        const tableList: Table[] = await this.tableRepository.find();
+        const tableList: Table[] = await this.tableRepository.find({where: {deleted: false}});
         return tableList;
     }
 
@@ -67,8 +68,9 @@ export class TableService {
 
     async delete(table: Table) {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK}
+
         try {
-            await this.tableRepository.delete(table.id);
+            await this.tableRepository.update(table.id, {deleted: true});
             endMessage = {data: table, status: HttpStatus.OK};
         }catch(err) {
             endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};

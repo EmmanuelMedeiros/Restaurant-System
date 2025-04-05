@@ -30,7 +30,10 @@ export class Item implements IItem {
     @JoinColumn({name: 'itemCategoryUUID'})
     public readonly category: ItemCategory;
 
-	constructor(category: ItemCategory, id: number, name: string, price: number, createdAt: string, updatedAt?: string, description?: string) {
+    @Column({ "type": "boolean", default: false })
+    public readonly deleted?: boolean;
+
+	constructor(category: ItemCategory, id: number, name: string, price: number, createdAt: string, updatedAt?: string, description?: string, deleted?: boolean) {
 		this.category = category;
 		this.description = description;
 		this.id = id;
@@ -38,7 +41,8 @@ export class Item implements IItem {
 		this.price = price;
         this.createdAt = createdAt,
         this.updatedAt = updatedAt,
-        this.description = description
+        this.description = description,
+        this.deleted = deleted
 	}
 
 }

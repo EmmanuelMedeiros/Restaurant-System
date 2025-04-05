@@ -28,8 +28,6 @@ export class OrderService {
 
     async create(createOrderDTO: CreateOrderDTO): Promise<EndMessage> {
 
-        console.log(createOrderDTO)
-
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -40,6 +38,7 @@ export class OrderService {
                 createOrderDTO.table.id,
                 createOrderDTO.table.name,
                 TableStatus.BUSY,
+                false
             )
             const order: Order = new Order(
                 createOrderDTO.createdAt,
