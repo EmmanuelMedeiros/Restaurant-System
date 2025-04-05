@@ -6,7 +6,7 @@ POST {{baseUrl}}/item-category
 Content-Type: application/json
 
 {
-    "title": "Tira-Gosto"
+    "title": "Almoço"
 }
 
 ### GET ALL ITEM CATEGORY 
@@ -23,7 +23,7 @@ PUT {{baseUrl}}/item-category/2
 Content-Type: application/json
 
 {
-    "title": "Tira-gostinho"
+    "title": "Almoço"
 }
 
 ### DELETE SPECIFIC ITEM CATEGORY

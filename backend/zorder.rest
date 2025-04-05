@@ -4,14 +4,15 @@
 
 POST {{baseUrl}}/order
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NzMxZGJhZi1hYzlkLTQxNGItYTJlOS03OTdjMTgzMzc1ZTQiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MzgxNDEyMCwiZXhwIjoxNzQzODE3NzIwLCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.KJH73fHaHErvMk4gbkzATcp86pJjMNAj3nbEI4uYl8A
 
 {
 
     "table": {
-        "id": 5
+        "id": 1
     },
     "waiter": {
-        "uuid": "dfd36b3b-f40b-42d9-ab51-aa1a8460cea9"
+        "uuid": "5731dbaf-ac9d-414b-a2e9-797c183375e4"
     },
     "orderItemList": [
         {

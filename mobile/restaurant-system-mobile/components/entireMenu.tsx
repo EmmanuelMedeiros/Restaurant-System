@@ -3,7 +3,7 @@ import { IItem } from "../interface/IItem";
 
 import Icons from '@expo/vector-icons/Feather'
 import { IItemCategory } from "../interface/IItemCategory";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { OrderCreationStates } from "../enum/OrderCreationStates";
 
 import { BackHandler } from "react-native";
@@ -12,6 +12,8 @@ import { Link, router } from "expo-router";
 import { ITable } from "../interface/ITable";
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { IApiResponse } from "@/interface/IApiResponse";
+import { ItemCategoryEndpoint } from "@/fuctions/itemCategory.endpoint";
+import UserContext from "@/context/user.context";
 
 const itemList: IItem[] = [
     {
@@ -43,6 +45,9 @@ interface EntireMenuComponentProps {
 }
 
 export default function EntireMenuComponent({storedItems, setStoredItems, setOrderState, currentTable, itemsList}: EntireMenuComponentProps) {
+
+    const userContext = useContext(UserContext);
+    const itemCategoryEndpoint: ItemCategoryEndpoint = new ItemCategoryEndpoint();
 
     const [itemCategoryToShow, setItemCategoryToShow]   = useState<number>(1);
 

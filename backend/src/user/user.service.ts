@@ -30,6 +30,8 @@ export class UserService {
                 role: true
             }
         })
+        const allUsers = await this.userRepository.find()
+        console.log(allUsers)
         return user;
     }
 

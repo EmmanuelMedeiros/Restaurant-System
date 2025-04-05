@@ -14,7 +14,9 @@ export class OrderEndpoint {
 
     async create(order: CreateOrderDTO, jwtToken: string|null): Promise<IApiResponse> {
         
+        console.log(order)
         let apiResponse: IApiResponse;
+        
 
         const apiResult = await axios.post(`${this.apiUrl}/order`, order, 
             {

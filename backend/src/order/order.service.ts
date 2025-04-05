@@ -27,6 +27,9 @@ export class OrderService {
     ) {};
 
     async create(createOrderDTO: CreateOrderDTO): Promise<EndMessage> {
+
+        console.log(createOrderDTO)
+
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();

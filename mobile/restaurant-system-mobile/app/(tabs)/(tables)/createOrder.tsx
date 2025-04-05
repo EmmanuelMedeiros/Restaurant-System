@@ -81,6 +81,8 @@ export default function CreateOrder() {
     async function createOrder() {
         if(currentTable) {
             
+            console.log("OLÁ")
+
             const refreshToken: string|null = await userContext.getRefreshToken();
             const token = await userContext.generateJwtToken(refreshToken);
 

@@ -6,8 +6,11 @@ import { BackHandler } from "react-native";
 import Icons from '@expo/vector-icons/Feather'
 import { IItemCategory } from "@/interface/IItemCategory";
 import { IItem } from "@/interface/IItem";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IOrderItem } from "@/interface/IOrderItem";
+import UserContext from "@/context/user.context";
+import { IApiResponse } from "@/interface/IApiResponse";
+import { ItemCategoryEndpoint } from "@/fuctions/itemCategory.endpoint";
 
 const menuCategoryList: IItemCategory[] = [
     {id: 0, title: "TODOS"}, {id: 1, title: "ALMOÇO"}, {id: 2, title: "TIRA-GOSTO"}, {id: 3, title: "BEBIDAS"}, {id: 4, title: "GUARNIÇÕES"}
@@ -31,8 +34,12 @@ interface MenuProps {
 
 export default function Menu({bottomButton, title, subtitle, posActionItemList ,itemPressableIcon, pressableIconFunction, itemList, orderItemList, setOrderItemList, showHeader, goBackFunction, isQuantityChangeable}: MenuProps) {
 
+    const userContext = useContext(UserContext);
+    const itemCategoryEndpoint: ItemCategoryEndpoint = new ItemCategoryEndpoint();
+
     const [itemCategoryToShow, setItemCategoryToShow] = useState<number>(0);
-    
+    const [menuCategoryList, setMenuCategoryList]     = useState<IItemCategory[]>([]);
+
     const increaseItemQuantity = (index: number) => {
         if(orderItemList && setOrderItemList) {
             const newArray = orderItemList.map((element, pos) => {
@@ -57,8 +64,30 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
             setOrderItemList(newArray);
         }
         return;
+    };
+
+    async function getItemCategory() {
+        try{
+            const refreshToken: string|null = await userContext.getRefreshToken();
+            const token = await userContext.generateJwtToken(refreshToken);
+
+            const apiResponse: IApiResponse = await itemCategoryEndpoint.getAll(token);
+            if(apiResponse.statusCode !== 200) {
+                console.log(`Get ALL item categories endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                return
+            } else {
+                setMenuCategoryList(apiResponse.data);
+                return;
+            }
+        }catch(err) {
+            console.log(err)
+        }
     }
+
     useEffect(() => {
+
+        getItemCategory();
+
         BackHandler.addEventListener("hardwareBackPress", () => {
             if(goBackFunction) {
                 goBackFunction();
@@ -67,7 +96,7 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
             router.back();
             return true;
         });
-    })
+    }, [])
 
     return(
         <View style={entireMenuStyle.container}>
@@ -115,7 +144,7 @@ export default function Menu({bottomButton, title, subtitle, posActionItemList ,
                                 style={entireMenuStyle.menuCategoryList}
                                 onPressOut={() => setItemCategoryToShow(element.id)}
                             >
-                                <Text style={itemCategoryToShow === element.id ? {fontWeight: 'bold', textDecorationLine: 'underline'} : null }>{element.title}</Text>
+                                <Text style={itemCategoryToShow === element.id ? {fontWeight: 'bold', textDecorationLine: 'underline'} : null }>{element.title.toUpperCase()}</Text>
                             </TouchableOpacity>
                         ))}
                     </ScrollView>
