@@ -27,6 +27,8 @@ export default function ItemsView() {
 
     async function getAllItems() {
 
+        console.log("Olá")
+
         const refreshToken: string|null = await userContext.getRefreshToken();
         const token = await userContext.generateJwtToken(refreshToken);
         const apiResponse: IApiResponse = await itemEndpoint.getAll(token);

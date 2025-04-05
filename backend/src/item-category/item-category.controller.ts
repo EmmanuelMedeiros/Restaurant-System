@@ -25,7 +25,7 @@ export class ItemCategoryController {
     async findAll() {
         const itemCategoriesList: ItemCategory[]|null = await this.itemCategoryService.findAll();
         if(!itemCategoriesList || itemCategoriesList.length < 1) {
-            throw new HttpException("No user found", HttpStatus.NOT_FOUND);
+            throw new HttpException("No categories found", HttpStatus.NOT_FOUND);
         }
         return itemCategoriesList;
     }

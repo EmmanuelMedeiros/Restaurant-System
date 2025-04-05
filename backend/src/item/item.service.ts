@@ -42,7 +42,7 @@ export class ItemService {
                 category: true
             },
             where: {
-                deleted: true
+                deleted: false
             }
         });
         return itemList;

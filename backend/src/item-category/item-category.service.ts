@@ -56,7 +56,7 @@ export class ItemCategoryService {
     
 
     async findAll(): Promise<ItemCategory[]|null> {
-        const itemCategoriesList: ItemCategory[] = await this.itemCategoryRepository.find({where: {deleted: true}});
+        const itemCategoriesList: ItemCategory[] = await this.itemCategoryRepository.find({where: {deleted: false}});
         return itemCategoriesList;
     }
 

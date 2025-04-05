@@ -44,9 +44,6 @@ export class ItemController {
     @Get()
     async findAll() {
         const itemList: Item[]|null = await this.itemService.findAll();
-        if(!itemList || itemList.length < 1) {
-            throw new HttpException("No item found in database", HttpStatus.BAD_REQUEST);
-        }
         return itemList
     }
 
