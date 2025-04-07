@@ -66,6 +66,8 @@ export default function TableCard({setShow, table}: TableCardProps) {
                     <View style={{height: '30%', width: '130%', marginRight: 20}}>
                         <ButtonToAction
                             buttonTitle="Fechar Conta"
+                            onPress={() => router.push({pathname: '/(tabs)/(tables)/finishOrder', params: {tableID: table?.id, tableName: table?.name}})}
+                            
                             textStyle={
                                 {
                                     color: closeOrderBGColor === "#255247" ? '#C1C1C1' : 'rgba(193, 193, 193, .4)',

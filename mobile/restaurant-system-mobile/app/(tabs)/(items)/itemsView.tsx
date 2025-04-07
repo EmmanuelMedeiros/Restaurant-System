@@ -66,19 +66,23 @@ export default function ItemsView() {
   useFocusEffect(
     useCallback(() => {
       getAllItems();
+        
+
     }, [])
   )
 
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-        if(isEditing) {
-            setIsEditing(false);
-        } else {
-            router.back();
-        }
-        return true;
-    })
-  })
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (isEditing) {
+        setIsEditing(false);
+      } else {
+        router.back();
+      }
+      return true;
+    });
+  
+    return () => backHandler.remove();
+  });
 
   useEffect(() => {
     if(!isEditing) {

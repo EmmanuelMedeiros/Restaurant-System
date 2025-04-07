@@ -6,6 +6,7 @@ export default function RootLayout() {
       <Stack.Screen name="index"        options={{animation: 'none'}}/>
       <Stack.Screen name="createOrder"  options={{animation: 'none'}}/>
       <Stack.Screen name="tableOrder"   options={{animation: 'none'}}/>
+      <Stack.Screen name="finishOrder"   options={{animation: 'none'}}/>
     </Stack>
   )
 }

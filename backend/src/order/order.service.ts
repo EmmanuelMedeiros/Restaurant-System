@@ -114,7 +114,7 @@ export class OrderService {
     async findOrderItems(order: Order) {
         const orderItems: OrderItem[]|null = await this.orderItemRepository.find({
             where: {
-                order: order
+                order: order,
             },
             relations: {
                 item: {
