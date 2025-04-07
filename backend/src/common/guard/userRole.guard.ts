@@ -23,7 +23,7 @@ export class UserRoleGuard implements CanActivate {
             };
             return false;
         } catch(err) {
-            console.log(err);
+            console.log("Could not get user role");
             return false;
         }
     }

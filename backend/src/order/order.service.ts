@@ -133,12 +133,14 @@ export class OrderService {
         const finishedAtMoment: string = moment().format("YYYY/MM/DD hh:mm:ss")
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
         try {
-            await queryRunner.manager.update(Order, order.uuid, {
+            
+/*             await queryRunner.manager.update(Order, order.uuid, {
                 finishedAt: finishedAtMoment
             });
             await queryRunner.manager.update(Table, order.table, {
                 status: TableStatus.SLEEPING
-            });
+            }); */
+            console.log(orderItems)
             await queryRunner.commitTransaction();
             const sendBackOrder: Order = {
                 createdAt: order.createdAt,
@@ -191,6 +193,17 @@ export class OrderService {
             return endMessage = {data: orderItemList, status: HttpStatus.OK};
         }catch(err) {
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        }
+    };
+
+    async printBilling(orderItems: OrderItem[]) {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        
+        try {
+            
+        }catch(err) {
+            console.log(err);
+            return endMessage = {status: HttpStatus.BAD_REQUEST, data: err.toString()}
         }
     }
 
