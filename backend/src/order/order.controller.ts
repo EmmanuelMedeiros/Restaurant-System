@@ -144,6 +144,29 @@ export class OrderController {
         return serviceResponse;
     }
 
+    @Get("/print/:uuid")
+    async printOrder(@Param("uuid") uuid:string) {
+        const order: Order|null = await this.orderService.findOne(uuid)
+        if(!order) {
+            throw new HttpException("No order found for this UUID", HttpStatus.NOT_FOUND);
+        };
+        if(order.finishedAt) {
+            throw new HttpException("This order is already finished", HttpStatus.BAD_REQUEST);
+        };
+        if(order.table.status !== TableStatus.BUSY) {
+            throw new HttpException("This table has no active order", HttpStatus.BAD_REQUEST);
+        };
+        const orderItems: OrderItem[]|null = await this.orderService.findOrderItems(order);
+        if(!orderItems ||orderItems.length < 1) {
+            throw new HttpException("No order items found!", HttpStatus.NOT_FOUND);
+        };
+        const serviceResponse: EndMessage = await this.orderService.printBilling(orderItems);
+        if(serviceResponse.status !== HttpStatus.OK) {
+            throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
+        }
+        return serviceResponse;
+    }
+
     @Put('/update_item/:uuid')
     async manipulateOrderItem(@Param("uuid") uuid:string, @Body() createOrderItemDTO: CreateOrderItemDTO[]) {
         const fetchedOrder: Order|null = await this.orderService.findOne(uuid);

@@ -14,6 +14,9 @@ import { Table } from 'src/table/entity/table.entity';
 import { CreateOrderItemDTO } from './dto/create-orderItem.dto';
 import { Item } from 'src/item/entity/item.entity';
 
+const escpos = require('escpos');
+escpos.Network = require('escpos-network');
+
 @Injectable()
 export class OrderService {
     constructor(
@@ -133,13 +136,13 @@ export class OrderService {
         const finishedAtMoment: string = moment().format("YYYY/MM/DD hh:mm:ss")
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
         try {
-            
-/*             await queryRunner.manager.update(Order, order.uuid, {
+            this.printBilling(orderItems);
+            await queryRunner.manager.update(Order, order.uuid, {
                 finishedAt: finishedAtMoment
             });
             await queryRunner.manager.update(Table, order.table, {
                 status: TableStatus.SLEEPING
-            }); */
+            });
             console.log(orderItems)
             await queryRunner.commitTransaction();
             const sendBackOrder: Order = {
@@ -198,8 +201,52 @@ export class OrderService {
 
     async printBilling(orderItems: OrderItem[]) {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
-        
+
+    
         try {
+            const device = new escpos.Network('192.168.0.11', 9100); // Replace with your printer's IP
+            const printer = new escpos.Printer(device);
+
+            device.open(function (error) {
+                if (error) {
+                  console.error("Connection error:", error);
+                  return endMessage = {data: error.toString(), status: HttpStatus.BAD_REQUEST};
+                };
+
+                let lines: string[] = [];
+                let billingPrice: number = 0;
+                orderItems.forEach((element) => {
+                    lines.push(`  ${element.quantity} ${element.item.name}`.padEnd(20, ' '));
+                    billingPrice += (element.item.price * element.quantity);
+                });
+
+                lines.push(`      SUBTOTAL:     ${billingPrice.toFixed(2)}`);
+                lines.push(`                10% +${(billingPrice * .1).toFixed(2)}`);
+                lines.push(`      TOTAL:        ${(billingPrice + (billingPrice * 1)).toFixed(2)}`);
+
+/*                 const lines = [
+                    `2 ItemA ----- R$  80.00`,
+                    `1 ItemB ----- R$  45.00`,
+                    ``,
+                    `      SUBTOTAL:     125.00`,
+                    `                10% +12.50`,
+                    `        TOTAL:   R$ 137,50`
+                  ]; */
+              
+                printer
+                  .align('lt')
+                  .style('b')
+                  .size(.5, .5);
+
+                lines.forEach(line => printer.text(line));
+
+                printer.feed(2)
+                .cut()
+                .close();
+                
+            });
+
+            return endMessage = {data: `Sucess on printing order`, status: HttpStatus.OK};
             
         }catch(err) {
             console.log(err);
