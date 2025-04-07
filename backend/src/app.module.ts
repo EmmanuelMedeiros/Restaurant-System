@@ -21,8 +21,9 @@ import { JWTVerify } from './common/middleware/jwtVerify.middleware';
       username: "postgres",//process.env.DB_USERNAME,
       password: "admin",//process.env.DB_PASSWORD,
       database: "restaurant_system",//process.env.DB_NAME,
-      synchronize: true,
-      autoLoadEntities: true
+      autoLoadEntities: true,
+      migrations: [`${__dirname}/migration/{.ts,*.js}`],
+      migrationsRun: true
     }
   ) ,TableModule, ItemCategoryModule, ItemModule, UserModule, OrderItemModule, OrderModule, AuthorizationModule],
   controllers: [AppController],

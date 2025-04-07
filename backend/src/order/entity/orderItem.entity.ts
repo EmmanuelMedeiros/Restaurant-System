@@ -3,7 +3,7 @@ import { Item } from "src/item/entity/item.entity";
 import { Order } from "./order.entity";
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 
-@Entity()
+@Entity('orderItem')
 export class OrderItem implements IOrderItem {
     @PrimaryColumn()
     public readonly uuid: string;
