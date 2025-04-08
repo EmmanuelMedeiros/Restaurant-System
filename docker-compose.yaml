@@ -1,0 +1,33 @@
+services:
+
+  postgresDB:
+    image: postgres:17
+    volumes:
+      - restaurantVolume:/var/lib/postgresql/data
+    ports:
+      - 2345:5432
+    env_file:
+      - ./db.env
+    networks:
+      - restaurantNewtork
+    container_name: postgresDB
+
+  nestjs:
+    build: ./backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgresDB
+    networks:
+      - restaurantNewtork 
+    env_file:
+      - ./backend/.env
+    
+
+
+networks:
+  restaurantNewtork:
+    driver: bridge
+
+volumes:
+  restaurantVolume: {}

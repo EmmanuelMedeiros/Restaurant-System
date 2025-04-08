@@ -17,7 +17,7 @@ import { JWTVerify } from './common/middleware/jwtVerify.middleware';
     {
       type: 'postgres',
       host: "localhost",//process.env.DB_HOST,
-      port: 5432,//Number(process.env.DB_PORT),
+      port: 2345,//Number(process.env.DB_PORT),
       username: "postgres",//process.env.DB_USERNAME,
       password: "admin",//process.env.DB_PASSWORD,
       database: "restaurant_system",//process.env.DB_NAME,
