@@ -7,6 +7,7 @@ let setRole: React.Dispatch<React.SetStateAction<UserRole | undefined>> = () => 
 let saveRefreshToken: (refreshToken: string) => Promise<void> = async () => {};
 let getRefreshToken: () => Promise<string|null> = async () => {return null};
 let jwtToken: string|undefined;
+let setJwtToken: React.Dispatch<React.SetStateAction<string | undefined>> = async () => {};
 let generateJwtToken: (refreshToken: string|null) => Promise<string|null> = async (refreshToken: string|null) => {return null};
 
 const UserContext = createContext(
@@ -16,6 +17,7 @@ const UserContext = createContext(
         saveRefreshToken,
         getRefreshToken,
         jwtToken,
+        setJwtToken,
         generateJwtToken
     }
 )
@@ -23,7 +25,8 @@ const UserContext = createContext(
 export function UserContextProvider(props: React.PropsWithChildren) {
 
     const [role, setRole] = useState<UserRole|undefined>();
-    let jwtToken: string|undefined = undefined;
+    const [jwtToken, setJwtToken] = useState<string>();
+
 
     const authEndpoint: AuthEndpoint = new AuthEndpoint();
 
@@ -55,6 +58,7 @@ export function UserContextProvider(props: React.PropsWithChildren) {
         saveRefreshToken,
         getRefreshToken,
         jwtToken,
+        setJwtToken,
         generateJwtToken
     }
 

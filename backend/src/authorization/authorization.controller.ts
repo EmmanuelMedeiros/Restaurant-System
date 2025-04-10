@@ -34,4 +34,11 @@ export class AuthorizationController {
         }
         return serviceResponse;
     }
+
+
+    @Post("/verify")
+    async verifyToken(@Body() jwtToken: {jwtToken: string}) {
+        const serviceResponse: EndMessage = await this.authService.verifyTokenValidation(jwtToken);
+        return serviceResponse;
+    }
 }

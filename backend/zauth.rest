@@ -15,5 +15,18 @@ POST {{baseUrl}}/auth/refresh
 Content-Type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNGMyMmEzZC1jNDE1LTRiZmUtODA3ZC0wYTNmZDNkZjRmMTMiLCJpYXQiOjE3Mzk1MzQ3NDgsImV4cCI6MTczOTcwNzU0OCwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIn0.G_plPU9d2CVLJ0V98qEesP4973ZCG3MSfX4pbXjSa7Y"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJpYXQiOjE3NDQyOTc2NjUsImV4cCI6MTc0NDQ3MDQ2NSwiYXVkIjoibG9jYWxob3N0IiwiaXNzIjoibG9jYWxob3N0In0.F3ULU7Dm3sJJM5hW_nsG1tn9hikndtYkBmfjZTVmqzI"
+}
+
+
+###
+
+
+### VERIFY TOKEN ###
+
+POST {{baseUrl}}/auth/verify
+Content-Type: application/json
+
+{
+    "jwtToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDI4Njk5MywiZXhwIjoxNzQ0MjkwNTkzLCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.ctUtJYSmSfu_COXfMQ9gpSFB3vcMlGGCxn61iBAMyw8"
 }

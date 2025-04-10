@@ -31,6 +31,7 @@ export class OrderService {
 
     async create(createOrderDTO: CreateOrderDTO): Promise<EndMessage> {
 
+
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -64,6 +65,7 @@ export class OrderService {
             return endMessage = {data: order, status: HttpStatus.CREATED};
         }catch(err) {
             await queryRunner.rollbackTransaction();
+            console.log(err)
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
     }

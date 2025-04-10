@@ -128,16 +128,16 @@ export default function FinishOrder() {
                     <Text style={{textAlign: 'center', fontSize: 18, fontWeight: 700, marginBottom: 10}}>SOMATÓRIA:</Text>
 
                     <Text style={{color: '151515', fontSize: 18, textAlign: 'right'}}>
-                        {bill}
+                        {bill.toFixed(2)}
                     </Text>
                     <Text style={{color: '151515', fontSize: 18, textAlign: 'right'}}>
-                        + {bill * .1}
+                    <Text style={{fontSize: 15}} >10%</Text> +  { (bill * .1 ).toFixed(2)}
                     </Text>
                     <Text style={{textAlign: 'right', marginTop: -15}}>
                         _________
                     </Text>
                     <Text style={{color: '151515', fontSize: 20, textAlign: 'right'}}>
-                        TOTAL: R${bill + (bill * .1)}
+                        TOTAL: R${( bill + (bill * .1)).toFixed(2) }
                     </Text>
 
                 </View>

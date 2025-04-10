@@ -100,7 +100,7 @@ export default function CreateOrder() {
                 setOrderReady(false);  
                 return;
             }
-            router.replace({pathname: "/(tabs)/(tables)/tableOrder", params: {tableID: tableID}})
+            router.replace({pathname: "/(tabs)/(tables)/tableOrder", params: {tableID: tableID, tableName: currentTable.name}})
             return;
         }
     };

@@ -3,13 +3,38 @@ import { IApiResponse } from "@/interface/IApiResponse";
 import axios from "axios";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserContext from "@/context/user.context";
+import { useContext } from "react";
 
 export class AuthEndpoint {
-    private apiUrl: string|undefined
+
+    private apiUrl: string|undefined;
+    private userContext = useContext(UserContext);
 
     constructor() {
         this.apiUrl = process.env.EXPO_PUBLIC_API_URL;
     };
+
+    async verifyJWTToken(jwtToken: string): Promise<boolean> {
+
+        let apiResponse: IApiResponse;
+
+        const apiResult: IApiResponse = await axios.post(`${this.apiUrl}/auth`, {
+            jwtToken: jwtToken
+        })
+        .then((response) => {
+            return apiResponse = {data: response.data.data, statusCode: response.data.status}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
+
+        if(apiResult.statusCode !== 200) {
+            return false;
+        }
+
+        return true;
+    }
 
     async authenticate(userToAuthenticate: AuthUserDTO): Promise<IApiResponse> {
         
@@ -42,6 +67,7 @@ export class AuthEndpoint {
         });
 
         if(apiResult.statusCode === 200) {
+            this.userContext.setJwtToken(apiResult.data.newJWTToken);
             return apiResult.data.newJWTToken;
         } else {
             return null;

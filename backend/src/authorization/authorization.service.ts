@@ -44,7 +44,17 @@ export class AuthorizationService {
             }catch(err) {
                 return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
             }
+        };
+
+    async verifyTokenValidation(jwtToken: {jwtToken: string}) {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        try {
+            const jwtTokenStillValid = this.jwtService.verify(jwtToken.jwtToken);
+            return endMessage = {data: "Valid JSON", status: HttpStatus.OK};
+        }catch(err) {
+            return endMessage = {data: "Unvalid JSON", status: HttpStatus.UNAUTHORIZED};
         }
+    }
 
     async signJwtToken(sub: string, expiresIn: number, payload?: object) {
         return await this.jwtService.signAsync(

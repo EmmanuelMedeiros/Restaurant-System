@@ -7,6 +7,7 @@ import { ITable } from "@/interface/ITable";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { router, useFocusEffect } from "expo-router";
 import UserContext from "@/context/user.context";
+import { AuthEndpoint } from "@/fuctions/auth.endpoint";
 
 const blackboardBG = require('../../../assets/images/blackboard_bg.png')
 
@@ -15,6 +16,7 @@ export default function TablesScreen() {
     const userContext = useContext(UserContext);
 
     const tablesEndpoint: TablesEndpoint = new TablesEndpoint();
+    const authEndpoint: AuthEndpoint = new AuthEndpoint();
 
     const [openTableCard, setOpenTableCard] = useState<boolean>(false);
     const [selectedTable, setSelectedTable] = useState<ITable>();
@@ -25,15 +27,33 @@ export default function TablesScreen() {
     const [tablesList, setTablesList] = useState<ITable[]>([]);
 
     async function getAllTables() {
-        const refreshToken: string|null = await userContext.getRefreshToken();
-        const token = await userContext.generateJwtToken(refreshToken);
 
-        if(!token) {
-            console.log("Invalid token for getAllTables request (It may be expired)")
+        const storedRefreshToken: string|null = await userContext.getRefreshToken();
+        let jwtToken: string|null = "";
+
+        if(storedRefreshToken) {
+            const verifyJWT: boolean = await authEndpoint.verifyJWTToken(userContext.jwtToken as string);
+
+            if(!verifyJWT) {
+                const refreshToken: string|null = await userContext.getRefreshToken();
+                const token = await userContext.generateJwtToken(refreshToken);
+                jwtToken = token;
+                userContext.setJwtToken(token as string);
+
+                if(!token) {
+                    console.log("Invalid token for getAllTables request (It may be expired)")
+                    router.replace('/(authentication)/login')
+                    return;
+                }
+
+            }
+        } else {
+            console.log("SEM TOKEN")
             router.replace('/(authentication)/login')
             return;
-        }
-        const apiResult: IApiResponse = await tablesEndpoint.getAll(token);
+        };
+
+        const apiResult: IApiResponse = await tablesEndpoint.getAll(jwtToken as string);
         if(apiResult.statusCode != 200) {
             return console.log(apiResult.data);
         };
