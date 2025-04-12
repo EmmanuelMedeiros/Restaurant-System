@@ -10,6 +10,7 @@ import { IApiResponse } from "@/interface/IApiResponse";
 import { useFonts } from 'expo-font'
 
 import "@expo/metro-runtime";
+import { PageContextProvider } from "@/context/page.context";
 
 const blackboardBG = require('../assets/images/blackboard_bg.png')
 
@@ -20,11 +21,13 @@ export default function RootLayout() {
   })
 
   return (
-    <UserContextProvider>
-        <Stack initialRouteName="(tabs)"  screenOptions={{headerShown: false}}>
-            <Stack.Screen name="(authentication)" />
-            <Stack.Screen name="(tabs)"/>
-        </Stack>
-    </UserContextProvider>
+    <PageContextProvider>
+      <UserContextProvider>
+          <Stack initialRouteName="(tabs)"  screenOptions={{headerShown: false}}>
+              <Stack.Screen name="(authentication)" />
+              <Stack.Screen name="(tabs)"/>
+          </Stack>
+      </UserContextProvider>
+    </PageContextProvider>
   )
 }

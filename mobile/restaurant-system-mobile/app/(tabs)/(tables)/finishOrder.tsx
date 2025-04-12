@@ -10,11 +10,14 @@ import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { IApiResponse } from "@/interface/IApiResponse";
 import { OrderEndpoint } from "@/fuctions/order.endpoint";
 import ButtonToAction from "@/components/buttonToAction";
+import Popup from "@/components/popup";
+import PageContext from "@/context/page.context";
 
 export default function FinishOrder() {
 
     
     const userContext = useContext(UserContext);
+    const pageContext = useContext(PageContext);
     const orderEndpoint: OrderEndpoint = new OrderEndpoint();
 
     const [order, setOrder]                             = useState<Pick<IOrder, "uuid"|"createdAt"|"modifiedAt"|"finishedAt">>();
@@ -56,12 +59,55 @@ export default function FinishOrder() {
                     const apiResponse: IApiResponse = await orderEndpoint.getSpecificOrderItems(order.uuid, token)
                     if(apiResponse.statusCode !== 200) {
                         console.log(`get order's items endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
-                        setItemList([])
                         return
                     } else {
-                        setItemList(apiResponse.data);
-                        return;
+                        setItemList(apiResponse.data)
                     }
+                } else {
+                    console.log("No order to fetch!");
+                    return;
+                };
+            }catch(err) {
+                console.log(err)
+            }
+        };
+
+        async function printOrder() {
+            try{
+
+                if(order !== undefined) {
+
+                    const refreshToken: string|null = await userContext.getRefreshToken();
+                    const token = await userContext.generateJwtToken(refreshToken);
+    
+                    const apiResponse: IApiResponse = await orderEndpoint.printOrder(order.uuid, token)
+                    if(apiResponse.statusCode !== 200) {
+                        console.log(`print order's items endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                        return
+                    }
+                } else {
+                    console.log("No order to fetch!");
+                    return;
+                };
+            }catch(err) {
+                console.log(err)
+            }
+        };
+
+        async function finishOrderFunction() {
+            try{
+
+                if(order !== undefined) {
+
+                    const refreshToken: string|null = await userContext.getRefreshToken();
+                    const token = await userContext.generateJwtToken(refreshToken);
+    
+                    const apiResponse: IApiResponse = await orderEndpoint.finishOrder(order.uuid, token)
+                    if(apiResponse.statusCode !== 200) {
+                        console.log(`finish order's items endpoint failed | err: ${JSON.stringify(apiResponse.data)}`);
+                        return
+                    };
+                    router.replace('/(tabs)/(tables)')
                 } else {
                     console.log("No order to fetch!");
                     return;
@@ -95,7 +141,17 @@ export default function FinishOrder() {
 
     useEffect(() => {
         finalBill();
-    }, [itemList])
+    }, [itemList]);
+
+
+    useEffect(() => {
+        console.log("Oláaaa positivo")
+
+        if(pageContext?.isPositive) {
+            finishOrderFunction()
+        }
+    }, [pageContext?.isPositive])
+
 
 
     return(
@@ -143,10 +199,13 @@ export default function FinishOrder() {
                 </View>
 
 
-        
-
                     <View style={{height: '30%', marginTop: 10, padding: 20}}>
                         <ButtonToAction
+                            onPress={() => {
+                                printOrder(),
+                                pageContext?.setShowPopup(true),
+                                pageContext?.setPopupSettings({title: "A impressão foi concluída com sucesso?", buttonTitle: "sim"})
+                            }}
                             buttonTitle="Fechar Conta"
                             textStyle={
                                 {

@@ -1,23 +1,23 @@
 @baseUrl = http://localhost:3000
 
-### CREATE NEW TABLE
+### CREATE NEW TABLE ###
 
 POST {{baseUrl}}/table
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MzgyMTA1NiwiZXhwIjoxNzQzODI0NjU2LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.ymRkQGhfLq1hggQjuSiAy18C4pnTEWPX2pcWXIoNTo0
 
-### GET ONE TABLE
+### GET ONE TABLE ###
 
 GET {{baseUrl}}/table/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDQ3MTY2NCwiZXhwIjoxNzQ0NDc1MjY0LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.sBfMKn5BWW6iW7i6IwtxMnRAG36yYwzLxWaR7hXOLxY
 
-### GET ALL TABLES
+### GET ALL TABLES ###
 
 GET {{baseUrl}}/table
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MzgyMTA1NiwiZXhwIjoxNzQzODI0NjU2LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.ymRkQGhfLq1hggQjuSiAy18C4pnTEWPX2pcWXIoNTo0
-### DELETE ONE TABLE
+### DELETE ONE TABLE ###
 
 DELETE {{baseUrl}}/table/2
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MzgyMTA1NiwiZXhwIjoxNzQzODI0NjU2LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.ymRkQGhfLq1hggQjuSiAy18C4pnTEWPX2pcWXIoNTo0
 
 ### MISSING: DELETE TABLE/ UPDATE TABLE
-

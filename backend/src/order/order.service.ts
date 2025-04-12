@@ -138,7 +138,6 @@ export class OrderService {
         const finishedAtMoment: string = moment().format("YYYY/MM/DD hh:mm:ss")
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
         try {
-            this.printBilling(orderItems);
             await queryRunner.manager.update(Order, order.uuid, {
                 finishedAt: finishedAtMoment
             });
@@ -201,6 +200,12 @@ export class OrderService {
         }
     };
 
+    async formatLine(qty, name, price) {
+        const qtyName = `${qty} ${name}`.padEnd(20, ' ');
+        const priceStr = `R$ ${price.toFixed(2)}`.padStart(10, ' ');
+        return `${qtyName}-----${priceStr}`;
+    }
+
     async printBilling(orderItems: OrderItem[]) {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
 
@@ -208,7 +213,7 @@ export class OrderService {
         try {
             const device = new escpos.Network('192.168.0.11', 9100); // Replace with your printer's IP
             const printer = new escpos.Printer(device);
-
+            
             device.open(function (error) {
                 if (error) {
                   console.error("Connection error:", error);
@@ -218,31 +223,39 @@ export class OrderService {
                 let lines: string[] = [];
                 let billingPrice: number = 0;
                 orderItems.forEach((element) => {
-                    lines.push(`  ${element.quantity} ${element.item.name}`.padEnd(20, ' '));
+
+                    const itemTotal: number = element.quantity * element.item.price;
+                    const quantityAndNameLine: string = `${element.quantity} ${element.item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`.padEnd(10, ' ');
+                    const priceLine:string = `R$ ${itemTotal.toFixed(2)}`.padStart(10, '');
+                    printer.size(.5, .5)
+                    printer.align('lt')
+                    printer.text(`${quantityAndNameLine} ------ ${priceLine}`)
                     billingPrice += (element.item.price * element.quantity);
                 });
 
-                lines.push(`      SUBTOTAL:     ${billingPrice.toFixed(2)}`);
-                lines.push(`                10% +${(billingPrice * .1).toFixed(2)}`);
-                lines.push(`      TOTAL:        ${(billingPrice + (billingPrice * 1)).toFixed(2)}`);
+                printer.align('rt')
 
-/*                 const lines = [
-                    `2 ItemA ----- R$  80.00`,
-                    `1 ItemB ----- R$  45.00`,
-                    ``,
-                    `      SUBTOTAL:     125.00`,
-                    `                10% +12.50`,
-                    `        TOTAL:   R$ 137,50`
-                  ]; */
+                printer.text('');
+                printer.text('');
+                printer.text(`      SUBTOTAL:     ${billingPrice.toFixed(2)}`);
+                printer.text(`                10% +${(billingPrice * .1).toFixed(2)}`);
+                printer.text(`      TOTAL:        ${(billingPrice + (billingPrice * .1)).toFixed(2)}`);
+
+                printer.align('ct')
+                
+                printer.text('')
+                printer.text('')
+                printer.size(.01, .01)
+                printer.text('BAR DO PELADO PONTA GROSSA');
+                printer.text('-------')
+                printer.text('VOLTE SEMPRE!');
+
               
                 printer
-                  .align('lt')
                   .style('b')
-                  .size(.5, .5);
+                  .text(lines);
 
-                lines.forEach(line => printer.text(line));
-
-                printer.feed(2)
+                printer.feed(1)
                 .cut()
                 .close();
                 

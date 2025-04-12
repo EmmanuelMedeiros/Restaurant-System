@@ -46,8 +46,8 @@ GET {{baseUrl}}/order?tableID=2
 
 ### FINISH ORDER 
 
-PUT {{baseUrl}}/order/finish/85eb5e2e-7268-4069-9612-0c9c96d67b93
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDAzNTUzMiwiZXhwIjoxNzQ0MDM5MTMyLCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.rNipJGCLoMPmVDghT3Q9rjMCyZ-J_L_6VkXZKsWXYNQ
+PUT {{baseUrl}}/order/finish/acbb72b3-4e6c-48cc-9773-2c50791f875d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDQxNTQyMCwiZXhwIjoxNzQ0NDE5MDIwLCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.eQX2mvxIcm_oxtNeBJ1qcTzH_0Ch4uGO9S-bJEgBSDQ
 
 ### MANIPULATE ORDER ITEM
 
@@ -66,3 +66,9 @@ Content-Type: application/json
 ### DELETE ORDER
 
 DELETE {{baseUrl}}/order/14182d19-1593-4107-888a-4b4038ef0891
+
+
+### PRINT ORDER ###
+
+GET  {{baseUrl}}/order/print/fa982ced-1b61-47c8-a150-6a3ba0720f28
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDM5NTAwNCwiZXhwIjoxNzQ0Mzk4NjA0LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.RdDIevZrnAERMX4jjynbs6MOunN949aHp-TvKOI02Tk
