@@ -2,7 +2,7 @@ import { IsEmail, IsEmpty, IsEnum, Length } from "class-validator";
 import { Role } from "src/enum/Role";
 import { IUser } from "src/interface/IUser";
 
-import * as bcrypt from 'bcrypt';
+const crypto = require('crypto');
 
 export class CreateUserDTO implements Pick<IUser, "email"|"password"|"role"> {
 
