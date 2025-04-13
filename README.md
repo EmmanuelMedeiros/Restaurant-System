@@ -54,5 +54,4 @@ The result is a system that:
 - **Local Storage** and **Real-Time Syncing** capabilities
 
 ### 🗃️ Database
-PostgreSQL
---- **PostgreSQL**
+- **PostgreSQL**
