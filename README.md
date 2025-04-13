@@ -47,11 +47,12 @@ The result is a system that:
 - **TypeScript**
 - **JWT (JSON Web Token)** for secure authentication
 - **Thermal Printer Integration** with a dedicated print server
-- **PostgreSQL**
 
 ### 📱 Mobile Front End
 - **React Native**
 - **Expo** for native mobile features
 - **Local Storage** and **Real-Time Syncing** capabilities
 
----
+### 🗃️ Database
+PostgreSQL
+--- **PostgreSQL**
