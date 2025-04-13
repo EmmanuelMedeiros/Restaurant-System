@@ -41,6 +41,21 @@ export default function TablesTabs() {
                     }
                 }
             />
+
+            <Tabs.Screen name="(users)"
+                options={
+                    {
+                        title: 'Items',
+                        tabBarShowLabel: false,
+                        tabBarIcon: ({focused}) => focused 
+                            ?
+                                <Icons name="user" size={30} color={'white'} style={{marginTop: 5}}/>
+                            :
+                                <Icons name="user" size={30} color={'#171717'} style={{marginTop: 5}} />
+                    }
+                }
+            />
+
             
         </Tabs>
     )

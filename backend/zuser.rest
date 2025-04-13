@@ -10,12 +10,13 @@ GET {{baseUrl}}/user/e7dbb9e8-0d8a-47dc-8efc-3366993f7bb9
 ### CREATE USER
 
 POST {{baseUrl}}/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDU1ODI4NywiZXhwIjoxNzQ0NTYxODg3LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.4wCnkbCcO_Ia1cacTBDwC2SS4g_bJYMjy9Y1ydbkJa8
 Content-Type: application/json
 
 {
-    "email": "admin@email.com",
-    "password": "adminadmin",
-    "role": "admin"
+    "email": "employeeA@email.com",
+    "password": "employeeA",
+    "role": "waiter"
 }
 
 ### MISSING: DELETE USER/ UPDATE USER/ JWT AUTH

@@ -164,10 +164,6 @@ export default function ItemsView() {
 
                                 <Icons name="archive" size={25} style={{color: 'white', position: 'absolute', right: 30}}/>
 
-                                {/* <Image 
-                                    source={tableIcon} 
-                                    style={{width: 35, height: 35, position: 'absolute', left: 30}}
-                                /> */}
                             </View>
                         </TouchableOpacity>
                     </View>
