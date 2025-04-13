@@ -20,8 +20,6 @@ The result is a system that:
 
 ## ✨ Main Features
 
-### 🔧 Back End
-
 - 🔐 **Authentication System:**  
   Role-based access with two defined roles:  
   - **Admins** have full system control, including printer configuration and user management.  
@@ -33,10 +31,6 @@ The result is a system that:
 - 🧾 **Thermal Printer Integration:**  
   Integrated with **POS thermal printers** through a dedicated print server.  
   Prints customer bills automatically at the end of the order flow — optimizing billing and minimizing errors.
-
----
-
-### 📱 Front End
 
 - 🍽️ **Order by Table:**  
   Waiters can manage and assign orders directly to specific tables, track statuses, and update them in real-time from their mobile devices.
