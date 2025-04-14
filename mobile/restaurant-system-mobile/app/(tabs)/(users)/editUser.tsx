@@ -76,10 +76,13 @@ export default function EditUser() {
             <Text style={editUserStyles.columnText}>Email</Text>
           </View>
 
-            {userList.map((element) => (
+            {userList.map((element, index) => (
               <View>
 
-                <View style={editUserStyles.lineContainer}>
+                <View 
+                  style={editUserStyles.lineContainer}
+                  key={index.toString()}
+                >
                   <Text style={editUserStyles.lineText}>{element.email.substring(0, 10)}...</Text>
 
                   <TouchableOpacity>

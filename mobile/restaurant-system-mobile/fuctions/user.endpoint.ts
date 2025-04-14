@@ -1,3 +1,4 @@
+import CreateUserDTO from "@/dto/createUser.dto";
 import { IApiResponse } from "@/interface/IApiResponse";
 import axios from "axios";
 
@@ -29,4 +30,26 @@ export class UserEndpoint {
 
         return apiResult;
     };
+
+    async create(createUserDTO: CreateUserDTO, jwtToken: string): Promise<IApiResponse> {
+
+        let apiResponse: IApiResponse;
+
+        const apiResult: IApiResponse = await axios.post(`${this.apiUrl}/user`, createUserDTO, 
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }
+        )
+        .then((response) => {
+            return apiResponse = {data: response.data, statusCode: response.status}
+        })
+        .catch((err) => {
+            return apiResponse = {data: err.response.data.message, statusCode: err.response.status};
+        });
+
+        return apiResult;
+
+    }
 }
