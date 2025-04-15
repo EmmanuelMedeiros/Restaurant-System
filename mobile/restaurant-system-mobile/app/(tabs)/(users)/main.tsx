@@ -11,7 +11,10 @@ export default function MainUser() {
     
             <View style={mainUserStyles.buttonsContainer}>
 
-                <TouchableOpacity style={mainUserStyles.touchableOpacityStyle}>
+                <TouchableOpacity 
+                    style={mainUserStyles.touchableOpacityStyle}
+                    onPress={() => router.push('/(tabs)/(users)/createUser')}    
+                >
                     <Text style={{textAlign: 'center', fontFamily: 'inknutAntiqua-regular', color: '#C1C1C1'}}>Adicionar Usuário</Text>
                 </TouchableOpacity>
 
