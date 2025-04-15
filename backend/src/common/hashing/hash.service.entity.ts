@@ -1,5 +1,5 @@
 import { HashContract } from "./abstract-hash.entity";
-import * as bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 
 export class HashService implements HashContract {
     async hash(password: string): Promise<string> {
