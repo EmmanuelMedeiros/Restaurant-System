@@ -24,7 +24,7 @@ import { JWTVerify } from './common/middleware/jwtVerify.middleware';
       synchronize: false,
       migrationsTableName: 'migrations',
       ssl: {
-        rejectUnauthorized: true
+        rejectUnauthorized: false
       }
 
     }
