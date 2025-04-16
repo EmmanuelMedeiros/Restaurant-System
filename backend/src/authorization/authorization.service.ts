@@ -23,11 +23,13 @@ export class AuthorizationService {
 
     async authenticate(authUserDTO: AuthUserDTO): Promise<EndMessage> {
             let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+
             try {
                 const fetchedUserByEmail: User[] = await this.userRepository.findBy({email: authUserDTO.email});
                 if(fetchedUserByEmail.length === 0) {
                     return endMessage = {data: 'Credentials not found in system', status: HttpStatus.BAD_REQUEST};
                 }
+
                 if( !(await this.hashService.compare(fetchedUserByEmail[0].password, authUserDTO.password)) ) {
                     return endMessage = {data: 'Credentials not match', status: HttpStatus.BAD_REQUEST};
                 };

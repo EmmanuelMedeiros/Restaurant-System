@@ -1,15 +1,19 @@
-FROM node:slim
+FROM node:20-slim
 
 WORKDIR /app
 
-COPY package*.json /app
-
+# Copy package files first for better caching
+COPY package*.json ./
 RUN npm install
 
-COPY . /app 
+# Copy the rest of the application
+COPY . .
 
+# Build the application
 RUN npm run build
 
-EXPOSE 3000
+# Cloud Run sets PORT automatically, so we just expose it
+EXPOSE 8080
 
-CMD ["node", "dist/main"]
+# Use a more reliable way to start your application
+CMD ["node", "dist/main.js"]

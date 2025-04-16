@@ -16,16 +16,17 @@ import { JWTVerify } from './common/middleware/jwtVerify.middleware';
   imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(
     {
       type: 'postgres',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      url: 'postgresql://restaurant_system_user:3IBjMANTc5puR3xetF61RZGIPEhuDmMW@dpg-cvv6s59r0fns73a5mc00-a.virginia-postgres.render.com/restaurant_system',
       autoLoadEntities: true,
       migrations: ['dist/migration/**/*.js'],
       migrationsRun: true,
       logging: true,
-      migrationsTableName: 'migrations'
+      synchronize: false,
+      migrationsTableName: 'migrations',
+      ssl: {
+        rejectUnauthorized: true
+      }
+
     }
   ) ,TableModule, ItemCategoryModule, ItemModule, UserModule, OrderItemModule, OrderModule, AuthorizationModule],
   controllers: [AppController],

@@ -1,0 +1,10 @@
+DB_HOST=postgresDB
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=admin
+DB_DATABASE=restaurant_system
+
+
+JWT_SECRET=memel
+JWT_AUDIENCE=localhost
+JWT_TOKEN_ISSUE=localhost
