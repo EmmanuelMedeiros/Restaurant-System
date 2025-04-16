@@ -16,7 +16,7 @@ import { JWTVerify } from './common/middleware/jwtVerify.middleware';
   imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(
     {
       type: 'postgres',
-      url: process.env.DB_URL,
+      url: 'postgresql://restaurant_system_user:3IBjMANTc5puR3xetF61RZGIPEhuDmMW@dpg-cvv6s59r0fns73a5mc00-a/restaurant_system',//process.env.DB_URL,
       autoLoadEntities: true,
       migrations: ['dist/migration/**/*.js'],
       migrationsRun: true,
