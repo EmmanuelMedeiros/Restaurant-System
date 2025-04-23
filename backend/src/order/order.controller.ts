@@ -167,6 +167,13 @@ export class OrderController {
         return serviceResponse;
     }
 
+    @Get('/printer/test')
+    async printerTest() {
+        const printerResponse = await this.printerTest();
+        return printerResponse
+    }
+    
+
     @Put('/update_item/:uuid')
     async manipulateOrderItem(@Param("uuid") uuid:string, @Body() createOrderItemDTO: CreateOrderItemDTO[]) {
         const fetchedOrder: Order|null = await this.orderService.findOne(uuid);
@@ -192,5 +199,4 @@ export class OrderController {
         const currentOrderItems: OrderItem[] = await this.orderService.findOrderItems(fetchedOrder);
         return currentOrderItems;
     }
-    
 }

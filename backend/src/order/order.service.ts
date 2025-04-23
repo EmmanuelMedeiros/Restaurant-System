@@ -12,8 +12,8 @@ import { OrderItem } from './entity/orderItem.entity';
 import { TableStatus } from 'src/enum/TableStatus';
 import { Table } from 'src/table/entity/table.entity';
 import { CreateOrderItemDTO } from './dto/create-orderItem.dto';
-import { Item } from 'src/item/entity/item.entity';
 
+require('dotenv').config();
 const escpos = require('escpos');
 escpos.Network = require('escpos-network');
 
@@ -204,6 +204,34 @@ export class OrderService {
         const qtyName = `${qty} ${name}`.padEnd(20, ' ');
         const priceStr = `R$ ${price.toFixed(2)}`.padStart(10, ' ');
         return `${qtyName}-----${priceStr}`;
+    }
+
+    async testPrinter() {
+        let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
+        const device = new escpos.Network(process.env.PRINTER_IP, 9100); // Replace with your printer's IP
+        const printer = new escpos.Printer(device);
+        try {
+            device.open(function (error) {
+                if (error) {
+                  console.error("Connection error:", error);
+                  return endMessage = {data: error.toString(), status: HttpStatus.BAD_REQUEST};
+                };
+                printer.size(.5, .5);
+                printer.text('IMPRESSORA FUNCIONANDO!');
+                printer
+                  .style('b')
+                printer.feed(1)
+                .cut()
+                .close();
+            })
+            
+            printer.close();
+            return endMessage = {data: `Sucess on printing order`, status: HttpStatus.OK};
+        } catch(err) {
+            printer.close();
+            console.log(err)
+            return endMessage = {data: `fail on printing order: ${err.toString()}`, status: HttpStatus.OK};
+        }
     }
 
     async printBilling(orderItems: OrderItem[]) {
