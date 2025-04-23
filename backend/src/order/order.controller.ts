@@ -169,7 +169,7 @@ export class OrderController {
 
     @Get('/printer/test')
     async printerTest() {
-        const printerResponse = await this.printerTest();
+        const printerResponse = await this.orderService.testPrinter();
         return printerResponse
     }
     
