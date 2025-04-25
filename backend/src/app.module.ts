@@ -16,19 +16,17 @@ import { JWTVerify } from './common/middleware/jwtVerify.middleware';
   imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(
     {
       type: 'postgres',
-      host: 'localhost',
+      host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
-      username: 'postgres',
+      username: process.env.DB_USERNAME,
       database: process.env.DB_DATABASE,
+      password: 'admin',
       autoLoadEntities: true,
       migrations: ['dist/migration/**/*.js'],
       migrationsRun: true,
       logging: true,
       synchronize: false,
       migrationsTableName: 'migrations',
-      ssl: {
-        rejectUnauthorized: false
-      }
 
     }
   ) ,TableModule, ItemCategoryModule, ItemModule, UserModule, OrderItemModule, OrderModule, AuthorizationModule],

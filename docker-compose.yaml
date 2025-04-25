@@ -22,8 +22,6 @@ services:
       - restaurantNewtork 
     env_file:
       - ./backend/.env
-    
-
 
 networks:
   restaurantNewtork:
