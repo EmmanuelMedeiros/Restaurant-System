@@ -15,7 +15,7 @@ services:
   nestjs:
     build: ./backend
     ports:
-      - 3000:3000
+      - 8080:8080
     depends_on:
       - postgresDB
     networks:
