@@ -21,11 +21,11 @@ export default function CreateUser() {
     const authEndpoint: AuthEndpoint = new AuthEndpoint();
     const userEndpoint: UserEndpoint = new UserEndpoint();
 
-    const [userName, setUserName] = useState<string>();
+    const [email, setEmail] = useState<string>();
     const [userPwd, setUserPwd]   = useState<string>();
-    const [userRole, setUserRole] = useState<UserRole>();
+    const [userRole, setUserRole] = useState<{title: UserRole}>();
 
-    async function createUser() {
+    const handleCreateUser = async (): Promise<void> => {
     
     let jwtToken: string|undefined = userContext.jwtToken;
     
@@ -46,13 +46,17 @@ export default function CreateUser() {
 
         const userToCreate: CreateUserDTO = new CreateUserDTO(
             userPwd as string,
-            userRole as UserRole,
-            userName as string
-        )
+            userRole?.title as UserRole,
+            email as string
+        );
+
+        console.log(userToCreate)
     
         const createUser: IApiResponse = await userEndpoint.create(userToCreate, jwtToken as string);
         if(createUser.statusCode !== 201) {
           return console.log("Error while trying to create new user: " + createUser.data);
+        }else {
+            router.back();
         }
     
       }
@@ -78,7 +82,7 @@ export default function CreateUser() {
                                 isNumeric={false}
                                 isPassword={false}
                                 placeholderText="Nome de usuário*"
-                                setInputValue={setUserName}
+                                setInputValue={setEmail}
                                 customFontSize={15}
                             />
                         </View>
@@ -111,7 +115,7 @@ export default function CreateUser() {
 
                         <TouchableOpacity 
                             style={{paddingBlock: 30, marginBottom: -95, backgroundColor: '#255247', width: '100%', borderRadius: 10, marginInline: 'auto', left:0, right:0, position: 'absolute', bottom: 0}}
-                            onPress={() => createUser}
+                            onPress={handleCreateUser}
                         >
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 20, position: 'relative'}}>
 

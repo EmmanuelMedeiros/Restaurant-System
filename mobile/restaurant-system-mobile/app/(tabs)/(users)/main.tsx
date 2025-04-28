@@ -3,6 +3,10 @@ import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
 
 const blackboardBG = require('../../../assets/images/blackboard_bg.png')
 
+const onHandleLogout = () => {
+
+};
+
 export default function MainUser() {
     return(
         <SafeAreaView style={{flex: 1}}>
@@ -23,6 +27,13 @@ export default function MainUser() {
                     onPress={() => router.push('/(tabs)/(users)/editUser')}
                 >
                     <Text style={{textAlign: 'center', fontFamily: 'inknutAntiqua-regular', color: '#C1C1C1'}}>Editar Usuário</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={mainUserStyles.touchableOpacityStyle}
+                    onPress={onHandleLogout}
+                >
+                    <Text style={{textAlign: 'center', fontFamily: 'inknutAntiqua-regular', color: '#C1C1C1'}}>Sair da conta</Text>
                 </TouchableOpacity>
 
             </View>
