@@ -10,7 +10,6 @@ import Icons from '@expo/vector-icons/Feather'
 import ProjectSelectInput from "@/components/projectSelectInput";
 import InputComponent from "@/components/inputComponent";
 
-import Constants from 'expo-constants';
 import { ItemEndpoint } from "@/fuctions/item.endpoint";
 import { CreateItemDTO } from "@/dto/create-item.dto";
 
@@ -34,6 +33,7 @@ export default function NewItem() {
         const apiResponse: IApiResponse = await itemCategoryEndpoint.getAll(token);
         if(apiResponse.statusCode !== 200) {
             console.log("Erro em getAllCategories endpoint: " + apiResponse.data);
+            setAllCategories([]);
             return;
         }
         setAllCategories(apiResponse.data);
@@ -70,8 +70,6 @@ export default function NewItem() {
         getAllCategories()
       }, [])
     )
-    
-
 
     return(
         

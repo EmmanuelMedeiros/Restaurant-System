@@ -32,7 +32,9 @@ export default function Login() {
         }
 
         userContext.saveRefreshToken(apiResult.data.refreshToken);
-        userContext.setJwtToken(apiResult.data.jwtToken)
+        userContext.saveOnCache("role", apiResult.data.user.role);
+        userContext.setJwtToken(apiResult.data.jwtToken);
+        userContext.setRole(apiResult.data.user.role);
         router.replace('/(tabs)/(tables)');
         return
     }

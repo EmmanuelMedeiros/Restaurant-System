@@ -1,13 +1,24 @@
+import UserContext from "@/context/user.context";
+import { UserRole } from "@/enum/UserRole";
+import { AuthEndpoint } from "@/fuctions/auth.endpoint";
 import { router } from "expo-router";
+import { useContext, useEffect } from "react";
 import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const blackboardBG = require('../../../assets/images/blackboard_bg.png')
 
-const onHandleLogout = () => {
-
-};
-
 export default function MainUser() {
+
+    const userContext = useContext(UserContext);
+
+    const authEndpoint: AuthEndpoint = new AuthEndpoint();
+
+    const onHandleLogout = () => {
+        userContext.setJwtToken('');
+        authEndpoint.clearStoredRefreshToken();
+        router.replace('/(authentication)/login');
+    }; 
+
     return(
         <SafeAreaView style={{flex: 1}}>
 
@@ -16,14 +27,14 @@ export default function MainUser() {
             <View style={mainUserStyles.buttonsContainer}>
 
                 <TouchableOpacity 
-                    style={mainUserStyles.touchableOpacityStyle}
+                    style={userContext.role === UserRole.ADMIN ? mainUserStyles.touchableOpacityStyle : mainUserStyles.dontShow}
                     onPress={() => router.push('/(tabs)/(users)/createUser')}    
                 >
                     <Text style={{textAlign: 'center', fontFamily: 'inknutAntiqua-regular', color: '#C1C1C1'}}>Adicionar Usuário</Text>
                 </TouchableOpacity>
-
+            
                 <TouchableOpacity 
-                    style={mainUserStyles.touchableOpacityStyle}
+                    style={userContext.role === UserRole.ADMIN ? mainUserStyles.touchableOpacityStyle : mainUserStyles.dontShow}
                     onPress={() => router.push('/(tabs)/(users)/editUser')}
                 >
                     <Text style={{textAlign: 'center', fontFamily: 'inknutAntiqua-regular', color: '#C1C1C1'}}>Editar Usuário</Text>
@@ -59,5 +70,9 @@ const mainUserStyles = StyleSheet.create({
         justifyContent: 'center',
 
         borderRadius: 10
+    },
+
+    dontShow: {
+        display: 'none'
     }
 })

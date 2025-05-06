@@ -85,6 +85,23 @@ export class AuthEndpoint {
         };
     };
 
+    async saveDataOnCache(key: string, value: any): Promise<boolean> {
+        try {
+            await AsyncStorage.setItem(key, value);
+            return true;
+        } catch (err) { 
+            return false;
+        }
+    };
+
+    async getStoredData(key: string): Promise<string | null> {
+        try {
+            return await AsyncStorage.getItem(key);
+        } catch (err) {
+            return 'WAITER'
+        }
+    }
+
     async getStoredRefreshToken(): Promise<string|null> {
         try {
             const refreshToken: string|null = await AsyncStorage.getItem("refreshToken");
@@ -93,6 +110,10 @@ export class AuthEndpoint {
             console.log(err);
             return null;
         }
+    }
+
+    async clearStoredRefreshToken(): Promise<void> {
+        AsyncStorage.clear();
     }
 
 }

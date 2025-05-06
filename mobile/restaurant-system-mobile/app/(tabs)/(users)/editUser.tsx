@@ -8,19 +8,24 @@ import { UserEndpoint } from "@/fuctions/user.endpoint";
 import { IApiResponse } from "@/interface/IApiResponse";
 
 import Icons from '@expo/vector-icons/Feather'
+import { IUser } from "@/interface/IUser";
+import UserComponent from "@/components/userComponent";
 
 const blackboardBG = require('../../../assets/images/blackboard_bg.png')
 
 export default function EditUser() {
 
-  const [userList, setUserList] = useState<{email: string}[]>([]);
+  const [userList, setUserList] = useState<IUser[]>([]);
 
   const userContext = useContext(UserContext);
 
   const authEndpoint: AuthEndpoint = new AuthEndpoint();
   const userEndpoint: UserEndpoint = new UserEndpoint();
 
-  async function getAllUsers() {
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentUserToEdit, setCurrentUserToEdit] = useState<IUser>();
+
+  async function getAllUsers(): Promise<void> {
 
     let jwtToken: string|undefined = userContext.jwtToken;
 
@@ -36,18 +41,38 @@ export default function EditUser() {
         return router.replace('/(authentication)/login')
       };
       jwtToken = newJwtToken;
-      
     }
 
     const allUsers: IApiResponse = await userEndpoint.getAll(jwtToken as string);
     if(allUsers.statusCode !== 200) {
       return console.log("Error while trying to fetch users: " + allUsers.data);
     }
-
-    return setUserList([{email: "email@email.com"}, {email: "emailB@email.com"}]);
-
+    setUserList(allUsers.data);
   }
 
+  const deleteUserOnHandle = async (user: IUser) => {
+    let jwtToken: string|undefined = userContext.jwtToken;
+
+    const isThisTokenValid = await authEndpoint.verifyJWTToken(jwtToken as string);
+    if(!isThisTokenValid) {
+
+      const refreshToken: string|null = await userContext.getRefreshToken();
+      if(!refreshToken) {
+        return router.replace('/(authentication)/login');
+      };
+      const newJwtToken: string|null = await userContext.generateJwtToken(refreshToken);
+      if(!newJwtToken) {
+        return router.replace('/(authentication)/login')
+      };
+      jwtToken = newJwtToken;
+    }
+
+    const response: IApiResponse = await userEndpoint.delete(user.uuid, jwtToken!);
+    getAllUsers();
+    if (response.statusCode !== 200) {
+      return console.log("Error while trying to delete user: " + response.data);
+    }
+  };
 
   useFocusEffect(
       useCallback(() => {
@@ -57,7 +82,6 @@ export default function EditUser() {
           }) 
       }, [])
   )
-  
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     router.back()
@@ -70,34 +94,59 @@ export default function EditUser() {
 
         <ImageBackground source={blackboardBG} style={ [{flex: 1, justifyContent: 'center', alignContent: 'center', width: '100%', height: '110%'}]} >
 
-          <ScrollView style={editUserStyles.scrollViewContainer}>
+          {isEditing
+            ?
+              <UserComponent
+                screenCategory="edit"
+                userToEdit={currentUserToEdit}
+              />
+            :
+              <>
+                <ScrollView style={editUserStyles.scrollViewContainer}>
 
-          <View style={editUserStyles.columnContainer}>
-            <Text style={editUserStyles.columnText}>Email</Text>
-          </View>
-
-            {userList.map((element, index) => (
-              <View>
-
-                <View 
-                  style={editUserStyles.lineContainer}
-                  key={index.toString()}
-                >
-                  <Text style={editUserStyles.lineText}>{element.email.substring(0, 10)}...</Text>
-
-                  <TouchableOpacity>
-                    <Icons name="edit" size={23} style={{marginTop: 10}}/>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity>
-                    <Icons name="trash" size={23} style={{marginTop: 10}}/>
-                  </TouchableOpacity>
+                <View style={editUserStyles.columnContainer}>
+                  <Text style={editUserStyles.columnText}>User</Text>
                 </View>
 
-              </View>
-            ))}
+                  {userList.map((element, index) => (
+                    <View
+                      key={index}
+                    >
+                    
+                      <View 
+                        style={editUserStyles.lineContainer}
+                        key={index.toString()}
+                      >
+                        <Text style={editUserStyles.lineText}>{element.email.split('@')[0]}</Text>
+                  
+                        <TouchableOpacity
+                          onPress={() => { setCurrentUserToEdit(element), setIsEditing(true) } }
+                        >
+                          <Icons 
+                            name="edit" 
+                            size={23} 
+                            style={{marginTop: 10}}
+                          />
+                        </TouchableOpacity>
+                  
+                        <TouchableOpacity
+                          onPress={() => deleteUserOnHandle(element)}
+                        >
+                          <Icons 
+                            name="trash" 
+                            size={23} 
+                            style={{marginTop: 10}}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                  
+                    </View>
+                  ))}
 
-          </ScrollView>
+                </ScrollView>
+              </>
+          }
+
 
         </ImageBackground>
 
@@ -141,7 +190,8 @@ const editUserStyles = StyleSheet.create({
 
     minWidth: 150,
 
-    marginLeft: 20,
+    textAlign: 'center',
+    paddingRight: 32,
     marginTop: 10
   },
   

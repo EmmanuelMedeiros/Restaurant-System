@@ -169,7 +169,6 @@ export default function TableOrder() {
                             <Menu
                                 orderItemList={itemList}
                                 posActionItemList={[]}
-                                itemPressableIcon={[<Icons name="info" size={20}/>]}
                                 pressableIconFunction={toggleItemFromRemoveItemsList}
                                 showHeader={true}
                                 title={`PEDIDO`}

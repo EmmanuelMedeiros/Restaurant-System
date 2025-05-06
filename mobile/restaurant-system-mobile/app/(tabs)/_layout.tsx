@@ -3,6 +3,9 @@ import { Tabs } from "expo-router";
 import Icons from '@expo/vector-icons/Feather'
 import { StyleSheet } from "react-native";
 import { Image } from "react-native";
+import { useContext } from "react";
+import UserContext from "@/context/user.context";
+import { UserRole } from "@/enum/UserRole";
 
 const tableIcon = require('../../assets/images/tableIcon.png')
 const activeTableIcon = require('../../assets/images/activeTableIcon.png')
@@ -11,6 +14,9 @@ const itemsIcon = require('../../assets/images/itemsIcon.png')
 const activeItemsIcon = require('../../assets/images/activeItemsIcon.png')
 
 export default function TablesTabs() {
+
+    const userContext = useContext(UserContext);
+
     return(
         <Tabs screenOptions={{headerShown: false, tabBarStyle: styles.bar}}>
 
@@ -31,6 +37,7 @@ export default function TablesTabs() {
             <Tabs.Screen name="(items)"
                 options={
                     {
+                        href: userContext.role === UserRole.ADMIN ? '/(tabs)/(items)/itemsView' : null,
                         title: 'Items',
                         tabBarShowLabel: false,
                         tabBarIcon: ({focused}) => focused 
