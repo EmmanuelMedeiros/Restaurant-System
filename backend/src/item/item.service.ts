@@ -39,10 +39,13 @@ export class ItemService {
     async findAll() {
         const itemList: Item[]|null = await this.itemRepository.find({
             relations: {
-                category: true
+                category: true,
             },
             where: {
-                deleted: false
+                deleted: false,
+                category: {
+                    deleted: false
+                }
             }
         });
         return itemList;

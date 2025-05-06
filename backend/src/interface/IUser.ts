@@ -4,5 +4,6 @@ export interface IUser {
     uuid: string,
     email: string,
     role: Role,
-    password: string
+    password: string,
+    deleted?: boolean
 }

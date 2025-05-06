@@ -17,12 +17,15 @@ export class User implements IUser {
     @Column({type: 'text', nullable: false})
     password: string;
 
+    @Column({type: 'boolean', nullable: false, default: false})
+    deleted?: boolean;
 
-	constructor(password: string, uuid: string, email: string, role: Role) {
+	constructor(password: string, uuid: string, email: string, role: Role, deleted?: boolean) {
 		this.password = password;
 		this.uuid = uuid;
         this.email = email,
         this.role = role
+        this.deleted = deleted;
 	}
     
     

@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:8080
 
 ### GET ALL USERS
 
@@ -19,5 +19,22 @@ Content-Type: application/json
     "role": "waiter"
 }
 
-### MISSING: DELETE USER/ UPDATE USER/ JWT AUTH
+### DELETE USER
+
+DELETE {{baseUrl}}/user/085bf4asb-913b-4c3e-838f-4b92c233a1fe
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDYzOTA3OSwiZXhwIjoxNzQ0NjQyNjc5LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.f3EqtY36KUdofCmYkF5pTSMJQapa19086BUsJKOcmU8
+Content-Type: application/json
+
+### UPDATE USER 
+
+PUT {{baseUrl}}/user 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDYzOTA3OSwiZXhwIjoxNzQ0NjQyNjc5LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.f3EqtY36KUdofCmYkF5pTSMJQapa19086BUsJKOcmU8
+Content-Type: application/json
+
+{
+    "uuid": "8d63893e-9e75-470f-914d-dfdc428b75b0",
+    "email": "olivia@emial.com"
+}
+
+### MISSING:  UPDATE USER/ JWT AUTH
 

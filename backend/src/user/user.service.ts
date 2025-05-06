@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { EndMessage } from 'src/interface/EndMessage';
 import { HashContract } from 'src/common/hashing/abstract-hash.entity';
+import UpdateUserDTO from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -15,7 +16,11 @@ export class UserService {
     ) {}
 
     async findAll(): Promise<User[]|null> {
-        const userList: User[] = await this.userRepository.find();
+        const userList: User[] = await this.userRepository.find({
+            where: {
+                deleted: false
+            }
+        });
         return userList;
     }
 
@@ -38,6 +43,7 @@ export class UserService {
     async create(createUserDTO: CreateUserDTO): Promise<EndMessage> {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK}
         try {
+            console.log("CAÍ AQUI")
             const hashPassword: string = await this.hashService.hash(createUserDTO.password);
             const newUser: User = new User(
                 hashPassword,
@@ -45,12 +51,52 @@ export class UserService {
                 createUserDTO.email,
                 createUserDTO.role
             )
-            await this.userRepository.insert(newUser);
+
+            const checkIfUserExists: User | null = await this.userRepository.findOneBy({
+                email: createUserDTO.email,
+            });
+            if (!checkIfUserExists) {
+                await this.userRepository.save(newUser);
+            };
+            await this.userRepository.update(checkIfUserExists!.uuid, {...createUserDTO, deleted: false});
+
             endMessage = {data: newUser, status: HttpStatus.CREATED};
         }catch(err) {
             endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
         }
         return endMessage;
+    }
+
+    async update(updateUserDTO: UpdateUserDTO): Promise<User> {
+        const checkIfUserExists: User | null = await this.userRepository.findOneBy({
+            uuid: updateUserDTO.uuid,
+        });
+        if (!checkIfUserExists) {
+            throw new Error("Esse usuário não existe!");
+        };
+
+        if (updateUserDTO.password) {
+            const hashPassword: string = await this.hashService.hash(updateUserDTO.password);
+            const userWithHashedPassowrd: UpdateUserDTO = new UpdateUserDTO(
+                updateUserDTO.uuid,
+                updateUserDTO.email,
+                hashPassword
+            );
+            return await this.userRepository.save(userWithHashedPassowrd);
+        }
+
+        return await this.userRepository.save(updateUserDTO);
+    }
+
+    async delete(uuid: string): Promise<User> {
+        const checkIfUserExists: User | null = await this.userRepository.findOneBy({
+            uuid: uuid,
+        });
+        if (!checkIfUserExists) {
+            throw new Error("Esse usuário não existe!");
+        };
+        await this.userRepository.update({uuid}, {deleted: true});
+        return checkIfUserExists;
     }
 
 }

@@ -12,7 +12,7 @@ export class Item implements IItem {
     @Column({type: 'text', name: "description", nullable: true})
     public readonly description?: string;
 
-    @Column({type: 'varchar', name: "name", unique: true})
+    @Column({type: 'varchar', name: "name"})
     @Length(1, 100)
     public readonly name: string;
 

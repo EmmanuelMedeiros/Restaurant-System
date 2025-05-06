@@ -7,6 +7,7 @@ import { CreateUserDTO } from './dto/create.user.dto';
 import { JWTGuard } from 'src/common/guard/jwt.guard';
 import { UserRoleGuard } from 'src/common/guard/userRole.guard';
 import { Role } from 'src/enum/Role';
+import UpdateUserDTO from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -48,6 +49,28 @@ export class UserController {
             throw new HttpException("No user found for this UUID", HttpStatus.NOT_FOUND);
         }
         return user;
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Put('')
+    async update(@Body() updateUserDTO: UpdateUserDTO) {
+    try {
+        const response = await this.userService.update(updateUserDTO);
+        return { data: response };
+    } catch(err) {
+        throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Delete('/:uuid')
+    async delete(@Param('uuid') uuid: string) {
+        try {
+            const response = await this.userService.delete(uuid);
+            return { data: response };
+        } catch(err) {
+            throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
 }

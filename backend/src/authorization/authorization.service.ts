@@ -25,7 +25,12 @@ export class AuthorizationService {
             let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
 
             try {
-                const fetchedUserByEmail: User[] = await this.userRepository.findBy({email: authUserDTO.email});
+                const fetchedUserByEmail: User[] = await this.userRepository.find({
+                    where: {
+                        email: authUserDTO.email
+                    },
+                    select: ["uuid", "password", "role"]
+                });
                 if(fetchedUserByEmail.length === 0) {
                     return endMessage = {data: 'Credentials not found in system', status: HttpStatus.BAD_REQUEST};
                 }
@@ -42,7 +47,7 @@ export class AuthorizationService {
                 const jwtToken = await this.signJwtToken(fetchedUserByEmail[0].uuid, this.jwtConfiguration.jwtLifeTime, jwtPayload);
                 const refreshToken = await this.signJwtToken(fetchedUserByEmail[0].uuid, this.jwtConfiguration.refreshJwtLifeTime);
 
-                return endMessage = {data: {jwtToken, refreshToken}, status: HttpStatus.OK};
+                return endMessage = {data: {jwtToken, refreshToken, user: fetchedUserByEmail[0]}, status: HttpStatus.OK};
             }catch(err) {
                 return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
             }

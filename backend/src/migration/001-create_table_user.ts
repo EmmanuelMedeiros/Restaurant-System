@@ -10,6 +10,7 @@ export class CreateTableUser1644055871184 implements MigrationInterface {
 	            email varchar(100) NOT NULL,
 	            "role" varchar NOT NULL,
 	            "password" text NOT NULL,
+                "deleted" boolean NOT NULL default false,
 	            CONSTRAINT "PK_a95e949168be7b7ece1a2382fed" PRIMARY KEY (uuid),
 	            CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE (email)
                 );
