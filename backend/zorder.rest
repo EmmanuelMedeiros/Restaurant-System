@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:8080
 
 ### POST ORDER
 
@@ -68,7 +68,11 @@ Content-Type: application/json
 DELETE {{baseUrl}}/order/14182d19-1593-4107-888a-4b4038ef0891
 
 
+### TEST PRINTER
+GET {{baseUrl}}/order/printer/test
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDY2MzI3ODUsImV4cCI6MTc0NjYzNjM4NSwiYXVkIjoibG9jYWxob3N0IiwiaXNzIjoibG9jYWxob3N0In0.laN-E19lTs9m3XBoaPQj-Q5sxyDaMGUofFGQTEs8gaw
+
 ### PRINT ORDER ###
 
 GET  {{baseUrl}}/order/print/fa982ced-1b61-47c8-a150-6a3ba0720f28
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NDM5NTAwNCwiZXhwIjoxNzQ0Mzk4NjA0LCJhdWQiOiJsb2NhbGhvc3QiLCJpc3MiOiJsb2NhbGhvc3QifQ.RdDIevZrnAERMX4jjynbs6MOunN949aHp-TvKOI02Tk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZmQzNmIzYi1mNDBiLTQyZDktYWI1MS1hYTFhODQ2MGNlYTkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDY2MzI3ODUsImV4cCI6MTc0NjYzNjM4NSwiYXVkIjoibG9jYWxob3N0IiwiaXNzIjoibG9jYWxob3N0In0.laN-E19lTs9m3XBoaPQj-Q5sxyDaMGUofFGQTEs8gaw

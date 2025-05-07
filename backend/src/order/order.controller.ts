@@ -196,7 +196,7 @@ export class OrderController {
         if(serviceResponse.status !== HttpStatus.OK) {
             throw new HttpException(serviceResponse.data, HttpStatus.BAD_REQUEST);
         }
-        const currentOrderItems: OrderItem[] = await this.orderService.findOrderItems(fetchedOrder);
+        const currentOrderItems: OrderItem[] | null = await this.orderService.findOrderItems(fetchedOrder);
         return currentOrderItems;
     }
 }
