@@ -6,7 +6,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 @Entity()
 export class Item implements IItem {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({})
     public readonly id: number;
 
     @Column({type: 'text', name: "description", nullable: true})

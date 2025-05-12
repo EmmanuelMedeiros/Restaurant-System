@@ -239,7 +239,7 @@ export class OrderService {
 
     
         try {
-            const device = new escpos.Network('192.168.0.11', 9100); // Replace with your printer's IP
+            const device = new escpos.Network(process.env.PRINTER_IP, 9100); // Replace with your printer's IP
             const printer = new escpos.Printer(device);
             
             device.open(function (error) {
@@ -257,7 +257,7 @@ export class OrderService {
                     const priceLine:string = `R$ ${itemTotal.toFixed(2)}`.padStart(10, '');
                     printer.size(.5, .5)
                     printer.align('lt')
-                    printer.text(`${quantityAndNameLine} ------ ${priceLine}`)
+                    printer.text(`${quantityAndNameLine} --- ${priceLine}`)
                     billingPrice += (element.item.price * element.quantity);
                 });
 

@@ -54,7 +54,9 @@ export class InsertItems1746495013543 implements MigrationInterface {
                 (45, NULL, 'PEIXE FRITO', 88.00, '2025-05-05', '2025-05-05', false, 2),
                 (46, NULL, 'PICANHA (INTEIRO)', 114.00, '2025-05-05', '2025-05-05', false, 2),
                 (47, NULL, 'PICANHA (MEIA)', 77.00, '2025-05-05', '2025-05-05', false, 2),
-                (48, NULL, 'SURURU AO MOLHO DE COCO', 55.00, '2025-05-05', '2025-05-05', false, 2);
+                (48, NULL, 'SURURU AO MOLHO DE COCO', 55.00, '2025-05-05', '2025-05-05', false, 2),
+                (49, NULL, 'SIRI DE CORAL', 7.00, '2025-05-05', '2025-05-05', false, 7),
+                (50, NULL, 'PATA DE UÇA', 70.00, '2025-05-05', '2025-05-05', false, 7);
             `
         )
     }

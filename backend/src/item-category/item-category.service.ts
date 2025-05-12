@@ -24,6 +24,7 @@ export class ItemCategoryService {
         }
       });
 
+      console.log(checkIfItemCategoryAlreadyExists)
       if (checkIfItemCategoryAlreadyExists.length > 0) {
         await this.itemCategoryRepository.update({title: createItemCategoryDTO.title}, {deleted: false});
         return (endMessage = {data: 'Categoria criada', status: 200});
