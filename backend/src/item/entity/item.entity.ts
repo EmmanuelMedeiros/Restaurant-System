@@ -13,7 +13,7 @@ export class Item implements IItem {
     public readonly description?: string;
 
     @Column({type: 'varchar', name: "name"})
-    @Length(1, 100)
+    @Length(2, 100)
     public readonly name: string;
 
     @Column({type: 'decimal'})

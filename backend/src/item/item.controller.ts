@@ -44,7 +44,7 @@ export class ItemController {
     @Get()
     async findAll() {
         const itemList: Item[]|null = await this.itemService.findAll();
-        return itemList
+        return itemList.sort((a, b) => a.name.localeCompare(b.name))
     }
 
     @HttpCode(HttpStatus.OK)
