@@ -25,9 +25,11 @@ export class ItemCategoryService {
       });
 
       console.log(checkIfItemCategoryAlreadyExists)
-      if (checkIfItemCategoryAlreadyExists.length > 0) {
+      if (checkIfItemCategoryAlreadyExists.length > 0 && checkIfItemCategoryAlreadyExists[0].deleted == true) {
         await this.itemCategoryRepository.update({title: createItemCategoryDTO.title}, {deleted: false});
         return (endMessage = {data: 'Categoria criada', status: 200});
+      } else if (checkIfItemCategoryAlreadyExists.length > 0 && checkIfItemCategoryAlreadyExists[0].deleted == false) {
+        return (endMessage = {data: 'Erro ao criar categoria. Essa categoria já existe!', status: 400})
       }
 
       const itemCategory: InsertResult = await this.itemCategoryRepository.insert(itemCategoryToInsert);

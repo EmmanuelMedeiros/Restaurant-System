@@ -43,7 +43,6 @@ export class UserService {
     async create(createUserDTO: CreateUserDTO): Promise<EndMessage> {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK}
         try {
-            console.log("CAÍ AQUI")
             const hashPassword: string = await this.hashService.hash(createUserDTO.password);
             const newUser: User = new User(
                 hashPassword,
@@ -57,9 +56,10 @@ export class UserService {
             });
             if (!checkIfUserExists) {
                 await this.userRepository.save(newUser);
+                endMessage = {data: 'Usuário criado!', status: 201};
+                return endMessage;
             };
             await this.userRepository.update(checkIfUserExists!.uuid, {...createUserDTO, deleted: false});
-
             endMessage = {data: newUser, status: HttpStatus.CREATED};
         }catch(err) {
             endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
