@@ -25,6 +25,14 @@ export class ItemService {
                     undefined,
                     createItemDTO.description
                 )
+                const fetchItemWithSameName = await this.itemRepository.find({
+                    where: {
+                        name: createItemDTO.name,
+                    },
+                });
+                if (fetchItemWithSameName.length > 0) {
+                    return endMessage = {data: 'Já existe item com esse nome', status: HttpStatus.BAD_REQUEST};
+                }
                 const itemCategory: InsertResult = await this.itemRepository.insert(itemCategoryToInsert);
                 const insertedTable: Item = {
                     ...itemCategoryToInsert,

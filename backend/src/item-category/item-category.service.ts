@@ -79,6 +79,10 @@ export class ItemCategoryService {
     const itemCategoriesList: ItemCategory[] = await this.itemCategoryRepository.find({
       where: { deleted: false },
     });
+
+    if (itemCategoriesList.length > 0) {
+      itemCategoriesList.sort((a, b) => a.title.localeCompare(b.title));
+    }
     return itemCategoriesList;
   }
 

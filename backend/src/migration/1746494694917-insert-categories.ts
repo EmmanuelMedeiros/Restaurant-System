@@ -8,21 +8,25 @@ export class InsertCategories1746494694917 implements MigrationInterface {
                             	"itemCategory"(id,
                             	title)
                             values (1,
-                            'ALMOÇO'),
+                            'ALMOÇOS'),
                             (2,
                             'TIRA-GOSTO'),
                             (3,
-                            'CALDINHO'),
+                            'CALDINHOS'),
                             (4,
                             'BEBIDAS'),
                             (5,
-                            'PRATO FEITO'),
+                            'PRATOS FEITOS'),
                             (6,
                             'PORÇÕES'),
                             (7,
                             'ENTRADAS'),
                             (8,
-                            'DOSES');
+                            'DOSES'),
+                            (9,
+                            'CERVEJAS'),
+                            (10,
+                            'BEBIDAS');
                         `);
   }
 
