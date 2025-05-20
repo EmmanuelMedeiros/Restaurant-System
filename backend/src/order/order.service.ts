@@ -250,14 +250,20 @@ export class OrderService {
 
                 let lines: string[] = [];
                 let billingPrice: number = 0;
-                orderItems.forEach((element) => {
 
+                printer.text('Qtde.  Item             Valor')
+                printer.align('ct')
+                printer.text('--------------------')
+
+                orderItems.forEach((element) => {
                     const itemTotal: number = element.quantity * element.item.price;
-                    const quantityAndNameLine: string = `${element.quantity} ${element.item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`.padEnd(10, ' ');
-                    const priceLine:string = `R$ ${itemTotal.toFixed(2)}`.padStart(10, '');
-                    printer.size(.5, .5)
+                    const quantityAndNameLine: string = `${element.quantity.toString().padStart(2, '0')} ${element.item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").substring(0, 16)}`.padEnd(20, ' ');
+                    const priceLine:string = `R$ ${itemTotal.toFixed(2)}`.padStart(2, ' ');
+                    printer.size(.05, .05)
                     printer.align('lt')
-                    printer.text(`${quantityAndNameLine} --- ${priceLine}`)
+                    printer.text(`${quantityAndNameLine} | ${priceLine}`)
+                    printer.align('ct')
+                    printer.text('--------------------')
                     billingPrice += (element.item.price * element.quantity);
                 });
 
