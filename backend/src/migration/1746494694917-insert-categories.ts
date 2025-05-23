@@ -24,7 +24,9 @@ export class InsertCategories1746494694917 implements MigrationInterface {
                             (8,
                             'DOSES'),
                             (9,
-                            'CERVEJAS');
+                            'CERVEJAS'),
+                            (10,
+                            'DRINKS');
                         `);
   }
 
