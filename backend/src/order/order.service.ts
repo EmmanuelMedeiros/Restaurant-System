@@ -60,13 +60,15 @@ export class OrderService {
             })
             await queryRunner.manager.insert(Order, order);
             await queryRunner.manager.insert(OrderItem, orderItemList);
-            await queryRunner.manager.update(Table, order.table.id, updatedTable)
+            await queryRunner.manager.update(Table, order.table.id, { status: TableStatus.BUSY })
             await queryRunner.commitTransaction();
             return endMessage = {data: order, status: HttpStatus.CREATED};
         }catch(err) {
             await queryRunner.rollbackTransaction();
             console.log(err)
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        } finally {
+            await queryRunner.release()
         }
     }
 
@@ -159,6 +161,8 @@ export class OrderService {
         }catch(err) {
             await queryRunner.rollbackTransaction();
             return endMessage = {data: err.toString(), status: HttpStatus.BAD_REQUEST};
+        } finally {
+            await queryRunner.release()
         }
     }
 
@@ -237,7 +241,6 @@ export class OrderService {
     async printBilling(orderItems: OrderItem[]) {
         let endMessage: EndMessage = {data: '', status: HttpStatus.OK};
 
-    
         try {
             const device = new escpos.Network(process.env.PRINTER_IP, 9100); // Replace with your printer's IP
             const printer = new escpos.Printer(device);
@@ -284,7 +287,6 @@ export class OrderService {
                 printer.text('-------')
                 printer.text('VOLTE SEMPRE!');
 
-              
                 printer
                   .style('b')
                   .text(lines);
@@ -294,9 +296,7 @@ export class OrderService {
                 .close();
                 
             });
-
             return endMessage = {data: `Sucess on printing order`, status: HttpStatus.OK};
-            
         }catch(err) {
             console.log(err);
             return endMessage = {status: HttpStatus.BAD_REQUEST, data: err.toString()}

@@ -22,6 +22,7 @@ services:
       - restaurantNewtork 
     env_file:
       - ./backend/.env
+    restart: unless-stopped
 
 networks:
   restaurantNewtork:
